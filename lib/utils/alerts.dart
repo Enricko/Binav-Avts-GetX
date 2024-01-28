@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+
+enum AlertStatus { SUCCESS, WARNING, DANGER, INFO, INSERT, UPDATE, DELETE }
 
 class Alerts {
   static showMessage(String message, BuildContext context) {
@@ -61,8 +64,7 @@ class Alerts {
               width: 90,
               child: ElevatedButton(
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4))),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
                   backgroundColor: MaterialStateProperty.all(Colors.red),
                 ),
                 onPressed: onPressYes,
@@ -125,8 +127,7 @@ class Alerts {
               width: 120,
               child: ElevatedButton(
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4))),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
                 ),
                 onPressed: onPressYes,
@@ -156,5 +157,78 @@ class Alerts {
     );
   }
 
+  static void loading(BuildContext context, bool isLoad) async {
+    if (isLoad) {
+      showDialog(
+          barrierDismissible: false, //Don't close dialog when click outside
+          context: context,
+          builder: (_) {
+            return Dialog(
+              backgroundColor: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    CircularProgressIndicator(), //Loading Indicator you can use any graphic
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('Loading...')
+                  ],
+                ),
+              ),
+            );
+          });
+    } else {
+      Navigator.of(context).pop(); //Close the dialog
+    }
+  }
 
+  static Future<void> snackBarGetx(
+      {required String title, required String message, required AlertStatus alertStatus}) async {
+    var color = {
+      AlertStatus.SUCCESS: Colors.green,
+      AlertStatus.INFO: Colors.blue,
+      AlertStatus.WARNING: Colors.yellow,
+      AlertStatus.DANGER: Colors.red,
+      AlertStatus.INSERT: Colors.green,
+      AlertStatus.UPDATE: Colors.yellow,
+      AlertStatus.DELETE: Colors.red,
+    };
+    var icon = {
+      AlertStatus.SUCCESS: Icons.check,
+      AlertStatus.INFO: Icons.info,
+      AlertStatus.WARNING: Icons.warning,
+      AlertStatus.DANGER: Icons.dangerous,
+      AlertStatus.INSERT: Icons.create,
+      AlertStatus.UPDATE: Icons.system_update_alt,
+      AlertStatus.DELETE: Icons.delete,
+    };
+
+    if (Get.isSnackbarOpen) {
+      await Get.closeCurrentSnackbar();
+    }
+    Get.snackbar(
+      title,
+      message,
+      animationDuration: Duration(milliseconds: 200),
+      duration: Duration(seconds: 5),
+      backgroundColor: Colors.white,
+      borderColor: color[alertStatus],
+      borderWidth: 4,
+      borderRadius: 15,
+      icon: Icon(
+        icon[alertStatus],
+        color: color[alertStatus],
+        weight: 100,
+        size: 42,
+      ),
+      maxWidth: 400,
+      isDismissible: true,
+      margin: EdgeInsets.only(top: 25, bottom: 25),
+      snackPosition: SnackPosition.TOP,
+      snackStyle: SnackStyle.FLOATING,
+    );
+  }
 }
