@@ -9,10 +9,6 @@ import '../services/auth.dart';
 
 class AuthController extends GetxController {
   var currentWidget = "login".obs;
-  var listWidget = {
-    "login": LoginWidget(),
-    "forget-password": const ForgetPasswordWidget(),
-  }.obs;
 
   var invisible = true.obs;
   var isLoading = false.obs;
@@ -32,6 +28,12 @@ class AuthController extends GetxController {
   //   print("INIT");
   // }
 
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   print("DISPOSE");
+  // }
+
   void changeWidget(String nameWidget) {
     currentWidget.value = nameWidget;
   }
@@ -45,6 +47,8 @@ class AuthController extends GetxController {
         Alerts.snackBarGetx(title: "Authentication",message: value.message!,alertStatus: AlertStatus.DANGER);
       }
     }).timeout(const Duration(seconds: 10),onTimeout: (){
+        Alerts.snackBarGetx(title: "Authentication",message: "Try Again Later...",alertStatus: AlertStatus.DANGER);
+    }).onError((error, stackTrace){
         Alerts.snackBarGetx(title: "Authentication",message: "Try Again Later...",alertStatus: AlertStatus.DANGER);
     });
     isLoading.value = false;

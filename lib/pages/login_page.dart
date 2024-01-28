@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../controller/auth.dart';
 import '../utils/intro_screen.dart';
+import 'auth/forget_password.dart';
 
 class Caraousel {
   var currentIndex;
@@ -19,6 +20,12 @@ class Caraousel {
 }
 
 class LoginPage extends StatelessWidget {
+  var controller = Get.find<AuthController>();
+  var listWidget = {
+    "login": LoginWidget(controller: Get.find<AuthController>()),
+    "forget-password": ForgetPasswordWidget(controller: Get.find<AuthController>()),
+  };
+
   var introPages = Caraousel(currentIndex: 0, screenList: [
     const IntroScreen(
       title: "Identifikasi Kapal",
@@ -102,10 +109,9 @@ class LoginPage extends StatelessWidget {
             child: Container(
               width: width <= 540 ? width : width / 2,
               padding: const EdgeInsets.all(30),
-              child: GetX<AuthController>(
-                init: AuthController(),
-                builder: (controller) {
-                  return controller.listWidget[controller.currentWidget.value]!;
+              child: Obx(
+                () {
+                  return listWidget[controller.currentWidget.value]!;
                 },
               ),
             ),

@@ -2,12 +2,15 @@ import 'package:binav_avts_getx/routes/page_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'controller/auth.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
 
   // This widget is the root of your application.
   @override
