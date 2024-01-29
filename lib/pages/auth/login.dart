@@ -154,7 +154,7 @@ class LoginWidget extends StatelessWidget {
                       ? null
                       : () async {
                           if (_formKey.currentState!.validate()) {
-                            controller.login(context);
+                            controller.login();
                           }
                         },
                   child: controller.isLoading.value

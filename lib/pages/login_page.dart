@@ -1,4 +1,7 @@
 import 'package:binav_avts_getx/pages/auth/login.dart';
+import 'package:binav_avts_getx/pages/auth/reset_password.dart';
+import 'package:binav_avts_getx/pages/auth/reset_password_success.dart';
+import 'package:binav_avts_getx/pages/auth/send_otp.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +27,9 @@ class LoginPage extends StatelessWidget {
   var listWidget = {
     "login": LoginWidget(controller: Get.find<AuthController>()),
     "forget-password": ForgetPasswordWidget(controller: Get.find<AuthController>()),
+    "send-otp": SendOtpWidget(controller: Get.find<AuthController>()),
+    "reset-password": ResetPasswordWidget(controller: Get.find<AuthController>()),
+    "reset-success": ResetPasswordSuccessWidget(controller: Get.find<AuthController>()),
   };
 
   var introPages = Caraousel(currentIndex: 0, screenList: [

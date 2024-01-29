@@ -84,29 +84,57 @@ class ForgetPasswordWidget extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 25),
-              width: double.infinity,
-              height: 40,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(const Color(0xFF133BAD)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+            Obx(()=>
+                Container(
+                  margin: const EdgeInsets.only(bottom: 25),
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(const Color(0xFF133BAD)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                     ),
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              await controller.sendOtp().then((value) {
+                                if (value) controller.currentWidget.value = "send-otp";
+                              });
+                            }
+                          },
+                    child: controller.isLoading.value
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                "Loading...",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text(
+                            "Send Code",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {}
-                },
-                child: const Text(
-                  "Send Code",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+                )
+              
             ),
           ],
         ),
