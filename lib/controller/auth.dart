@@ -1,10 +1,9 @@
-import 'package:binav_avts_getx/pages/auth/forget_password.dart';
 import 'package:binav_avts_getx/utils/alerts.dart';
 import 'package:binav_avts_getx/utils/general.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-import '../pages/auth/login.dart';
 import '../services/auth.dart';
 
 class AuthController extends GetxController {
@@ -13,26 +12,28 @@ class AuthController extends GetxController {
   var invisible = true.obs;
   var isLoading = false.obs;
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController passwordConfirmationController = TextEditingController();
-  TextEditingController otpController = TextEditingController();
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController passwordConfirmationController;
+  late TextEditingController otpController;
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   // emailController = TextEditingController();
-  //   // passwordController = TextEditingController();
-  //   // passwordConfirmationController = TextEditingController();
-  //   // otpController = TextEditingController();
-  //   print("INIT");
-  // }
+  @override
+  void onInit() {
+    super.onInit();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    passwordConfirmationController = TextEditingController();
+    otpController = TextEditingController();
+  }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   print("DISPOSE");
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    passwordConfirmationController.dispose();
+    otpController.dispose();
+  }
 
   void changeWidget(String nameWidget) {
     currentWidget.value = nameWidget;
@@ -44,6 +45,9 @@ class AuthController extends GetxController {
     await AuthService().login(emailController.text, passwordController.text).then((value) {
       if (General.isApiOk(value.status!)) {
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        var box = GetStorage();
+        box.write("userToken", "${value.token}");
+        print(value.token);
         returnVal = true;
       } else {
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);
@@ -107,10 +111,14 @@ class AuthController extends GetxController {
     isLoading.value = false;
     return returnVal;
   }
+
   Future<bool> resetPassword() async {
     bool returnVal = false;
     isLoading.value = true;
-    await AuthService().resetPassword(emailController.text, otpController.text,passwordController.text,passwordConfirmationController.text).then((value) {
+    await AuthService()
+        .resetPassword(
+            emailController.text, otpController.text, passwordController.text, passwordConfirmationController.text)
+        .then((value) {
       if (General.isApiOk(value.status!)) {
         Alerts.snackBarGetx(title: "Reset Password", message: value.message!, alertStatus: AlertStatus.SUCCESS);
         otpController.clear();
