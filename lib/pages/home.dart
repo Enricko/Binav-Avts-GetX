@@ -86,143 +86,142 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         child: Column(
           children: [
             Flexible(
-              child: Obx(
-                () => FlutterMap(
-                  mapController: mapGetController.mapController,
-                  options: MapOptions(
-                    onMapEvent: (event) {
-                      mapGetController.updatePoint(null);
-                    },
+              child: FlutterMap(
+                mapController: mapGetController.mapController,
+                options: MapOptions(
+                  onMapEvent: (event) {
+                    mapGetController.updatePoint(null);
+                  },
+                  minZoom: 4,
+                  maxZoom: 18,
+                  initialZoom: 10,
+                  initialCenter: const LatLng(-1.089955, 117.360343),
+                  onPositionChanged: (position, hasGesture) {
+                    mapGetController.currentZoom.value = position.zoom!;
+                  },
+                ),
+                nonRotatedChildren: [
+                  /// button zoom in/out kanan bawah
+                  const FlutterMapZoomButtons(
                     minZoom: 4,
                     maxZoom: 18,
-                    initialZoom: 10,
-                    initialCenter: const LatLng(-1.089955, 117.360343),
-                    onPositionChanged: (position, hasGesture) {
-                      mapGetController.currentZoom.value = position.zoom!;
+                    mini: true,
+                    padding: 10,
+                    alignment: Alignment.bottomRight,
+                  ),
+
+                  /// widget skala kiri atas
+                  ScaleLayerWidget(
+                    options: ScaleLayerPluginOption(
+                      lineColor: Colors.blue,
+                      lineWidth: 2,
+                      textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+                      padding: const EdgeInsets.all(10),
+                    ),
+                  ),
+                  Obx(
+                    () {
+                      if (mapGetController.getVessel.value) {
+                        return VesselDetail();
+                      }
+                      return SizedBox();
                     },
                   ),
-                  nonRotatedChildren: [
-                    /// button zoom in/out kanan bawah
-                    const FlutterMapZoomButtons(
-                      minZoom: 4,
-                      maxZoom: 18,
-                      mini: true,
-                      padding: 10,
-                      alignment: Alignment.bottomRight,
-                    ),
+                ],
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        // Google RoadMap
+                        // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                        // Google Altered roadmap
+                        // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
+                        // Google Satellite
+                        // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+                        // Google Terrain
+                        // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
+                        // Google Hybrid
+                        'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                    // Open Street Map
+                    // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                    // tileProvider: CancellableNetworkTileProvider(),
+                  ),
+                  Obx(
+                    () {
+                      final LatLng? latLng = mapGetController.latLng.value;
 
-                    /// widget skala kiri atas
-                    ScaleLayerWidget(
-                      options: ScaleLayerPluginOption(
-                        lineColor: Colors.blue,
-                        lineWidth: 2,
-                        textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
-                        padding: const EdgeInsets.all(10),
-                      ),
-                    ),
-
-                    /// widget berisi detail informasi kapal
-                    // if (BlocProvider.of<GeneralCubit>(context).vesselClicked != null) VesselDetail(),
-                    // Obx((){
-                    //   print(mapGetController.singleKapalSocket)
-                    // })
-                    if (mapGetController.getVessel.value) VesselDetail(),
-                  ],
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          // Google RoadMap
-                          // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                          // Google Altered roadmap
-                          // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
-                          // Google Satellite
-                          // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-                          // Google Terrain
-                          // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
-                          // Google Hybrid
-                          'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                      // Open Street Map
-                      // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                      // tileProvider: CancellableNetworkTileProvider(),
-                    ),
-                    Obx(
-                      () {
-                        final LatLng? latLng = mapGetController.latLng.value;
-
-                        return MarkerLayer(
-                          markers: [
-                            if (latLng != null)
-                              Marker(
-                                width: mapGetController.pointSize.value,
-                                height: mapGetController.pointSize.value,
-                                point: latLng,
-                                child: CircleAvatar(
-                                  child: Image.asset(
-                                    "assets/compass.png",
-                                    width: 250,
-                                    height: 250,
-                                  ),
+                      return MarkerLayer(
+                        markers: [
+                          if (latLng != null)
+                            Marker(
+                              width: mapGetController.pointSize.value,
+                              height: mapGetController.pointSize.value,
+                              point: latLng,
+                              child: CircleAvatar(
+                                child: Image.asset(
+                                  "assets/compass.png",
+                                  width: 250,
+                                  height: 250,
                                 ),
                               ),
-                          ],
-                        );
-                      },
-                    ),
-                    StreamBuilder(
-                      stream: mapGetController.streamSocket.value.getResponseAll,
-                      builder: (BuildContext context, AsyncSnapshot<GetKapalCoor> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
-                          return Obx(
-                            () => MarkerLayer(
-                              markers: snapshot.data!.data!.map(
-                                (e) {
-                                  return Marker(
-                                    width: mapGetController.vesselSizes(e.size!) +
-                                        (mapGetController.currentZoom.value - 8) * 6,
-                                    height: mapGetController.vesselSizes(e.size!) +
-                                        (mapGetController.currentZoom.value - 8) * 6,
-                                    point: LatLng(e.coor!.coorGga!.latitude!, e.coor!.coorGga!.longitude!),
-                                    child: MouseRegion(
-                                      cursor: SystemMouseCursors.click,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          vesselOnClick(
-                                            e.callSign!,
-                                            LatLng(
-                                              e.coor!.coorGga!.latitude! - .005,
-                                              e.coor!.coorGga!.longitude!,
-                                            ),
-                                          );
-                                        },
-                                        child: Transform.rotate(
-                                          angle: mapGetController.degreesToRadians(
-                                            e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                  StreamBuilder(
+                    stream: mapGetController.streamSocket.value.getResponseAll,
+                    builder: (BuildContext context, AsyncSnapshot<GetKapalCoor> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
+                        return Obx(
+                          () => MarkerLayer(
+                            markers: snapshot.data!.data!.map(
+                              (e) {
+                                return Marker(
+                                  width: mapGetController.vesselSizes(e.size!) +
+                                      (mapGetController.currentZoom.value - 8) * 6,
+                                  height: mapGetController.vesselSizes(e.size!) +
+                                      (mapGetController.currentZoom.value - 8) * 6,
+                                  point: LatLng(e.coor!.coorGga!.latitude!, e.coor!.coorGga!.longitude!),
+                                  child: MouseRegion(
+                                    cursor: SystemMouseCursors.click,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        vesselOnClick(
+                                          e.callSign!,
+                                          LatLng(
+                                            e.coor!.coorGga!.latitude! - .005,
+                                            e.coor!.coorGga!.longitude!,
                                           ),
-                                          child: Tooltip(
-                                            message: e.callSign!,
-                                            child: Image.asset(
-                                              "assets/ship.png",
-                                              height: mapGetController.vesselSizes(e.size!.toString()) +
-                                                  (mapGetController.currentZoom.value - 8) * 6,
-                                              width: mapGetController.vesselSizes(e.size!.toString()) +
-                                                  (mapGetController.currentZoom.value - 8) * 6,
-                                            ),
+                                        );
+                                      },
+                                      child: Transform.rotate(
+                                        angle: mapGetController.degreesToRadians(
+                                          e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                                        ),
+                                        child: Tooltip(
+                                          message: e.callSign!,
+                                          child: Image.asset(
+                                            "assets/ship.png",
+                                            height: mapGetController.vesselSizes(e.size!.toString()) +
+                                                (mapGetController.currentZoom.value - 8) * 6,
+                                            width: mapGetController.vesselSizes(e.size!.toString()) +
+                                                (mapGetController.currentZoom.value - 8) * 6,
                                           ),
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              ).toList(),
-                            ),
-                          );
-                        }
-                        return SizedBox();
-                      },
-                    ),
-                  ],
-                ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        );
+                      }
+                      return SizedBox();
+                    },
+                  ),
+                ],
               ),
             ),
           ],

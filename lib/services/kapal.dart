@@ -25,6 +25,11 @@ class StreamSocketKapal {
     socketResponseSingleKapal.sink.add(response);
   }
 
+  Future<void> refreshSingleKapal()async{
+    await socketResponseSingleKapal.close();
+
+    socketResponseSingleKapal = StreamController<GetKapalCoor>();
+  }
 
   void dispose() {
     socketResponseAllKapal.close();
