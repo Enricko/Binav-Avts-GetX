@@ -154,7 +154,9 @@ class LoginWidget extends StatelessWidget {
                       ? null
                       : () async {
                           if (_formKey.currentState!.validate()) {
-                            controller.login();
+                            await controller.login().then((value) {
+                              if (value) Get.offNamed("home");
+                            });
                           }
                         },
                   child: controller.isLoading.value

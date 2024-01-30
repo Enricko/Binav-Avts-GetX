@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
+import 'package:binav_avts_getx/model/get_mapping_response.dart';
 import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../services/mapping.dart';
 
 class MapGetXController extends GetxController {
   // MapGetXController({required this.context});
@@ -21,7 +24,8 @@ class MapGetXController extends GetxController {
 
   var currentZoom = 10.0.obs;
 
-  Rx<StreamSocketKapal> streamSocket = StreamSocketKapal().obs;
+  Rx<StreamSocketKapal> streamSocketKapal = StreamSocketKapal().obs;
+  
 
   double vesselSizes(String size) {
     switch (size) {
@@ -66,7 +70,7 @@ class MapGetXController extends GetxController {
     socket.on('kapal_coor', (data) {
       var response = GetKapalCoor.fromJson(data);
 
-      streamSocket.value.addResponseAll(response);
+      streamSocketKapal.value.addResponseAll(response);
     });
     socket.onDisconnect((_) => print('disconnect All'));
   }
@@ -83,7 +87,7 @@ class MapGetXController extends GetxController {
 
   void socketSingleKapal(String callSign) {
     socketSingleKapalDisconnect();
-    // streamSocket.value.socketResponseSingleKapal.close().then((value){});
+    // streamSocketKapal.value.socketResponseSingleKapal.close().then((value){});
     String nameEvent = "single_kapal_coor";
     singleKapalSocket = IO
         .io('http://127.0.0.1:5000/kapal?name_event=$nameEvent&call_sign=$callSign',
@@ -95,7 +99,7 @@ class MapGetXController extends GetxController {
     singleKapalSocket!.value.on('single_kapal_coor', (data) {
       var response = GetKapalCoor.fromJson(data);
 
-      streamSocket.value.addResponseSingle(response);
+      streamSocketKapal.value.addResponseSingle(response);
     });
     singleKapalSocket!.value.onDisconnect((_) => print('disconnect Single'));
   }
@@ -123,6 +127,6 @@ class MapGetXController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    streamSocket.value.dispose();
+    streamSocketKapal.value.dispose();
   }
 }

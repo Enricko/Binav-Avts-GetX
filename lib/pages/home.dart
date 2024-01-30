@@ -7,6 +7,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../model/get_kapal_coor.dart';
+import '../widget/maps/pipeline_layer.dart';
 import '../widget/maps/scale_bar/scale_bar.dart';
 import '../widget/maps/zoom_button.dart';
 import '../widget/vessel_detail.dart';
@@ -169,8 +170,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       );
                     },
                   ),
+                  PipelineLayer(),
                   StreamBuilder(
-                    stream: mapGetController.streamSocket.value.getResponseAll,
+                    stream: mapGetController.streamSocketKapal.value.getResponseAll,
                     builder: (BuildContext context, AsyncSnapshot<GetKapalCoor> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
                         return Obx(

@@ -10,7 +10,7 @@ class AuthService extends GetConnect {
   // Future<Response> getUser() => get("http://127.0.0.1:5000/api/client");
 
   Future<GetUserResponse> checkUser(String token) async {
-    var response = await get("${InitService.baseUrl}/user", headers: {
+    var response = await get("${InitService.baseUrlApi}/user", headers: {
       "Authorization": "Bearer " + token,
     });
     return GetUserResponse.fromJson(response.body);
@@ -21,7 +21,7 @@ class AuthService extends GetConnect {
       "email": email,
       "password": password,
     });
-    var response = await post("${InitService.baseUrl}login", body);
+    var response = await post("${InitService.baseUrlApi}login", body);
     return LoginResponse.fromJson(response.body);
   }
 
@@ -29,7 +29,7 @@ class AuthService extends GetConnect {
     final body = FormData({
       "email": email,
     });
-    var response = await post("${InitService.baseUrl}forgot-password", body);
+    var response = await post("${InitService.baseUrlApi}forgot-password", body);
     return LoginResponse.fromJson(response.body);
   }
 
@@ -40,7 +40,7 @@ class AuthService extends GetConnect {
       "email": email,
       "otp_code": otpCode,
     });
-    var response = await post("${InitService.baseUrl}check-code", body);
+    var response = await post("${InitService.baseUrlApi}check-code", body);
     return LoginResponse.fromJson(response.body);
   }
 
@@ -52,7 +52,7 @@ class AuthService extends GetConnect {
       "password": password,
       "password_confirmation": passwordConfirmation,
     });
-    var response = await post("${InitService.baseUrl}reset-password", body);
+    var response = await post("${InitService.baseUrlApi}reset-password", body);
     return LoginResponse.fromJson(response.body);
   }
 }

@@ -1,4 +1,3 @@
-import 'package:binav_avts_getx/controller/auth_check.dart';
 import 'package:binav_avts_getx/pages/login_page.dart';
 import 'package:binav_avts_getx/pages/not_found.dart';
 import 'package:binav_avts_getx/routes/page_route.dart';

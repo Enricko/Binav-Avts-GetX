@@ -1,4 +1,3 @@
-import 'package:binav_avts_getx/controller/auth_check.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:get/get.dart';

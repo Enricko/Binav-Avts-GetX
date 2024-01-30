@@ -48,7 +48,7 @@ class VesselDetail extends StatelessWidget {
           sheetBelow: SnappingSheetContent(
             draggable: true,
             child: StreamBuilder<KapalCoor.GetKapalCoor>(
-              stream: mapGetController.streamSocket.value.socketResponseSingleKapal.stream,
+              stream: mapGetController.streamSocketKapal.value.socketResponseSingleKapal.stream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
                   KapalCoor.Data data = snapshot.data!.data!.first;
@@ -68,7 +68,7 @@ class VesselDetail extends StatelessWidget {
                                     Timer(const Duration(milliseconds: 300), () {
                                       mapGetController.socketSingleKapalDisconnect();
                                       mapGetController.getVessel.value = false;
-                                      mapGetController.streamSocket.value.refreshSingleKapal();
+                                      mapGetController.streamSocketKapal.value.refreshSingleKapal();
                                     });
                                   },
                                   child: Container(
