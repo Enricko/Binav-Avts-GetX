@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+import '../utils/alerts.dart';
+
 class AuthMiddleware extends GetMiddleware {
   // @override
   // // TODO: implement priority
@@ -18,11 +20,15 @@ class AuthMiddleware extends GetMiddleware {
         if (route == "/login") {
           return const RouteSettings(name: "/home");
         }
-      } else if(route != "/login") {
+      } else if (route != "/login") {
+        box.remove("userToken");
+        Alerts.snackBarGetx(
+            title: "Authentication", message: "Authentication Expired.", alertStatus: AlertStatus.DANGER);
         return const RouteSettings(name: "/login");
       }
     } else {
       if (route != "/login") {
+        Alerts.snackBarGetx(title: "Authentication", message: "Please login first.", alertStatus: AlertStatus.DANGER);
         return const RouteSettings(name: "/login");
       }
     }

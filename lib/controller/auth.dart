@@ -47,7 +47,6 @@ class AuthController extends GetxController {
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
         var box = GetStorage();
         box.write("userToken", "${value.token}");
-        print(value.token);
         returnVal = true;
       } else {
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);

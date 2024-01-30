@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:binav_avts_getx/utils/maps/scale_bar/scale_bar_utils.dart' as util;
+import 'package:binav_avts_getx/widget/maps/scale_bar/scale_bar_utils.dart' as util;
 
 class ScaleLayerPluginOption {
   TextStyle? textStyle;
