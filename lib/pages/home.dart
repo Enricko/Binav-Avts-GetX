@@ -12,11 +12,23 @@ import '../widget/maps/pipeline_layer.dart';
 import '../widget/maps/scale_bar/scale_bar.dart';
 import '../widget/maps/zoom_button.dart';
 import '../widget/maps/vessel/vessel_detail.dart';
+import 'table/kapal.dart';
+
+class TableController extends GetxController {
+  // Example data
+  var tableData = [
+    ['Name', 'Age'],
+    ['John', '30'],
+    ['Alice', '25'],
+    ['Bob', '35'],
+  ].obs;
+}
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   var mapGetController = Get.find<MapGetXController>();
+  final TableController controller = Get.put(TableController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +38,37 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color(0xFF0E286C),
         iconTheme: const IconThemeData(
           color: Colors.white, // Change this color to the desired color
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            PopupMenuButton(
+              position: PopupMenuPosition.under,
+              icon: const Icon(Icons.menu),
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'vesselList',
+                  child: Text('Vessel List'),
+                ),
+                const PopupMenuItem(
+                  value: 'pipelineList',
+                  child: Text('Pipeline List'),
+                ),
+                const PopupMenuItem(
+                  value: 'clientList',
+                  child: Text('Client List'),
+                ),
+              ],
+              onSelected: (item) {
+                switch (item) {
+                  case "vesselList":
+                    Get.dialog(
+                      Dialog(child: KapalTable()),
+                    );
+                }
+              },
+            )
+          ],
         ),
       ),
       body: Padding(
