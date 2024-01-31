@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:binav_avts_getx/controller/map.dart';
 import 'package:binav_avts_getx/model/get_kapal_coor.dart' as KapalCoor;
+import 'package:binav_avts_getx/widget/maps/vessel/vessel_draw.dart';
 import 'package:binav_avts_getx/widget/snipping_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
+
+import '../../../services/init.dart';
 
 // ignore: must_be_immutable
 class VesselDetail extends StatelessWidget {
@@ -193,8 +196,7 @@ class VesselDetail extends StatelessWidget {
                                   "Vessel",
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
-                                // VesselDrawer(link: vesselData.kapal!.xmlFile!.toString().replaceAll("\/", "/")),
-                                // link: "https://client-project.enricko.site/storage/xml/2023_10_15_05_45_50_asqw33388.xml"),
+                                VesselDrawer(link: InitService.baseUrl + "assets/kapal/" + data.xmlFile!),
                               ],
                             ),
                           ),

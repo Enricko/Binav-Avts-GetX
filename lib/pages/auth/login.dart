@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:binav_avts_getx/pages/auth/forget_password.dart';
+import 'package:binav_avts_getx/routes/route_name.dart';
 import 'package:binav_avts_getx/services/auth.dart';
 import 'package:binav_avts_getx/utils/alerts.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +156,7 @@ class LoginWidget extends StatelessWidget {
                       : () async {
                           if (_formKey.currentState!.validate()) {
                             await controller.login().then((value) {
-                              if (value) Get.offNamed("home");
+                              if (value) Get.offNamed(RouteName.home);
                             });
                           }
                         },
