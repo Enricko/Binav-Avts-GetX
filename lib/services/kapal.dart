@@ -36,7 +36,31 @@ class KapalService extends GetConnect {
   // Future<Response> getUser() => get("http://127.0.0.1:5000/api/client");
 
   Future<GetKapalResponse> getData(String token, int page, int perpage) async {
-    var response = await get("${InitService.baseUrlApi}/kapal?page=$page&per_page=$perpage", headers: {
+    var response = await get("${InitService.baseUrlApi}kapal?page=$page&per_page=$perpage", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetKapalResponse.fromJson(response.body);
+  }
+  Future<GetKapalResponse> deleteData(String token, String callSign) async {
+    var response = await delete("${InitService.baseUrlApi}kapal/$callSign", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetKapalResponse.fromJson(response.body);
+  }
+
+  Future<GetKapalResponse> addData(String token,Map<String,dynamic> data) async {
+    final body = FormData({
+      "call_sign": data['call_sign'],
+      "id_client": data['id_client'],
+      "flag": data['flag'],
+      "kelas": data['kelas'],
+      "builder": data['builder'],
+      "year_built": data['year_built'],
+      "size": data['size'],
+      "status": data['status'],
+      "xml_file": data['xml_file'],
+    });
+    var response = await post("${InitService.baseUrlApi}kapal",body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
