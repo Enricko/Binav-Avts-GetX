@@ -57,7 +57,7 @@ class PipelineLayer extends StatelessWidget {
 
   Future<void> loadKMZData(BuildContext context, List<GetMapping.Data> mappingData) async {
     // try {
-    String url = InitService.baseUrl + "assets/mapping/";
+    String url = InitService.baseUrl! + "assets/mapping/";
     var box = GetStorage();
     Map<String, dynamic> data = {};
 

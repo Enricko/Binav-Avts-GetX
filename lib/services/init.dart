@@ -1,4 +1,6 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class InitService{
-  static const baseUrl = "http://127.0.0.1:5000/";
-  static const baseUrlApi = "http://127.0.0.1:5000/api/";
+  static final baseUrl = dotenv.env['BASE_URL'];
+  static final baseUrlApi = "${baseUrl}api/";
 }

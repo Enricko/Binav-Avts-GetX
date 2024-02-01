@@ -196,7 +196,7 @@ class VesselDetail extends StatelessWidget {
                                   "Vessel",
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
-                                VesselDrawer(link: InitService.baseUrl + "assets/kapal/" + data.xmlFile!),
+                                VesselDrawer(link: InitService.baseUrl! + "assets/kapal/" + data.xmlFile!),
                               ],
                             ),
                           ),
