@@ -1,4 +1,5 @@
 import 'package:binav_avts_getx/pages/table/add_form.dart';
+import 'package:binav_avts_getx/pages/table/edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pagination_flutter/pagination.dart';
@@ -132,6 +133,20 @@ class KapalTable extends StatelessWidget {
                                 DataCell(Row(
                                   children: [
                                     Tooltip(
+                                      message: "Edit",
+                                      child: IconButton(
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.blue,
+                                        ),
+                                        onPressed: () {
+                                          Get.dialog(Dialog(
+                                            child: EditFormKapal(callSign:row.callSign!),
+                                          ));
+                                        },
+                                      ),
+                                    ),
+                                    Tooltip(
                                       message: "Delete",
                                       child: IconButton(
                                         icon: const Icon(
@@ -146,7 +161,7 @@ class KapalTable extends StatelessWidget {
                                                   onPressYes: () async {
                                                     await controller
                                                         .deleteData(callSign: row.callSign!)
-                                                        .then((_) async{
+                                                        .then((_) async {
                                                       await controller.getKapalData();
                                                       Navigator.pop(context);
                                                     });

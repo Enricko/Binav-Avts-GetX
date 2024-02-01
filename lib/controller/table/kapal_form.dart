@@ -35,6 +35,21 @@ class KapalFormController extends GetxController {
     }
   }
 
+  Future<void> getUpdatedData(String callSign) async {
+    var token = GetStorage().read("userToken");
+
+    await KapalService().getDataByID(token, callSign).then((value) {
+      callSignController.text = value.data!.first.callSign!;
+      flagController.text = value.data!.first.flag!;
+      kelasController.text = value.data!.first.kelas!;
+      builderController.text = value.data!.first.builder!;
+      yearBuiltController.text = value.data!.first.yearBuilt!;
+      filePickerController.text = value.data!.first.xmlFile!;
+      isSwitched.value = value.data!.first.status!;
+      vesselSize.value = value.data!.first.size!;
+    });
+  }
+
   Future<bool> addData() async {
     bool returnVal = false;
     isLoad.value = true;
@@ -55,6 +70,41 @@ class KapalFormController extends GetxController {
       "size": vesselSize.value,
       "status": isSwitched.value,
       "xml_file": MultipartFile(filePickerVal.value, filename: filePickerController.text),
+    }).then((value) {
+      if (General.isApiOk(value.status!)) {
+        Get.back();
+        Get.delete<KapalFormController>();
+        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        returnVal = true;
+      } else {
+        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
+        returnVal = false;
+      }
+    }).timeout(const Duration(seconds: 10), onTimeout: () {
+      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    }).onError((error, stackTrace) {
+      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    });
+    isLoad.value = false;
+
+    return returnVal;
+  }
+  Future<bool> updateData(String callSign) async {
+    bool returnVal = false;
+    isLoad.value = true;
+
+    var token = GetStorage().read("userToken");
+    await KapalService().updateData(token, callSign,{
+      "new_call_sign": callSignController.text,
+      "flag": flagController.text,
+      "kelas": kelasController.text,
+      "builder": builderController.text,
+      "year_built": yearBuiltController.text,
+      "size": vesselSize.value,
+      "status": isSwitched.value,
+      "xml_file": filePickerVal.value != null ? MultipartFile(filePickerVal.value, filename: filePickerController.text) : null,
     }).then((value) {
       if (General.isApiOk(value.status!)) {
         Get.back();

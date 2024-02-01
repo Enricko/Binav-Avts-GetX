@@ -1,26 +1,23 @@
-import 'package:binav_avts_getx/controller/table/kapal_form.dart';
-import 'package:binav_avts_getx/model/get_client_response.dart';
-import 'package:binav_avts_getx/services/client.dart';
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
-import "package:responsive_ui/responsive_ui.dart";
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:responsive_ui/responsive_ui.dart';
 
 import '../../controller/table/kapal.dart';
+import '../../controller/table/kapal_form.dart';
 import '../../utils/constants.dart';
 import '../../utils/custom_text_field.dart';
 
-class AddFormKapal extends StatelessWidget {
-  AddFormKapal({super.key});
-
+class EditFormKapal extends StatelessWidget {
+  EditFormKapal({super.key, required this.callSign});
+  final String callSign;
   final _formKey = GlobalKey<FormState>();
-  var formController = Get.put(KapalFormController());
+  var controller = Get.put(KapalFormController());
 
   @override
   Widget build(BuildContext context) {
+    controller.getUpdatedData(callSign);
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -40,7 +37,7 @@ class AddFormKapal extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Add Vessel",
+                          "Edit Vessel",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -75,60 +72,8 @@ class AddFormKapal extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: FutureBuilder<GetClientResponse>(
-                        future: ClientService().getData(GetStorage().read("userToken"), 1, 10000),
-                        builder: (context, snapshot) {
-                          return DropDownTextField(
-                            controller: formController.idClientController,
-                            dropDownList: [
-                              if (snapshot.connectionState == ConnectionState.done || snapshot.hasData)
-                                if (snapshot.data!.data!.length > 0)
-                                  for (var x in snapshot.data!.data!)
-                                    DropDownValueModel(name: '${x.user!.name} - ${x.idClient}', value: "${x.idClient}"),
-                            ],
-                            clearOption: false,
-                            enableSearch: true,
-                            textStyle: const TextStyle(color: Colors.black),
-                            searchDecoration: const InputDecoration(hintText: "enter your custom hint text here"),
-                            validator: (value) {
-                              if (value == null || value == "" || value.isEmpty) {
-                                return "Required field";
-                              } else {
-                                return null;
-                              }
-                            },
-                            onChanged: (value) {
-                              print(formController.idClientController.dropDownValue!.value.toString());
-                              // idClientValue = clientController.dropDownValue!.value.toString();
-                              // SingleValueDropDownController(data: DropDownValueModel(value: "${data['role']}", name: "${data['role']}"))
-                            },
-                            textFieldDecoration: InputDecoration(
-                              labelText: "Pilih Client",
-                              labelStyle: Constants.labelstyle,
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(width: 1, color: Colors.blueAccent),
-                              ),
-                              enabledBorder:
-                                  const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.black38)),
-                              errorBorder:
-                                  const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                              focusedErrorBorder:
-                                  const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                              contentPadding: const EdgeInsets.fromLTRB(8, 3, 1, 3),
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     CustomTextField(
-                      controller: formController.callSignController,
+                      controller: controller.callSignController,
                       hint: 'Call Sign',
                       type: TextInputType.text,
                       validator: (value) {
@@ -139,7 +84,7 @@ class AddFormKapal extends StatelessWidget {
                       },
                     ),
                     CustomTextField(
-                      controller: formController.flagController,
+                      controller: controller.flagController,
                       hint: 'Flag',
                       type: TextInputType.text,
                       validator: (value) {
@@ -150,7 +95,7 @@ class AddFormKapal extends StatelessWidget {
                       },
                     ),
                     CustomTextField(
-                      controller: formController.kelasController,
+                      controller: controller.kelasController,
                       hint: 'Class',
                       type: TextInputType.text,
                       validator: (value) {
@@ -161,7 +106,7 @@ class AddFormKapal extends StatelessWidget {
                       },
                     ),
                     CustomTextField(
-                      controller: formController.builderController,
+                      controller: controller.builderController,
                       hint: 'Builder',
                       type: TextInputType.text,
                       validator: (value) {
@@ -172,7 +117,7 @@ class AddFormKapal extends StatelessWidget {
                       },
                     ),
                     CustomTextField(
-                      controller: formController.yearBuiltController,
+                      controller: controller.yearBuiltController,
                       hint: 'Year Built',
                       type: TextInputType.number,
                       validator: (value) {
@@ -234,7 +179,7 @@ class AddFormKapal extends StatelessWidget {
                           "large",
                         ],
                         onChanged: (value) {
-                          formController.vesselSize.value = value!;
+                          controller.vesselSize.value = value!;
                         },
                       ),
                     ),
@@ -253,7 +198,7 @@ class AddFormKapal extends StatelessWidget {
                           ),
                           child: CustomTextField(
                             readOnly: true,
-                            controller: formController.filePickerController,
+                            controller: controller.filePickerController,
                             hint: 'File Name',
                             type: TextInputType.text,
                             validator: (value) {
@@ -280,7 +225,7 @@ class AddFormKapal extends StatelessWidget {
                             ),
                             label: const Text('Pilih File XML File Only', style: TextStyle(fontSize: 14.0)),
                             onPressed: () {
-                              formController.pickFile();
+                              controller.pickFile();
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.lightBlue,
@@ -308,9 +253,9 @@ class AddFormKapal extends StatelessWidget {
                               child: FittedBox(
                                 fit: BoxFit.fill,
                                 child: Switch(
-                                  value: formController.isSwitched.value,
+                                  value: controller.isSwitched.value,
                                   onChanged: (bool value) {
-                                    formController.isSwitched.value = value;
+                                    controller.isSwitched.value = value;
                                   },
                                   activeTrackColor: Colors.lightGreen,
                                   activeColor: Colors.green,
@@ -342,18 +287,18 @@ class AddFormKapal extends StatelessWidget {
                       ),
                     ),
                   ),
-                  onPressed: formController.isLoad.value
+                  onPressed: controller.isLoad.value
                       ? null
                       : () async {
                           if (_formKey.currentState!.validate()) {
-                            await formController.addData().then((value) async {
-                              if (value) {
+                            await controller.updateData(callSign).then((value)async{
+                              if(value){
                                 await Get.find<KapalTableController>().getKapalData();
                               }
                             });
                           }
                         },
-                  child: formController.isLoad.value
+                  child: controller.isLoad.value
                       ? const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,

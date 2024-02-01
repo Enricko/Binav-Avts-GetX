@@ -141,7 +141,7 @@ class LoginWidget extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(bottom: 25),
                 width: double.infinity,
-                height: 40,
+                height: 50,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFF133BAD)),

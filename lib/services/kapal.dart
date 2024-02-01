@@ -41,6 +41,12 @@ class KapalService extends GetConnect {
     });
     return GetKapalResponse.fromJson(response.body);
   }
+  Future<GetKapalResponse> getDataByID(String token, String callSign) async {
+    var response = await get("${InitService.baseUrlApi}kapal/$callSign", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetKapalResponse.fromJson(response.body);
+  }
   Future<GetKapalResponse> deleteData(String token, String callSign) async {
     var response = await delete("${InitService.baseUrlApi}kapal/$callSign", headers: {
       "Authorization": "Bearer " + token,
@@ -61,6 +67,22 @@ class KapalService extends GetConnect {
       "xml_file": data['xml_file'],
     });
     var response = await post("${InitService.baseUrlApi}kapal",body, headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetKapalResponse.fromJson(response.body);
+  }
+  Future<GetKapalResponse> updateData(String token,String callSign,Map<String,dynamic> data) async {
+    final body = FormData({
+      "new_call_sign": data['new_call_sign'],
+      "flag": data['flag'],
+      "kelas": data['kelas'],
+      "builder": data['builder'],
+      "year_built": data['year_built'],
+      "size": data['size'],
+      "status": data['status'],
+      "xml_file": data['xml_file'],
+    });
+    var response = await put("${InitService.baseUrlApi}kapal/$callSign",body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
