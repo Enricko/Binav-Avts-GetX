@@ -7,7 +7,7 @@ import 'package:binav_avts_getx/routes/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/mapping.dart';
+import '../controller/pipeline.dart';
 
 class PageRouteList {
   // PageRouteList({required this.context});
@@ -28,7 +28,7 @@ class PageRouteList {
       page: () => HomePage(),
       binding: BindingsBuilder((){
         Get.put(MapGetXController());
-        Get.put(MappingController());
+        Get.put(PipelineController());
       }),
       middlewares: [
         AuthMiddleware()

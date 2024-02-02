@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../utils/alerts.dart';
-import '../../utils/general.dart';
+import '../../../utils/alerts.dart';
+import '../../../utils/general.dart';
 
 class KapalFormController extends GetxController {
   late TextEditingController callSignController;

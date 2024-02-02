@@ -1,15 +1,12 @@
-import 'package:binav_avts_getx/pages/table/add_form.dart';
-import 'package:binav_avts_getx/pages/table/edit_form.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import "package:get/get.dart";
 import 'package:pagination_flutter/pagination.dart';
 
-import '../../controller/table/kapal.dart';
-import '../../utils/alerts.dart';
+import '../../../controller/table/pipeline/pipeline.dart';
 
-class KapalTable extends StatelessWidget {
-  KapalTable({super.key});
-  var controller = Get.put(KapalTableController());
+class PipelineTable extends StatelessWidget {
+  PipelineTable({super.key});
+  var controller = Get.put(PipelineTableController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,31 +22,32 @@ class KapalTable extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "List Vessel",
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "List Vessel",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Obx(
+                        () => Text(
+                          "Page ${controller.page.value} of ${controller.total_page.value}",
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Obx(
-                          () => Text(
-                            "Page ${controller.page.value} of ${controller.total_page.value}",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   alignment: Alignment.centerRight,
                   child: IconButton(
@@ -75,9 +73,9 @@ class KapalTable extends StatelessWidget {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
               onPressed: () {
-                Get.dialog(Dialog(
-                  child: AddFormKapal(),
-                ));
+                // Get.dialog(Dialog(
+                //   child: AddFormKapal(),
+                // ));
               },
               child: const Text(
                 "Add Vessel",
@@ -104,32 +102,24 @@ class KapalTable extends StatelessWidget {
                             headingRowColor: MaterialStateProperty.all(const Color(0xffd3d3d3)),
                             columns: const [
                               DataColumn(label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Call Sign", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Year Built", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("File XML", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Upload IP ", style: TextStyle(fontWeight: FontWeight.w800))),
+                              DataColumn(label: Text("Client Name", style: TextStyle(fontWeight: FontWeight.w800))),
+                              DataColumn(label: Text("Pipeline Name", style: TextStyle(fontWeight: FontWeight.w800))),
+                              DataColumn(label: Text("File", style: TextStyle(fontWeight: FontWeight.w800))),
+                              DataColumn(label: Text("Status", style: TextStyle(fontWeight: FontWeight.w800))),
                               DataColumn(label: Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
                             ],
                             // ignore: invalid_use_of_protected_member
                             rows: controller.data!.value.map((row) {
                               int numberedTable =
                                   // ignore: invalid_use_of_protected_member
-                                  controller.data!.value.toList().indexWhere((e) => e.callSign == row.callSign) +
+                                  controller.data!.value.toList().indexWhere((e) => e.idMapping == row.idMapping) +
                                       1 * controller.page.value;
                               return DataRow(cells: [
                                 DataCell(Text(numberedTable.toString())),
-                                DataCell(Text(row.callSign!)),
-                                DataCell(Text(row.flag!)),
-                                DataCell(Text(row.kelas!)),
-                                DataCell(Text(row.builder!)),
-                                DataCell(Text(row.yearBuilt!)),
-                                DataCell(Text(row.size!)),
-                                DataCell(Text(row.xmlFile!)),
-                                DataCell(Container()),
+                                DataCell(Text(row.client!.user!.name!)),
+                                DataCell(Text(row.name!)),
+                                DataCell(Text(row.file!)),
+                                DataCell(Text(row.status!.toString())),
                                 DataCell(Row(
                                   children: [
                                     Tooltip(
@@ -140,9 +130,9 @@ class KapalTable extends StatelessWidget {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () {
-                                          Get.dialog(Dialog(
-                                            child: EditFormKapal(callSign:row.callSign!),
-                                          ));
+                                          // Get.dialog(Dialog(
+                                          //   child: EditFormKapal(callSign: row.callSign!),
+                                          // ));
                                         },
                                       ),
                                     ),
@@ -156,21 +146,21 @@ class KapalTable extends StatelessWidget {
                                         onPressed: controller.isLoad.value
                                             ? null
                                             : () {
-                                                Alerts.showAlertYesNo(
-                                                  title: "Are you sure you want to delete this data?",
-                                                  onPressYes: () async {
-                                                    await controller
-                                                        .deleteData(callSign: row.callSign!)
-                                                        .then((_) async {
-                                                      await controller.getKapalData();
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  onPressNo: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  context: context,
-                                                );
+                                                // Alerts.showAlertYesNo(
+                                                //   title: "Are you sure you want to delete this data?",
+                                                //   onPressYes: () async {
+                                                //     await controller
+                                                //         .deleteData(callSign: row.callSign!)
+                                                //         .then((_) async {
+                                                //       await controller.getKapalData();
+                                                //       Navigator.pop(context);
+                                                //     });
+                                                //   },
+                                                //   onPressNo: () {
+                                                //     Navigator.pop(context);
+                                                //   },
+                                                //   context: context,
+                                                // );
                                               },
                                       ),
                                     ),
@@ -195,7 +185,7 @@ class KapalTable extends StatelessWidget {
                 pagesVisible: 7,
                 onPageChanged: (value) async {
                   if (value != controller.page.value) {
-                    await controller.getKapalData().then((_) {
+                    await controller.getPipelineData().then((_) {
                       controller.page.value = value;
                     });
                   }

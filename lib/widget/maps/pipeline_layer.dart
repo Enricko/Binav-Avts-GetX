@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:binav_avts_getx/controller/mapping.dart';
-import 'package:binav_avts_getx/model/get_mapping_response.dart' as GetMapping;
+import 'package:binav_avts_getx/controller/pipeline.dart';
+import 'package:binav_avts_getx/model/get_pipeline_response.dart' as GetPipeline;
 import 'package:binav_avts_getx/services/init.dart';
 import 'package:flutter/foundation.dart';
 import 'package:archive/archive.dart';
@@ -53,9 +53,9 @@ class Points {
 class PipelineLayer extends StatelessWidget {
   PipelineLayer({super.key});
   var mapGetController = Get.find<MapGetXController>();
-  var mappingController = Get.find<MappingController>();
+  var pipelineController = Get.find<PipelineController>();
 
-  Future<void> loadKMZData(BuildContext context, List<GetMapping.Data> mappingData) async {
+  Future<void> loadKMZData(BuildContext context, List<GetPipeline.Data> mappingData) async {
     // try {
     String url = InitService.baseUrl! + "assets/mapping/";
     var box = GetStorage();
@@ -179,8 +179,8 @@ class PipelineLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GetMapping.GetMappingResponse>(
-      stream: mappingController.streamSocketMapping.value.getResponseAll,
+    return StreamBuilder<GetPipeline.GetPipelineResponse>(
+      stream: pipelineController.streamSocketPipeline.value.getResponseAll,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           loadKMZData(context, snapshot.data!.data!);

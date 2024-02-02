@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../services/mapping.dart';
+import '../services/pipeline.dart';
 
 class MapGetXController extends GetxController {
   // MapGetXController({required this.context});

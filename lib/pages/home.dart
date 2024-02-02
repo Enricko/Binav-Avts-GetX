@@ -12,23 +12,14 @@ import '../widget/maps/pipeline_layer.dart';
 import '../widget/maps/scale_bar/scale_bar.dart';
 import '../widget/maps/zoom_button.dart';
 import '../widget/maps/vessel/vessel_detail.dart';
-import 'table/kapal.dart';
+import 'table/kapal/kapal.dart';
+import 'table/pipeline/pipeline.dart';
 
-class TableController extends GetxController {
-  // Example data
-  var tableData = [
-    ['Name', 'Age'],
-    ['John', '30'],
-    ['Alice', '25'],
-    ['Bob', '35'],
-  ].obs;
-}
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   var mapGetController = Get.find<MapGetXController>();
-  final TableController controller = Get.put(TableController());
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +55,10 @@ class HomePage extends StatelessWidget {
                   case "vesselList":
                     Get.dialog(
                       Dialog(child: KapalTable()),
+                    );
+                  case "pipelineList":
+                    Get.dialog(
+                      Dialog(child: PipelineTable()),
                     );
                 }
               },

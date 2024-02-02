@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:responsive_ui/responsive_ui.dart';
 
-import '../../controller/table/kapal.dart';
-import '../../controller/table/kapal_form.dart';
-import '../../utils/constants.dart';
-import '../../utils/custom_text_field.dart';
+import '../../../controller/table/kapal/kapal.dart';
+import '../../../controller/table/kapal/kapal_form.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/custom_text_field.dart';
 
 class EditFormKapal extends StatelessWidget {
   EditFormKapal({super.key, required this.callSign});

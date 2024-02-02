@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../model/get_mapping_response.dart';
-import '../services/mapping.dart';
+import '../model/get_pipeline_response.dart';
+import '../services/pipeline.dart';
 
-class MappingController extends GetxController {
-  Rx<StreamSocketMapping> streamSocketMapping = StreamSocketMapping().obs;
+class PipelineController extends GetxController {
+  Rx<StreamSocketPipeline> streamSocketPipeline = StreamSocketPipeline().obs;
 
   void socketAllMapping() {
     IO.Socket socket = IO.io('http://127.0.0.1:5000/mapping', IO.OptionBuilder().setTransports(['websocket']).build());
@@ -13,9 +13,9 @@ class MappingController extends GetxController {
     socket.onConnect((_) => print('connect All'));
 
     socket.on('mapping', (data) {
-      var response = GetMappingResponse.fromJson(data);
+      var response = GetPipelineResponse.fromJson(data);
 
-      streamSocketMapping.value.addResponseAll(response);
+      streamSocketPipeline.value.addResponseAll(response);
     });
     socket.onDisconnect((_) => print('disconnect All'));
   }
@@ -29,6 +29,6 @@ class MappingController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    streamSocketMapping.value.dispose();
+    streamSocketPipeline.value.dispose();
   }
 }

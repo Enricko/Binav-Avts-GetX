@@ -1,5 +1,5 @@
 
-class GetKapalResponse {
+class GetPipelineResponse {
   String? message;
   int? status;
   int? perpage;
@@ -7,9 +7,9 @@ class GetKapalResponse {
   int? total;
   List<Data>? data;
 
-  GetKapalResponse({this.message, this.status, this.perpage, this.page, this.total, this.data});
+  GetPipelineResponse({this.message, this.status, this.perpage, this.page, this.total, this.data});
 
-  GetKapalResponse.fromJson(Map<String, dynamic> json) {
+  GetPipelineResponse.fromJson(Map<String, dynamic> json) {
     if(json["message"] is String) {
       message = json["message"];
     }
@@ -45,42 +45,38 @@ class GetKapalResponse {
 }
 
 class Data {
-  String? callSign;
-  String? flag;
-  String? kelas;
-  String? builder;
-  String? size;
+  String? idClient;
+  int? idMapping;
+  String? name;
+  String? file;
   bool? status;
-  String? xmlFile;
-  String? yearBuilt;
+  String? createdAt;
+  String? updatedAt;
   Client? client;
 
-  Data({this.callSign, this.flag, this.kelas, this.builder, this.size, this.status, this.xmlFile, this.yearBuilt, this.client});
+  Data({this.idClient, this.idMapping, this.name, this.file, this.status, this.createdAt, this.updatedAt, this.client});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["call_sign"] is String) {
-      callSign = json["call_sign"];
+    if(json["id_client"] is String) {
+      idClient = json["id_client"];
     }
-    if(json["flag"] is String) {
-      flag = json["flag"];
+    if(json["id_mapping"] is int) {
+      idMapping = json["id_mapping"];
     }
-    if(json["kelas"] is String) {
-      kelas = json["kelas"];
+    if(json["name"] is String) {
+      name = json["name"];
     }
-    if(json["builder"] is String) {
-      builder = json["builder"];
-    }
-    if(json["size"] is String) {
-      size = json["size"];
+    if(json["file"] is String) {
+      file = json["file"];
     }
     if(json["status"] is bool) {
       status = json["status"];
     }
-    if(json["xml_file"] is String) {
-      xmlFile = json["xml_file"];
+    if(json["created_at"] is String) {
+      createdAt = json["created_at"];
     }
-    if(json["year_built"] is String) {
-      yearBuilt = json["year_built"];
+    if(json["updated_at"] is String) {
+      updatedAt = json["updated_at"];
     }
     if(json["client"] is Map) {
       client = json["client"] == null ? null : Client.fromJson(json["client"]);
@@ -89,14 +85,13 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["call_sign"] = callSign;
-    _data["flag"] = flag;
-    _data["kelas"] = kelas;
-    _data["builder"] = builder;
-    _data["size"] = size;
+    _data["id_client"] = idClient;
+    _data["id_mapping"] = idMapping;
+    _data["name"] = name;
+    _data["file"] = file;
     _data["status"] = status;
-    _data["xml_file"] = xmlFile;
-    _data["year_built"] = yearBuilt;
+    _data["created_at"] = createdAt;
+    _data["updated_at"] = updatedAt;
     if(client != null) {
       _data["client"] = client?.toJson();
     }

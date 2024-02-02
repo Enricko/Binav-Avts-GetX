@@ -1,4 +1,4 @@
-import 'package:binav_avts_getx/controller/table/kapal_form.dart';
+import 'package:binav_avts_getx/controller/table/kapal/kapal_form.dart';
 import 'package:binav_avts_getx/model/get_client_response.dart';
 import 'package:binav_avts_getx/services/client.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -9,9 +9,9 @@ import "package:responsive_ui/responsive_ui.dart";
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controller/table/kapal.dart';
-import '../../utils/constants.dart';
-import '../../utils/custom_text_field.dart';
+import '../../../controller/table/kapal/kapal.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/custom_text_field.dart';
 
 class AddFormKapal extends StatelessWidget {
   AddFormKapal({super.key});
