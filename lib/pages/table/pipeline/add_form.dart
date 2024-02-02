@@ -1,23 +1,21 @@
-import 'package:binav_avts_getx/controller/table/kapal/kapal_form.dart';
-import 'package:binav_avts_getx/model/get_client_response.dart';
-import 'package:binav_avts_getx/services/client.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/services.dart';
-import 'package:get_storage/get_storage.dart';
-import "package:responsive_ui/responsive_ui.dart";
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:responsive_ui/responsive_ui.dart';
 
-import '../../../controller/table/kapal/kapal.dart';
+import '../../../controller/table/pipeline/pipeline.dart';
+import '../../../controller/table/pipeline/pipeline_form.dart';
+import '../../../model/get_client_response.dart';
+import '../../../services/client.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/custom_text_field.dart';
 
-class AddFormKapal extends StatelessWidget {
-  AddFormKapal({super.key});
+class AddFormPipeline extends StatelessWidget {
+  AddFormPipeline({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  var formController = Get.put(KapalFormController());
+  var formController = Get.put(PipelineFormController());
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class AddFormKapal extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Add Vessel",
+                          "Add Pipeline",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -57,7 +55,7 @@ class AddFormKapal extends StatelessWidget {
                       onPressed: () {
                         // Close the dialog
                         Get.back();
-                        Get.delete<KapalFormController>();
+                        Get.delete<PipelineFormController>();
                       },
                     ),
                   ),
@@ -128,118 +126,15 @@ class AddFormKapal extends StatelessWidget {
                       height: 10,
                     ),
                     CustomTextField(
-                      controller: formController.callSignController,
-                      hint: 'Call Sign',
+                      controller: formController.nameController,
+                      hint: 'Name',
                       type: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
-                          return "The Call Sign field is required.";
+                          return "The Name field is required.";
                         }
                         return null;
                       },
-                    ),
-                    CustomTextField(
-                      controller: formController.flagController,
-                      hint: 'Flag',
-                      type: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value == "") {
-                          return "The Flag field is required.";
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      controller: formController.kelasController,
-                      hint: 'Class',
-                      type: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value == "") {
-                          return "The Class field is required.";
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      controller: formController.builderController,
-                      hint: 'Builder',
-                      type: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value == "") {
-                          return "The Builder field is required.";
-                        }
-                        return null;
-                      },
-                    ),
-                    CustomTextField(
-                      controller: formController.yearBuiltController,
-                      hint: 'Year Built',
-                      type: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value == "") {
-                          return "The Year Built field is required.";
-                        }
-                        return null;
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: DropdownSearch<String>(
-                        dropdownBuilder: (context, selectedItem) => Text(
-                          selectedItem ?? "",
-                          style: const TextStyle(fontSize: 15, color: Colors.black54),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty || value == "") {
-                            return "The Ukuran Kapal field is required.";
-                          }
-                          return null;
-                        },
-                        popupProps: PopupPropsMultiSelection.dialog(
-                          fit: FlexFit.loose,
-                          itemBuilder: (context, item, isSelected) => ListTile(
-                            title: Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                        dropdownDecoratorProps: DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Vessel Size",
-                            hintText: "Vessel Size",
-                            labelStyle: Constants.labelstyle,
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(width: 1, color: Colors.blueAccent),
-                            ),
-                            enabledBorder:
-                                const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.black38)),
-                            errorBorder:
-                                const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                            focusedErrorBorder:
-                                const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                            contentPadding: const EdgeInsets.fromLTRB(8, 3, 1, 3),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                        items: [
-                          "small",
-                          "medium",
-                          "large",
-                        ],
-                        onChanged: (value) {
-                          formController.vesselSize.value = value!;
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
                     ),
                     Responsive(
                       children: [
@@ -278,7 +173,7 @@ class AddFormKapal extends StatelessWidget {
                               color: Colors.white,
                               size: 24.0,
                             ),
-                            label: const Text('Pilih File XML File Only', style: TextStyle(fontSize: 14.0)),
+                            label: const Text('Pilih File KML/KMZ File Only', style: TextStyle(fontSize: 14.0)),
                             onPressed: () {
                               formController.pickFile();
                             },
@@ -348,7 +243,7 @@ class AddFormKapal extends StatelessWidget {
                           if (_formKey.currentState!.validate()) {
                             await formController.addData().then((value) async {
                               if (value) {
-                                await Get.find<KapalTableController>().getKapalData();
+                                await Get.find<PipelineTableController>().getPipelineData();
                               }
                             });
                           }

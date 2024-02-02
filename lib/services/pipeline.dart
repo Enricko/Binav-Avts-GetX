@@ -42,4 +42,17 @@ class PipelineService extends GetConnect {
     });
     return GetPipelineResponse.fromJson(response.body);
   }
+
+  Future<GetPipelineResponse> addData(String token, Map<String, dynamic> data) async {
+    final body = FormData({
+      "name": data['name'],
+      "id_client": data['id_client'],
+      "status": data['status'],
+      "file": data['file'],
+    });
+    var response = await post("${InitService.baseUrlApi}mapping",body, headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetPipelineResponse.fromJson(response.body);
+  }
 }

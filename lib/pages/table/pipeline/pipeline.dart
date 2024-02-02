@@ -3,6 +3,7 @@ import "package:get/get.dart";
 import 'package:pagination_flutter/pagination.dart';
 
 import '../../../controller/table/pipeline/pipeline.dart';
+import 'add_form.dart';
 
 class PipelineTable extends StatelessWidget {
   PipelineTable({super.key});
@@ -73,9 +74,9 @@ class PipelineTable extends StatelessWidget {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
               onPressed: () {
-                // Get.dialog(Dialog(
-                //   child: AddFormKapal(),
-                // ));
+                Get.dialog(Dialog(
+                  child: AddFormPipeline(),
+                ));
               },
               child: const Text(
                 "Add Vessel",

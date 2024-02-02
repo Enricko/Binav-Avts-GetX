@@ -91,6 +91,7 @@ class KapalFormController extends GetxController {
 
     return returnVal;
   }
+  
   Future<bool> updateData(String callSign) async {
     bool returnVal = false;
     isLoad.value = true;
