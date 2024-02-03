@@ -43,6 +43,13 @@ class PipelineService extends GetConnect {
     return GetPipelineResponse.fromJson(response.body);
   }
 
+  Future<GetPipelineResponse> getDataByID(String token, String idMapping) async {
+    var response = await get("${InitService.baseUrlApi}mapping/$idMapping", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetPipelineResponse.fromJson(response.body);
+  }
+
   Future<GetPipelineResponse> addData(String token, Map<String, dynamic> data) async {
     final body = FormData({
       "name": data['name'],
@@ -50,11 +57,24 @@ class PipelineService extends GetConnect {
       "status": data['status'],
       "file": data['file'],
     });
-    var response = await post("${InitService.baseUrlApi}mapping",body, headers: {
+    var response = await post("${InitService.baseUrlApi}mapping", body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetPipelineResponse.fromJson(response.body);
   }
+
+  Future<GetPipelineResponse> editData(String token, String idMapping, Map<String, dynamic> data) async {
+    final body = FormData({
+      "name": data['name'],
+      "status": data['status'],
+      "file": data['file'],
+    });
+    var response = await put("${InitService.baseUrlApi}mapping/$idMapping", body, headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetPipelineResponse.fromJson(response.body);
+  }
+
   Future<GetPipelineResponse> deleteData(String token, String idMapping) async {
     var response = await delete("${InitService.baseUrlApi}mapping/$idMapping", headers: {
       "Authorization": "Bearer " + token,

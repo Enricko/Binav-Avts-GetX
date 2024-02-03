@@ -1,3 +1,4 @@
+import 'package:binav_avts_getx/pages/table/pipeline/edit_form.dart';
 import 'package:flutter/material.dart';
 import "package:get/get.dart";
 import 'package:pagination_flutter/pagination.dart';
@@ -132,9 +133,9 @@ class PipelineTable extends StatelessWidget {
                                           color: Colors.blue,
                                         ),
                                         onPressed: () {
-                                          // Get.dialog(Dialog(
-                                          //   child: EditFormKapal(callSign: row.callSign!),
-                                          // ));
+                                          Get.dialog(Dialog(
+                                            child: EditFormPipeline(idPipeline: row.idMapping!.toString()),
+                                          ));
                                         },
                                       ),
                                     ),

@@ -18,14 +18,25 @@ class PipelineFormController extends GetxController {
   Rx<Uint8List?> filePickerVal = Rx<Uint8List?>(null);
 
   var isLoad = false.obs;
-  
+
   void pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['kml','kmz']);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['kml', 'kmz']);
 
     if (result != null) {
       filePickerController.text = result.files.single.name;
       filePickerVal.value = result.files.first.bytes;
     }
+  }
+
+  Future<void> getUpdatedData(String idPipeline) async {
+    var token = GetStorage().read("userToken");
+
+    await PipelineService().getDataByID(token, idPipeline).then((value) {
+      nameController.text = value.data!.first.name!;
+      filePickerController.text = value.data!.first.file!;
+      isSwitched.value = value.data!.first.status!;
+    });
   }
 
   Future<bool> addData() async {
@@ -44,7 +55,38 @@ class PipelineFormController extends GetxController {
       "status": isSwitched.value,
       "file": MultipartFile(filePickerVal.value, filename: filePickerController.text),
     }).then((value) {
-      print(value.toJson().toString());
+      if (General.isApiOk(value.status!)) {
+        Get.back();
+        Get.delete<PipelineFormController>();
+        Alerts.snackBarGetx(title: "Pipeline", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        returnVal = true;
+      } else {
+        Alerts.snackBarGetx(title: "Pipeline", message: value.message!, alertStatus: AlertStatus.DANGER);
+        returnVal = false;
+      }
+    }).timeout(const Duration(seconds: 10), onTimeout: () {
+      Alerts.snackBarGetx(title: "Pipeline", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    }).onError((error, stackTrace) {
+      Alerts.snackBarGetx(title: "Pipeline", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    });
+    isLoad.value = false;
+
+    return returnVal;
+  }
+
+  Future<bool> editData(String idPipeline) async {
+    bool returnVal = false;
+    isLoad.value = true;
+
+    var token = GetStorage().read("userToken");
+    await PipelineService().editData(token, idPipeline, {
+      "name": nameController.text,
+      "status": isSwitched.value,
+      "file":
+          filePickerVal.value != null ? MultipartFile(filePickerVal.value, filename: filePickerController.text) : null,
+    }).then((value) {
       if (General.isApiOk(value.status!)) {
         Get.back();
         Get.delete<PipelineFormController>();
