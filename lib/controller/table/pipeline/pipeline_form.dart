@@ -58,7 +58,7 @@ class PipelineFormController extends GetxController {
       Alerts.snackBarGetx(title: "Pipeline", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "$error", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Pipeline", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     });
     isLoad.value = false;

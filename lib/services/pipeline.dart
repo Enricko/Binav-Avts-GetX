@@ -55,4 +55,10 @@ class PipelineService extends GetConnect {
     });
     return GetPipelineResponse.fromJson(response.body);
   }
+  Future<GetPipelineResponse> deleteData(String token, String idMapping) async {
+    var response = await delete("${InitService.baseUrlApi}mapping/$idMapping", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetPipelineResponse.fromJson(response.body);
+  }
 }

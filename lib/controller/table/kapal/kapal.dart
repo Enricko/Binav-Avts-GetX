@@ -33,14 +33,14 @@ class KapalTableController extends GetxController {
     var token = GetStorage().read("userToken");
     await KapalService().deleteData(token, callSign).then((value) {
       if (General.isApiOk(value.status!)) {
-        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
       } else {
-        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);
+        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
       }
     }).timeout(const Duration(seconds: 10), onTimeout: () {
-      Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
     });
     isLoad.value = false;
   }

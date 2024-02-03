@@ -91,7 +91,7 @@ class KapalFormController extends GetxController {
 
     return returnVal;
   }
-  
+
   Future<bool> updateData(String callSign) async {
     bool returnVal = false;
     isLoad.value = true;
@@ -120,7 +120,7 @@ class KapalFormController extends GetxController {
       Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "$error", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     });
     isLoad.value = false;

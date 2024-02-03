@@ -3,6 +3,7 @@ import "package:get/get.dart";
 import 'package:pagination_flutter/pagination.dart';
 
 import '../../../controller/table/pipeline/pipeline.dart';
+import '../../../utils/alerts.dart';
 import 'add_form.dart';
 
 class PipelineTable extends StatelessWidget {
@@ -29,7 +30,7 @@ class PipelineTable extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "List Vessel",
+                        "List Pipeline",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -79,7 +80,7 @@ class PipelineTable extends StatelessWidget {
                 ));
               },
               child: const Text(
-                "Add Vessel",
+                "Add Pipeline",
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -147,21 +148,21 @@ class PipelineTable extends StatelessWidget {
                                         onPressed: controller.isLoad.value
                                             ? null
                                             : () {
-                                                // Alerts.showAlertYesNo(
-                                                //   title: "Are you sure you want to delete this data?",
-                                                //   onPressYes: () async {
-                                                //     await controller
-                                                //         .deleteData(callSign: row.callSign!)
-                                                //         .then((_) async {
-                                                //       await controller.getKapalData();
-                                                //       Navigator.pop(context);
-                                                //     });
-                                                //   },
-                                                //   onPressNo: () {
-                                                //     Navigator.pop(context);
-                                                //   },
-                                                //   context: context,
-                                                // );
+                                                Alerts.showAlertYesNo(
+                                                  title: "Are you sure you want to delete this data?",
+                                                  onPressYes: () async {
+                                                    await controller
+                                                        .deleteData(idMapping: row.idMapping!.toString())
+                                                        .then((_) async {
+                                                      await controller.getPipelineData();
+                                                      Navigator.pop(context);
+                                                    });
+                                                  },
+                                                  onPressNo: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  context: context,
+                                                );
                                               },
                                       ),
                                     ),
