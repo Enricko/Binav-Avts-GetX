@@ -12,6 +12,7 @@ import '../widget/maps/pipeline_layer.dart';
 import '../widget/maps/scale_bar/scale_bar.dart';
 import '../widget/maps/zoom_button.dart';
 import '../widget/maps/vessel/vessel_detail.dart';
+import 'table/client/client.dart';
 import 'table/kapal/kapal.dart';
 import 'table/pipeline/pipeline.dart';
 
@@ -59,6 +60,10 @@ class HomePage extends StatelessWidget {
                   case "pipelineList":
                     Get.dialog(
                       Dialog(child: PipelineTable()),
+                    );
+                  case "clientList":
+                    Get.dialog(
+                      Dialog(child: ClientTable()),
                     );
                 }
               },
