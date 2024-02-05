@@ -54,7 +54,6 @@ class EditFormPipeline extends StatelessWidget {
                     child: IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () {
-                        // Close the dialog
                         Get.back();
                         Get.delete<PipelineFormController>();
                       },
