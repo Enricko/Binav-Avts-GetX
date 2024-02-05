@@ -24,6 +24,13 @@ class ClientService extends GetConnect {
     return GetClientResponse.fromJson(response.body);
   }
 
+  Future<GetClientResponse> sendEmailDetail(String token, String idClient) async {
+    var response = await get("${InitService.baseUrlApi}client_email/$idClient", headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetClientResponse.fromJson(response.body);
+  }
+
   Future<GetClientResponse> addData(String token, Map<String, dynamic> data) async {
     final body = FormData({
       "name": data['name'],

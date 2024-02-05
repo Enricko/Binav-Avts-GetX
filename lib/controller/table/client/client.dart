@@ -26,21 +26,30 @@ class ClientTableController extends GetxController {
     isLoad.value = false;
   }
 
-    Future<void> deleteData({required String idClient}) async {
+  Future<void> deleteData({required String idClient}) async {
     isLoad.value = true;
 
     var token = GetStorage().read("userToken");
     await ClientService().deleteData(token, idClient).then((value) {
       if (General.isApiOk(value.status!)) {
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        Alerts.snackBarGetx(title: "Client", message: value.message!, alertStatus: AlertStatus.SUCCESS);
       } else {
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
+        Alerts.snackBarGetx(title: "Client", message: value.message!, alertStatus: AlertStatus.DANGER);
       }
     }).timeout(const Duration(seconds: 10), onTimeout: () {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Client", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "Client", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
     });
+    isLoad.value = false;
+  }
+
+  Future<void> sendEmailDetails({required String idClient}) async {
+    isLoad.value = true;
+
+    var token = GetStorage().read("userToken");
+    await ClientService().sendEmailDetail(token, idClient);
+    Alerts.snackBarGetx(title: "Client", message: "Email sent successfully", alertStatus: AlertStatus.SUCCESS);
     isLoad.value = false;
   }
 

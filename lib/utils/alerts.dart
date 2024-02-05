@@ -111,9 +111,6 @@ class Alerts {
               'assets/lottie/mail.json',
               fit: BoxFit.contain,
             ),
-            // child: Lottie.asset('assets/lottie/animation_delete.json',
-            //   fit: BoxFit.contain,
-            // ),
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
           // judul

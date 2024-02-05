@@ -31,7 +31,7 @@ class ClientTable extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "List Client",
                         style: TextStyle(
                           color: Colors.black,
@@ -42,7 +42,7 @@ class ClientTable extends StatelessWidget {
                       Obx(
                         () => Text(
                           "Page ${controller.page.value} of ${controller.total_page.value}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
@@ -71,7 +71,7 @@ class ClientTable extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.centerRight,
-            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: ElevatedButton(
               style: ButtonStyle(
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
@@ -91,7 +91,7 @@ class ClientTable extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: SingleChildScrollView(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -99,7 +99,7 @@ class ClientTable extends StatelessWidget {
                     () => controller.isLoad.value
                         ? Container(
                             alignment: Alignment.center,
-                            child: CircularProgressIndicator(),
+                            child: const CircularProgressIndicator(),
                           )
                         : DataTable(
                             border: TableBorder.all(color: Colors.black, width: 1),
@@ -122,7 +122,32 @@ class ClientTable extends StatelessWidget {
                                 DataCell(Text(numberedTable.toString())),
                                 DataCell(Text(row.user!.name!)),
                                 DataCell(Text(row.user!.email!)),
-                                DataCell(Row(children: [],)),
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Alerts.showAlertYesNoConfirm(
+                                              title: "Are you sure you want to send mail to ${row.user!.email!}?",
+                                              onPressYes: controller.isLoad.value
+                                                  ? () {}
+                                                  : () async {
+                                                      await controller
+                                                          .sendEmailDetails(idClient: row.idClient!)
+                                                          .then((value) {
+                                                        Navigator.pop(context);
+                                                      });
+                                                    },
+                                              onPressNo: () {
+                                                Navigator.pop(context);
+                                              },
+                                              context: context);
+                                        },
+                                        child: const Text("Send Email"),
+                                      )
+                                    ],
+                                  ),
+                                ),
                                 DataCell(Text(row.status!.toString())),
                                 DataCell(Row(
                                   children: [
