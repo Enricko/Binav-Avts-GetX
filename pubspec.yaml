@@ -110,7 +110,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - .env
+    - env
     - assets/kapal.png
     - assets/model_kapal.jpg
     - assets/kml/cta.kml

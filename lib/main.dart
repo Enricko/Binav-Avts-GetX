@@ -11,7 +11,7 @@ import 'routes/route_name.dart';
 
 void main() async {
   await GetStorage.init();
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "env");
   runApp(MyApp());
 }
 
