@@ -111,7 +111,6 @@ class KapalService extends GetConnect {
     var response = await get("${InitService.baseUrlApi}ip_kapal/${call_sign}", headers: {
       "Authorization": "Bearer " + token,
     });
-    print(response.body);
     return GetIpVessel.fromJson(response.body);
   }
 
