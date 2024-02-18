@@ -13,7 +13,8 @@ class StreamSocketKapal {
 
   StreamController<GetKapalCoor> socketResponseSingleKapal = StreamController<GetKapalCoor>();
 
-  StreamController<GetKapalLatlongResponse> socketResponseSingleKapalLatlong = StreamController<GetKapalLatlongResponse>();
+  StreamController<GetKapalLatlongResponse> socketResponseSingleKapalLatlong =
+      StreamController<GetKapalLatlongResponse>();
 
   Stream<GetKapalCoor> get getResponseAll => socketResponseAllKapal.stream;
   void addResponseAll(GetKapalCoor response) {
@@ -24,7 +25,9 @@ class StreamSocketKapal {
   void addResponseSingle(GetKapalCoor response) {
     socketResponseSingleKapal.sink.add(response);
   }
-  Stream<GetKapalLatlongResponse> get getResponseSingleLatlong => socketResponseSingleKapalLatlong.stream;
+
+  Stream<GetKapalLatlongResponse> get getResponseSingleLatlong =>
+      socketResponseSingleKapalLatlong.stream;
   void addResponseSingleLatlong(GetKapalLatlongResponse response) {
     socketResponseSingleKapalLatlong.sink.add(response);
   }
@@ -47,17 +50,20 @@ class KapalService extends GetConnect {
   // Future<Response> getUser() => get("http://127.0.0.1:5000/api/client");
 
   Future<GetKapalResponse> getData(String token, int page, int perpage) async {
-    var response = await get("${InitService.baseUrlApi}kapal?page=$page&per_page=$perpage", headers: {
+    var response =
+        await get("${InitService.baseUrlApi}kapal?page=$page&per_page=$perpage", headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
   }
+
   Future<GetKapalResponse> getDataByID(String token, String callSign) async {
     var response = await get("${InitService.baseUrlApi}kapal/$callSign", headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
   }
+
   Future<GetKapalResponse> deleteData(String token, String callSign) async {
     var response = await delete("${InitService.baseUrlApi}kapal/$callSign", headers: {
       "Authorization": "Bearer " + token,
@@ -65,7 +71,7 @@ class KapalService extends GetConnect {
     return GetKapalResponse.fromJson(response.body);
   }
 
-  Future<GetKapalResponse> addData(String token,Map<String,dynamic> data) async {
+  Future<GetKapalResponse> addData(String token, Map<String, dynamic> data) async {
     final body = FormData({
       "call_sign": data['call_sign'],
       "id_client": data['id_client'],
@@ -77,12 +83,14 @@ class KapalService extends GetConnect {
       "status": data['status'],
       "xml_file": data['xml_file'],
     });
-    var response = await post("${InitService.baseUrlApi}kapal",body, headers: {
+    var response = await post("${InitService.baseUrlApi}kapal", body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
   }
-  Future<GetKapalResponse> updateData(String token,String callSign,Map<String,dynamic> data) async {
+
+  Future<GetKapalResponse> updateData(
+      String token, String callSign, Map<String, dynamic> data) async {
     final body = FormData({
       "new_call_sign": data['new_call_sign'],
       "flag": data['flag'],
@@ -93,30 +101,33 @@ class KapalService extends GetConnect {
       "status": data['status'],
       "xml_file": data['xml_file'],
     });
-    var response = await put("${InitService.baseUrlApi}kapal/$callSign",body, headers: {
+    var response = await put("${InitService.baseUrlApi}kapal/$callSign", body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
   }
 
   Future<GetIpVessel> getIpVessel(String token, String call_sign) async {
-    var response = await get("${InitService.baseUrlApi}api/ip_kapal/{$call_sign}",
-        headers: {
+    var response = await get("${InitService.baseUrlApi}ip_kapal/${call_sign}", headers: {
       "Authorization": "Bearer " + token,
     });
+    print(response.body);
     return GetIpVessel.fromJson(response.body);
   }
 
-  Future<GetKapalResponse> addIpVessel(String token,String call_sign,Map<String,dynamic> data,) async {
+  Future<GetKapalResponse> addIpVessel(
+    String token,
+    String call_sign,
+    Map<String, dynamic> data,
+  ) async {
     final body = FormData({
       "type_ip": data['type_ip'],
       "ip": data['ip'],
       "port": data['port'],
     });
-    var response = await post("${InitService.baseUrlApi}api/ip_kapal/${call_sign}",body, headers: {
+    var response = await post("${InitService.baseUrlApi}ip_kapal/${call_sign}", body, headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);
   }
-
 }

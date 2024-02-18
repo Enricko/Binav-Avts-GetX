@@ -15,41 +15,15 @@ import '../../../utils/alerts.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/custom_text_field.dart';
 
-class IpKapalPage extends StatefulWidget {
+class IpKapalPage extends StatelessWidget {
   IpKapalPage({super.key, required this.callSign});
-
   final String callSign;
-
-  @override
-  State<IpKapalPage> createState() => _IpKapalPageState();
-}
-
-class _IpKapalPageState extends State<IpKapalPage> {
   var controller = Get.put(IpTableController());
-
-  // String? type;
-  // bool load = false;
-  // bool ignorePointer = false;
-  // Timer? _timer;
-  // Timer? ignorePointerTimer;
-
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    controller.getIpKapal(widget.callSign);
-    // _timer = Timer.periodic(const Duration(milliseconds: 1500), (timer) {
-    //   BlocProvider.of<SocketCubit>(context)
-    //       .getIPKapalDataTable(payload: {"call_sign": widget.callSign, "page": 1, "perpage": 10});
-    //   setState(() {
-    //     load = false;
-    //   });
-    // });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    controller.getIpKapal(callSign);
     var width = MediaQuery.of(context).size.width;
     return SizedBox(
       width: width <= 540 ? width / 1.4 : width / 1.7,
@@ -64,9 +38,8 @@ class _IpKapalPageState extends State<IpKapalPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  " Upload Ip & Port (${widget.callSign})",
-                  style: GoogleFonts.openSans(
-                      fontSize: 15, fontWeight: FontWeight.bold),
+                  " Upload Ip & Port (${callSign})",
+                  style: GoogleFonts.openSans(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   onPressed: () {
@@ -102,9 +75,7 @@ class _IpKapalPageState extends State<IpKapalPage> {
                               IpAddressInputFormatter()
                             ],
                             validator: (value) {
-                              if (value == null ||
-                                  value.isEmpty ||
-                                  value == "") {
+                              if (value == null || value.isEmpty || value == "") {
                                 return "The IP field is required.";
                               }
                               return null;
@@ -123,38 +94,29 @@ class _IpKapalPageState extends State<IpKapalPage> {
                                       LengthLimitingTextInputFormatter(5),
                                     ],
                                     validator: (value) {
-                                      if (value == null ||
-                                          value.isEmpty ||
-                                          value == "") {
+                                      if (value == null || value.isEmpty || value == "") {
                                         return "The Port field is required.";
                                       }
                                       return null;
                                     },
                                     decoration: InputDecoration(
-                                        contentPadding:
-                                            EdgeInsets.fromLTRB(8, 3, 1, 3),
+                                        contentPadding: EdgeInsets.fromLTRB(8, 3, 1, 3),
                                         labelText: "Port",
                                         labelStyle: Constants.labelstyle,
-                                        floatingLabelBehavior:
-                                            FloatingLabelBehavior.always,
+                                        floatingLabelBehavior: FloatingLabelBehavior.always,
                                         focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.blueAccent),
+                                          borderSide:
+                                              BorderSide(width: 1, color: Colors.blueAccent),
                                         ),
                                         enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.black38)),
+                                            borderSide:
+                                                BorderSide(width: 1, color: Colors.black38)),
                                         errorBorder: const OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.redAccent)),
-                                        focusedErrorBorder:
-                                            const OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.redAccent)),
+                                            borderSide:
+                                                BorderSide(width: 1, color: Colors.redAccent)),
+                                        focusedErrorBorder: const OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(width: 1, color: Colors.redAccent)),
                                         filled: true,
                                         fillColor: Colors.white),
                                   ),
@@ -167,24 +129,19 @@ class _IpKapalPageState extends State<IpKapalPage> {
                                 width: 150,
                                 child: DropdownSearch<String>(
                                   selectedItem: controller.type.value,
-                                  dropdownBuilder: (context, selectedItem) =>
-                                      Text(
+                                  dropdownBuilder: (context, selectedItem) => Text(
                                     selectedItem ?? "",
-                                    style: const TextStyle(
-                                        fontSize: 15, color: Colors.black54),
+                                    style: const TextStyle(fontSize: 15, color: Colors.black54),
                                   ),
                                   validator: (value) {
-                                    if (value == null ||
-                                        value.isEmpty ||
-                                        value == "") {
+                                    if (value == null || value.isEmpty || value == "") {
                                       return "The Type field is required.";
                                     }
                                     return null;
                                   },
                                   popupProps: PopupPropsMultiSelection.dialog(
                                     fit: FlexFit.loose,
-                                    itemBuilder: (context, item, isSelected) =>
-                                        ListTile(
+                                    itemBuilder: (context, item, isSelected) => ListTile(
                                       title: Text(
                                         item,
                                         style: const TextStyle(
@@ -193,29 +150,22 @@ class _IpKapalPageState extends State<IpKapalPage> {
                                       ),
                                     ),
                                   ),
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
+                                  dropdownDecoratorProps: DropDownDecoratorProps(
                                     dropdownSearchDecoration: InputDecoration(
                                       labelText: "Type",
                                       labelStyle: Constants.labelstyle,
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1, color: Colors.blueAccent),
+                                        borderSide: BorderSide(width: 1, color: Colors.blueAccent),
                                       ),
                                       enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1, color: Colors.black38)),
+                                          borderSide: BorderSide(width: 1, color: Colors.black38)),
                                       errorBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.redAccent)),
-                                      focusedErrorBorder:
-                                          const OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.redAccent)),
-                                      contentPadding:
-                                          const EdgeInsets.fromLTRB(8, 3, 1, 3),
+                                          borderSide:
+                                              BorderSide(width: 1, color: Colors.redAccent)),
+                                      focusedErrorBorder: const OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(width: 1, color: Colors.redAccent)),
+                                      contentPadding: const EdgeInsets.fromLTRB(8, 3, 1, 3),
                                       filled: true,
                                       fillColor: Colors.white,
                                     ),
@@ -243,8 +193,7 @@ class _IpKapalPageState extends State<IpKapalPage> {
                                 ignoring: controller.ignorePointer.value,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blueAccent),
+                                    backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
                                     shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5),
@@ -254,16 +203,13 @@ class _IpKapalPageState extends State<IpKapalPage> {
                                   onPressed: controller.isLoad.value
                                       ? null
                                       : () async {
-                                          if (_formKey.currentState!
-                                              .validate()) {
+                                          if (_formKey.currentState!.validate()) {
                                             await controller
-                                                .addIpKapal(widget.callSign)
+                                                .addIpKapal(callSign)
                                                 .then((value) async {
                                               if (value) {
-                                                await Get.find<
-                                                        IpTableController>()
-                                                    .getIpKapal(
-                                                        widget.callSign);
+                                                await Get.find<IpTableController>()
+                                                    .getIpKapal(callSign);
                                               }
                                             });
                                           }
@@ -287,81 +233,85 @@ class _IpKapalPageState extends State<IpKapalPage> {
                     Container(
                       width: double.infinity,
                       child: SingleChildScrollView(
-                          child: Obx(
-                        () => controller.isLoad.value
-                            ? Container(
-                                alignment: Alignment.center,
-                                child: CircularProgressIndicator(),
-                              )
-                            : DataTable(
-                                headingRowColor: MaterialStateProperty.all(
-                                    Color(0xffd3d3d3)),
-                                columns: const [
-                                  DataColumn(
-                                      label: SizedBox(
-                                          width: 210, child: Text("IP"))),
-                                  DataColumn(label: Text("Port")),
-                                  DataColumn(label: Text("Type")),
-                                  DataColumn(label: Text("Action")),
-                                ],
-                                rows: controller.dataIp!.map((value) {
-                                  return DataRow(cells: [
-                                    DataCell(Text(value.ip!)),
-                                    DataCell(Text(value.port!.toString())),
-                                    DataCell(Text(value.typeIp!)),
-                                    DataCell(Tooltip(
-                                      message: "Delete",
-                                      child: IconButton(
-                                        onPressed: () {
-                                          Alerts.showAlertYesNo(
-                                              title:
-                                                  "Are you sure you want to delete this data?",
-                                              onPressYes: () async {
-                                                // if (!ignorePointer) {
-                                                //   setState(() {
-                                                //     ignorePointer = true;
-                                                //     ignorePointerTimer = Timer(const Duration(seconds: 3), () {
-                                                //       setState(() {
-                                                //         ignorePointer = false;
-                                                //       });
-                                                //     });
-                                                //   });
-                                                //   EasyLoading.show(status: "Loading...");
-                                                //   try {
-                                                //     SharedPreferences pref = await SharedPreferences.getInstance();
-                                                //     IpKapalDataService()
-                                                //         .deleteIpKapal(
-                                                //             token: pref.getString("token")!,
-                                                //             idIpKapal: value.idIpKapal.toString())
-                                                //         .then((val) {
-                                                //       if (val.status == 200) {
-                                                //         EasyLoading.showSuccess(val.message!,
-                                                //             duration: const Duration(seconds: 3), dismissOnTap: true);
-                                                //         Navigator.pop(context);
-                                                //       } else {
-                                                //         EasyLoading.showError(val.message!,
-                                                //             duration: const Duration(seconds: 3), dismissOnTap: true);
-                                                //         Navigator.pop(context);
-                                                //       }
-                                                //     });
-                                                //   } catch (e) {
-                                                //     print(e);
-                                                //     EasyLoading.showError(e.toString());
-                                                //   }
-                                                // }
-                                              },
-                                              onPressNo: () {
-                                                Navigator.pop(context);
-                                              },
-                                              context: context);
-                                        },
-                                        icon: Icon(Icons.delete,
-                                            color: Colors.redAccent),
-                                      ),
-                                    )),
-                                  ]);
-                                }).toList()),
-                      )),
+                        child: Obx(
+                          () => controller.isLoad.value
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : DataTable(
+                                  headingRowColor: MaterialStateProperty.all(Color(0xffd3d3d3)),
+                                  columns: const [
+                                    DataColumn(label: SizedBox(width: 210, child: Text("IP"))),
+                                    DataColumn(label: Text("Port")),
+                                    DataColumn(label: Text("Type")),
+                                    DataColumn(label: Text("Action")),
+                                  ],
+                                  rows: controller.dataIp!.map(
+                                    (value) {
+                                      return DataRow(
+                                        cells: [
+                                          DataCell(Text(value.ip!)),
+                                          DataCell(Text(value.port!.toString())),
+                                          DataCell(Text(value.typeIp!)),
+                                          DataCell(
+                                            Tooltip(
+                                              message: "Delete",
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  Alerts.showAlertYesNo(
+                                                      title:
+                                                          "Are you sure you want to delete this data?",
+                                                      onPressYes: () async {
+                                                        // if (!ignorePointer) {
+                                                        //   setState(() {
+                                                        //     ignorePointer = true;
+                                                        //     ignorePointerTimer = Timer(const Duration(seconds: 3), () {
+                                                        //       setState(() {
+                                                        //         ignorePointer = false;
+                                                        //       });
+                                                        //     });
+                                                        //   });
+                                                        //   EasyLoading.show(status: "Loading...");
+                                                        //   try {
+                                                        //     SharedPreferences pref = await SharedPreferences.getInstance();
+                                                        //     IpKapalDataService()
+                                                        //         .deleteIpKapal(
+                                                        //             token: pref.getString("token")!,
+                                                        //             idIpKapal: value.idIpKapal.toString())
+                                                        //         .then((val) {
+                                                        //       if (val.status == 200) {
+                                                        //         EasyLoading.showSuccess(val.message!,
+                                                        //             duration: const Duration(seconds: 3), dismissOnTap: true);
+                                                        //         Navigator.pop(context);
+                                                        //       } else {
+                                                        //         EasyLoading.showError(val.message!,
+                                                        //             duration: const Duration(seconds: 3), dismissOnTap: true);
+                                                        //         Navigator.pop(context);
+                                                        //       }
+                                                        //     });
+                                                        //   } catch (e) {
+                                                        //     print(e);
+                                                        //     EasyLoading.showError(e.toString());
+                                                        //   }
+                                                        // }
+                                                      },
+                                                      onPressNo: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      context: context);
+                                                },
+                                                icon: Icon(Icons.delete, color: Colors.redAccent),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ).toList(),
+                                ),
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -382,8 +332,7 @@ class MyInputFormatters {
 
 class IpAddressInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     var text = newValue.text;
 
     if (newValue.selection.baseOffset == 0) {
@@ -431,7 +380,6 @@ class IpAddressInputFormatter extends TextInputFormatter {
 
     var string = buffer.toString();
     return newValue.copyWith(
-        text: string,
-        selection: TextSelection.collapsed(offset: string.length));
+        text: string, selection: TextSelection.collapsed(offset: string.length));
   }
 }
