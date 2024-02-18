@@ -23,6 +23,9 @@ class HomePage extends StatelessWidget {
 
   var mapGetController = Get.find<MapGetXController>();
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  // ///animation
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,22 +59,52 @@ class HomePage extends StatelessWidget {
                 switch (item) {
                   case "vesselList":
                     Get.dialog(
-                      Dialog(child: KapalTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: KapalTable()),
                     );
                   case "pipelineList":
                     Get.dialog(
-                      Dialog(child: PipelineTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: PipelineTable()),
                     );
                   case "clientList":
                     Get.dialog(
-                      Dialog(child: ClientTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: ClientTable()),
                     );
                 }
               },
             ),
+
+            // IconButton(
+            //   icon: new Icon(Icons.settings),
+            //   onPressed: () {
+            //     Scaffold.of(context).openDrawer();
+            //     // Scaffold.of(context).openDrawer();
+            //   },
+            // ),
+
+            // InkWell(
+            //     onTap: () {
+            //       setState(() {
+            //         isSidenavOpen = !isSidenavOpen;
+            //         if (isSidenavOpen) {
+            //           animationController.forward();
+            //         } else {
+            //           animationController.reverse();
+            //         }
+            //       });
+            //     },
+            //     child: AnimatedIcon(
+            //         icon: AnimatedIcons.menu_close, progress: iconAnimation)),
+
             GestureDetector(
                 onTap: () {
                   Get.dialog(
+                    // transitionDuration: Duration(seconds: 1),
                     Dialog(
                         alignment: Alignment.centerRight,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -94,157 +127,178 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Flexible(
-              child: FlutterMap(
-                mapController: mapGetController.mapController,
-                options: MapOptions(
-                  onMapEvent: (event) {
-                    mapGetController.updatePoint(null);
-                  },
-                  minZoom: 4,
-                  maxZoom: 18,
-                  initialZoom: 10,
-                  initialCenter: const LatLng(-1.089955, 117.360343),
-                  onPositionChanged: (position, hasGesture) {
-                    mapGetController.currentZoom.value = position.zoom!;
-                  },
-                ),
-                nonRotatedChildren: [
-                  /// button zoom in/out kanan bawah
-                  const FlutterMapZoomButtons(
-                    minZoom: 4,
-                    maxZoom: 18,
-                    mini: true,
-                    padding: 10,
-                    alignment: Alignment.bottomRight,
-                  ),
-
-                  /// widget skala kiri atas
-                  ScaleLayerWidget(
-                    options: ScaleLayerPluginOption(
-                      lineColor: Colors.blue,
-                      lineWidth: 2,
-                      textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
-                      padding: const EdgeInsets.all(10),
-                    ),
-                  ),
-                  Obx(
-                    () {
-                      if (mapGetController.getVessel.value) {
-                        return VesselDetail();
-                      }
-                      return SizedBox();
-                    },
-                  ),
-                ],
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        // Google RoadMap
-                        // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                        // Google Altered roadmap
-                        // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
-                        // Google Satellite
-                        // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-                        // Google Terrain
-                        // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
-                        // Google Hybrid
-                        'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                    // Open Street Map
-                    // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                    // tileProvider: CancellableNetworkTileProvider(),
-                  ),
-                  PipelineLayer(),
-                  
-                  VesselWidget(),
-                  Obx(
-                    () {
-                      final LatLng? latLng = mapGetController.latLng.value;
-
-                      return MarkerLayer(
-                        markers: [
-                          if (latLng != null)
-                            Marker(
-                              width: mapGetController.pointSize.value,
-                              height: mapGetController.pointSize.value,
-                              point: latLng,
-                              child: CircleAvatar(
-                                child: Image.asset(
-                                  "assets/compass.png",
-                                  width: 250,
-                                  height: 250,
-                                ),
-                              ),
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                  Obx(
-                    () => StreamBuilder(
-                      stream: mapGetController.streamSocketKapal.value.getResponseSingleLatlong,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
-                          if (snapshot.data!.data!.length <= 0 && mapGetController.getVessel.value == false) {
-                            return SizedBox();
-                          }
-                          return PolylineLayer(
-                            polylines: [
-                              Polyline(
-                                strokeWidth: 5,
-                                points: [
-                                  for (var x in snapshot.data!.data!)
-                                    LatLng(x.latitude!, x.longitude!),
-                                  // for (var i in value.vesselCoorResult)
-                                  // if (value.searchKapal != null)
-                                  //   if (value.searchKapal!.kapal!.callSign == value.onClickVessel)
-                                  //     LatLng(
-                                  //         predictLatLong(
-                                  //                 value.searchKapal!.coor!.coorGga!.latitude!
-                                  //                     .toDouble(),
-                                  //                 value.searchKapal!.coor!.coorGga!.longitude!
-                                  //                     .toDouble(),
-                                  //                 100,
-                                  //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
-                                  //                     value.searchKapal!.coor!.defaultHeading!
-                                  //                         .toDouble(),
-                                  //                 value.predictMovementVessel)
-                                  //             .latitude,
-                                  //         predictLatLong(
-                                  //                 value.searchKapal!.coor!.coorGga!.latitude!
-                                  //                     .toDouble(),
-                                  //                 value.searchKapal!.coor!.coorGga!.longitude!
-                                  //                     .toDouble(),
-                                  //                 100,
-                                  //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
-                                  //                     value.searchKapal!.coor!.defaultHeading!
-                                  //                         .toDouble(),
-                                  //                 value.predictMovementVessel)
-                                  //             .longitude
-                                  //         // i.coorGga!.latitude!.toDouble() + (predictMovementVessel * (9.72222 / 111111.1)),
-                                  //         //   i.coorGga!.longitude!.toDouble()
-                                  //         ),
-                                ],
-                                color: Colors.blue,
-                              ),
-                            ],
-                          );
-                        }
-                        return SizedBox();
+      // drawer:  Drawer(
+      //   width: 100,
+      //   child:  ListView(
+      //     // Important: Remove any padding from the ListView.
+      //     padding: EdgeInsets.zero,
+      //     children: [
+      //       const DrawerHeader(
+      //         decoration: BoxDecoration(
+      //           color: Colors.blue,
+      //         ),
+      //         child: Text('Drawer Header'),
+      //       ),
+      //       ListTile(
+      //         title: const Text('Item 1'),
+      //         onTap: () {
+      //           // Update the state of the app.
+      //           // ...
+      //         },
+      //       ),
+      //       ListTile(
+      //         title: const Text('Item 2'),
+      //         onTap: () {
+      //           // Update the state of the app.
+      //           // ...
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Flexible(
+                  child: FlutterMap(
+                    mapController: mapGetController.mapController,
+                    options: MapOptions(
+                      onMapEvent: (event) {
+                        mapGetController.updatePoint(null);
+                      },
+                      minZoom: 4,
+                      maxZoom: 18,
+                      initialZoom: 10,
+                      initialCenter: const LatLng(-1.089955, 117.360343),
+                      onPositionChanged: (position, hasGesture) {
+                        mapGetController.currentZoom.value = position.zoom!;
                       },
                     ),
+                    nonRotatedChildren: [
+                      /// button zoom in/out kanan bawah
+                      const FlutterMapZoomButtons(
+                        minZoom: 4,
+                        maxZoom: 18,
+                        mini: true,
+                        padding: 10,
+                        alignment: Alignment.bottomRight,
+                      ),
+
+                      /// widget skala kiri atas
+                      ScaleLayerWidget(
+                        options: ScaleLayerPluginOption(
+                          lineColor: Colors.blue,
+                          lineWidth: 2,
+                          textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+                          padding: const EdgeInsets.all(10),
+                        ),
+                      ),
+                      Obx(
+                        () {
+                          if (mapGetController.getVessel.value) {
+                            return VesselDetail();
+                          }
+                          return SizedBox();
+                        },
+                      ),
+                    ],
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            // Google RoadMap
+                            // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                            // Google Altered roadmap
+                            // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
+                            // Google Satellite
+                            // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+                            // Google Terrain
+                            // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
+                            // Google Hybrid
+                            'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                        // Open Street Map
+                        // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                        // tileProvider: CancellableNetworkTileProvider(),
+                      ),
+                      PipelineLayer(),
+                      VesselWidget(),
+                      Obx(
+                        () => StreamBuilder(
+                          stream: mapGetController.streamSocketKapal.value.getResponseSingleLatlong,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done ||
+                                snapshot.hasData) {
+                              if (snapshot.data!.data!.length <= 0 &&
+                                  mapGetController.getVessel.value == false) {
+                                return SizedBox();
+                              }
+                              return PolylineLayer(
+                                polylines: [
+                                  Polyline(
+                                    strokeWidth: 5,
+                                    points: [
+                                      for (var x in snapshot.data!.data!)
+                                        LatLng(x.latitude!, x.longitude!),
+                                      // for (var i in value.vesselCoorResult)
+                                      // if (value.searchKapal != null)
+                                      //   if (value.searchKapal!.kapal!.callSign == value.onClickVessel)
+                                      //     LatLng(
+                                      //         predictLatLong(
+                                      //                 value.searchKapal!.coor!.coorGga!.latitude!
+                                      //                     .toDouble(),
+                                      //                 value.searchKapal!.coor!.coorGga!.longitude!
+                                      //                     .toDouble(),
+                                      //                 100,
+                                      //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
+                                      //                     value.searchKapal!.coor!.defaultHeading!
+                                      //                         .toDouble(),
+                                      //                 value.predictMovementVessel)
+                                      //             .latitude,
+                                      //         predictLatLong(
+                                      //                 value.searchKapal!.coor!.coorGga!.latitude!
+                                      //                     .toDouble(),
+                                      //                 value.searchKapal!.coor!.coorGga!.longitude!
+                                      //                     .toDouble(),
+                                      //                 100,
+                                      //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
+                                      //                     value.searchKapal!.coor!.defaultHeading!
+                                      //                         .toDouble(),
+                                      //                 value.predictMovementVessel)
+                                      //             .longitude
+                                      //         // i.coorGga!.latitude!.toDouble() + (predictMovementVessel * (9.72222 / 111111.1)),
+                                      //         //   i.coorGga!.longitude!.toDouble()
+                                      //         ),
+                                    ],
+                                    color: Colors.blue,
+                                  ),
+                                ],
+                              );
+                            }
+                            return SizedBox();
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+class SidebarModel extends ChangeNotifier {
+  List<String> title = ["Vessel", "Pipeline", "Client"];
+  String? hoveredTitle;
+
+  void setHoveredTitle(String? title) {
+    hoveredTitle = title;
+    notifyListeners();
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:binav_avts_getx/model/get_user_response.dart';
+import 'package:binav_avts_getx/model/logout_response.dart';
+import 'package:binav_avts_getx/pages/profile/logout.dart';
 import 'package:binav_avts_getx/services/init.dart';
 import 'package:get/get.dart';
 
@@ -55,4 +57,26 @@ class AuthService extends GetConnect {
     var response = await post("${InitService.baseUrlApi}reset-password", body);
     return LoginResponse.fromJson(response.body);
   }
+
+  Future<LoginResponse> changePassword(String oldpassword, String newpassword, String confirmpassword) async {
+    try {
+      final body = FormData({
+        "old_password": oldpassword,
+        "new_password": newpassword,
+        "password_confirmation": confirmpassword,
+      });
+      var response = await post(
+          "${InitService.baseUrlApi}change", body);
+      return LoginResponse.fromJson(response.body);
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
+  }
+  Future<LogoutResponse> logout(String token) async {
+    var response = await delete("${InitService.baseUrlApi}/api/logout" ,headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return LogoutResponse.fromJson(response.body);
+  }
+
 }

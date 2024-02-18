@@ -77,6 +77,7 @@ class PipelineTable extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
               onPressed: () {
                 Get.dialog(Dialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                   child: AddFormPipeline(),
                 ));
               },

@@ -10,7 +10,7 @@ class ProfileController extends GetxController {
   var currentWidget = "profile_page".obs;
   //
   // var invisible = true.obs;
-  // var isLoading = false.obs;
+  var isLoading = false.obs;
 
   var isChangePassword = false.obs;
   var invisibleOldPass = true.obs;
@@ -40,12 +40,34 @@ class ProfileController extends GetxController {
   @override
   void dispose() {
     super.dispose();
-    // emailController.dispose();
-    // passwordController.dispose();
-    // passwordConfirmationController.dispose();
+    OldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
     // otpController.dispose();
   }
 
+  Future<bool> changepassword() async {
+    bool returnVal = false;
+    isLoading.value = true;
+    await AuthService().changePassword(OldPasswordController.text, newPasswordController.text, confirmPasswordController.text).then((value) async {
+      if (General.isApiOk(value.status!)){
+          Alerts.snackBarGetx(title: "Success", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+          returnVal = true;
+
+      } else {
+        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);
+        returnVal = false;
+      }
+    }).timeout(const Duration(seconds: 10), onTimeout: () {
+      Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    }).onError((error, stackTrace) {
+      Alerts.snackBarGetx(title: "${error}", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    });
+    isLoading.value = false;
+    return returnVal;
+  }
   // void changeWidget(String nameWidget) {
   //   currentWidget.value = nameWidget;
   // }

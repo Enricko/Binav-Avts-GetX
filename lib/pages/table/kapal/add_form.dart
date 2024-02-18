@@ -245,7 +245,7 @@ class AddFormKapal extends StatelessWidget {
                       children: [
                         Div(
                           divison: const Division(
-                            colXS: 12,
+                            colXS: 8,
                             colS: 6,
                             colM: 8,
                             colL: 9,
@@ -264,6 +264,7 @@ class AddFormKapal extends StatelessWidget {
                             },
                           ),
                         ),
+                        SizedBox(width: 10,),
                         Div(
                           divison: const Division(
                             colXS: 12,
