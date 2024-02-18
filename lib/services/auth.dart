@@ -7,10 +7,8 @@ import 'package:get/get.dart';
 import '../model/login_response.dart';
 
 class AuthService extends GetConnect {
-  // Future<Response> getUser() => get("http://127.0.0.1:5000/api/client");
-
   Future<GetUserResponse> checkUser(String token) async {
-    var response = await get("${InitService.baseUrlApi}/user", headers: {
+    var response = await get("${InitService.baseUrlApi}user", headers: {
       "Authorization": "Bearer " + token,
     });
     return GetUserResponse.fromJson(response.body);
@@ -23,7 +21,7 @@ class AuthService extends GetConnect {
         "password": password,
       });
       var response = await post(
-          "${InitService.baseUrlApi}/login", body,
+          "${InitService.baseUrlApi}login", body,
           headers: {'ngrok-skip-browser-warning': 'true'});
       return LoginResponse.fromJson(response.body);
     } catch (e) {

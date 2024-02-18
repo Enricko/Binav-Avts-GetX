@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
+import 'package:binav_avts_getx/services/init.dart';
 import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -62,7 +63,7 @@ class MapGetXController extends GetxController {
   }
 
   void socketAllKapal() {
-    IO.Socket socket = IO.io('http://127.0.0.1:5000/kapal', IO.OptionBuilder().setTransports(['websocket']).build());
+    IO.Socket socket = IO.io('${InitService.baseUrl}kapal', IO.OptionBuilder().setTransports(['websocket']).build());
 
     socket.onConnect((_) => print('connect All'));
 
@@ -89,7 +90,7 @@ class MapGetXController extends GetxController {
     // streamSocketKapal.value.socketResponseSingleKapal.close().then((value){});
     String nameEvent = "single_kapal_coor";
     singleKapalSocket = IO
-        .io('http://127.0.0.1:5000/kapal?name_event=$nameEvent&call_sign=$callSign',
+        .io('${InitService.baseUrl}kapal?name_event=$nameEvent&call_sign=$callSign',
             IO.OptionBuilder().setTransports(['websocket']).build())
         .obs;
 

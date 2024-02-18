@@ -61,7 +61,7 @@ class AuthController extends GetxController {
       Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(title: "${error}", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     });
     isLoading.value = false;
