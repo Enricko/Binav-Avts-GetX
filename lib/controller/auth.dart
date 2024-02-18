@@ -42,12 +42,17 @@ class AuthController extends GetxController {
   Future<bool> login() async {
     bool returnVal = false;
     isLoading.value = true;
-    await AuthService().login(emailController.text, passwordController.text).then((value) {
-      if (General.isApiOk(value.status!)) {
-        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
-        var box = GetStorage();
-        box.write("userToken", "${value.token}");
-        returnVal = true;
+    await AuthService().login(emailController.text, passwordController.text).then((value) async {
+      if (General.isApiOk(value.status!)){
+        await AuthService().checkUser(value.token!).then((val) {
+          var box = GetStorage();
+          box.write("email", "${val.data!.first.email}");
+          box.write("name", "${val.data!.first.name}");
+          Alerts.snackBarGetx(title: "Success", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+          box.write("userToken", "${value.token}");
+          returnVal = true;
+        });
+
       } else {
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);
         returnVal = false;

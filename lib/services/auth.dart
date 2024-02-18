@@ -17,12 +17,18 @@ class AuthService extends GetConnect {
   }
 
   Future<LoginResponse> login(String email, String password) async {
-    final body = FormData({
-      "email": email,
-      "password": password,
-    });
-    var response = await post("${InitService.baseUrlApi}login", body);
-    return LoginResponse.fromJson(response.body);
+    try {
+      final body = FormData({
+        "email": email,
+        "password": password,
+      });
+      var response = await post(
+          "${InitService.baseUrlApi}/login", body,
+          headers: {'ngrok-skip-browser-warning': 'true'});
+      return LoginResponse.fromJson(response.body);
+    } catch (e) {
+      throw Exception("Error: $e");
+    }
   }
 
   Future<LoginResponse> sendOtp(String email) async {
@@ -33,8 +39,6 @@ class AuthService extends GetConnect {
     return LoginResponse.fromJson(response.body);
   }
 
-
-
   Future<LoginResponse> checkOtp(String email, String otpCode) async {
     final body = FormData({
       "email": email,
@@ -44,8 +48,8 @@ class AuthService extends GetConnect {
     return LoginResponse.fromJson(response.body);
   }
 
-  Future<LoginResponse> resetPassword(
-      String email, String otpCode, String password, String passwordConfirmation) async {
+  Future<LoginResponse> resetPassword(String email, String otpCode,
+      String password, String passwordConfirmation) async {
     final body = FormData({
       "email": email,
       "otp_code": otpCode,

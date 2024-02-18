@@ -36,7 +36,7 @@ class KapalService extends GetConnect {
   // Future<Response> getUser() => get("http://127.0.0.1:5000/api/client");
 
   Future<GetKapalResponse> getData(String token, int page, int perpage) async {
-    var response = await get("${InitService.baseUrlApi}kapal?page=$page&per_page=$perpage", headers: {
+    var response = await get("https://627b-140-213-58-125.ngrok-free.app/kapal?page=$page&per_page=$perpage", headers: {
       "Authorization": "Bearer " + token,
     });
     return GetKapalResponse.fromJson(response.body);

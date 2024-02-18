@@ -1,4 +1,5 @@
 import 'package:binav_avts_getx/controller/map.dart';
+import 'package:binav_avts_getx/pages/table/first_profile.dart';
 import 'package:binav_avts_getx/widget/maps/vessel/vessel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -67,7 +68,28 @@ class HomePage extends StatelessWidget {
                     );
                 }
               },
-            )
+            ),
+            GestureDetector(
+                onTap: (){
+                  Get.dialog(
+                    Dialog(
+                        alignment: Alignment.centerRight,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        child: FirstProfile()),
+                  );
+                  // showDialog(
+                  //     context: context,
+                  //     barrierDismissible: false,
+                  //     builder: (BuildContext context) {
+                  //       return Dialog(
+                  //           alignment: Alignment.centerRight,
+                  //           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+                  //           child:FirstProfile());
+                  //     });
+                },
+                child: CircleAvatar(
+                  child: Text("K",style: TextStyle(fontSize: 15) ),
+                ))
           ],
         ),
       ),
