@@ -18,12 +18,14 @@ import 'table/client/client.dart';
 import 'table/kapal/kapal.dart';
 import 'table/pipeline/pipeline.dart';
 
-
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   var mapGetController = Get.find<MapGetXController>();
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  // ///animation
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,25 +59,56 @@ class HomePage extends StatelessWidget {
                 switch (item) {
                   case "vesselList":
                     Get.dialog(
-                      Dialog(child: KapalTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: KapalTable()),
                     );
                   case "pipelineList":
                     Get.dialog(
-                      Dialog(child: PipelineTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: PipelineTable()),
                     );
                   case "clientList":
                     Get.dialog(
-                      Dialog(child: ClientTable()),
+                      Dialog(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          child: ClientTable()),
                     );
                 }
               },
             ),
+
+            // IconButton(
+            //   icon: new Icon(Icons.settings),
+            //   onPressed: () {
+            //     Scaffold.of(context).openDrawer();
+            //     // Scaffold.of(context).openDrawer();
+            //   },
+            // ),
+
+            // InkWell(
+            //     onTap: () {
+            //       setState(() {
+            //         isSidenavOpen = !isSidenavOpen;
+            //         if (isSidenavOpen) {
+            //           animationController.forward();
+            //         } else {
+            //           animationController.reverse();
+            //         }
+            //       });
+            //     },
+            //     child: AnimatedIcon(
+            //         icon: AnimatedIcons.menu_close, progress: iconAnimation)),
+
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   Get.dialog(
+                    // transitionDuration: Duration(seconds: 1),
                     Dialog(
                         alignment: Alignment.centerRight,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         child: FirstProfile()),
                   );
                   // showDialog(
@@ -89,107 +122,187 @@ class HomePage extends StatelessWidget {
                   //     });
                 },
                 child: CircleAvatar(
-                  child: Text("${GetStorage().read("name")[0]}".toUpperCase(),style: TextStyle(fontSize: 15) ),
+                  child: Text("${GetStorage().read("name")[0]}".toUpperCase(),
+                      style: TextStyle(fontSize: 15)),
                 ))
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Flexible(
-              child: FlutterMap(
-                mapController: mapGetController.mapController,
-                options: MapOptions(
-                  onMapEvent: (event) {
-                    mapGetController.updatePoint(null);
-                  },
-                  minZoom: 4,
-                  maxZoom: 18,
-                  initialZoom: 10,
-                  initialCenter: const LatLng(-1.089955, 117.360343),
-                  onPositionChanged: (position, hasGesture) {
-                    mapGetController.currentZoom.value = position.zoom!;
-                  },
-                ),
-                nonRotatedChildren: [
-                  /// button zoom in/out kanan bawah
-                  const FlutterMapZoomButtons(
+      // drawer:  Drawer(
+      //   width: 100,
+      //   child:  ListView(
+      //     // Important: Remove any padding from the ListView.
+      //     padding: EdgeInsets.zero,
+      //     children: [
+      //       const DrawerHeader(
+      //         decoration: BoxDecoration(
+      //           color: Colors.blue,
+      //         ),
+      //         child: Text('Drawer Header'),
+      //       ),
+      //       ListTile(
+      //         title: const Text('Item 1'),
+      //         onTap: () {
+      //           // Update the state of the app.
+      //           // ...
+      //         },
+      //       ),
+      //       ListTile(
+      //         title: const Text('Item 2'),
+      //         onTap: () {
+      //           // Update the state of the app.
+      //           // ...
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // ),
+      body: Stack(children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Flexible(
+                child: FlutterMap(
+                  mapController: mapGetController.mapController,
+                  options: MapOptions(
+                    onMapEvent: (event) {
+                      mapGetController.updatePoint(null);
+                    },
                     minZoom: 4,
                     maxZoom: 18,
-                    mini: true,
-                    padding: 10,
-                    alignment: Alignment.bottomRight,
-                  ),
-
-                  /// widget skala kiri atas
-                  ScaleLayerWidget(
-                    options: ScaleLayerPluginOption(
-                      lineColor: Colors.blue,
-                      lineWidth: 2,
-                      textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
-                      padding: const EdgeInsets.all(10),
-                    ),
-                  ),
-                  Obx(
-                    () {
-                      if (mapGetController.getVessel.value) {
-                        return VesselDetail();
-                      }
-                      return SizedBox();
+                    initialZoom: 10,
+                    initialCenter: const LatLng(-1.089955, 117.360343),
+                    onPositionChanged: (position, hasGesture) {
+                      mapGetController.currentZoom.value = position.zoom!;
                     },
                   ),
-                ],
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        // Google RoadMap
-                        // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                        // Google Altered roadmap
-                        // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
-                        // Google Satellite
-                        // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-                        // Google Terrain
-                        // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
-                        // Google Hybrid
-                        'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                    // Open Street Map
-                    // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                    // tileProvider: CancellableNetworkTileProvider(),
-                  ),
-                  PipelineLayer(),
-                  VesselWidget(),
-                  Obx(
-                    () {
-                      final LatLng? latLng = mapGetController.latLng.value;
+                  nonRotatedChildren: [
 
-                      return MarkerLayer(
-                        markers: [
-                          if (latLng != null)
-                            Marker(
-                              width: mapGetController.pointSize.value,
-                              height: mapGetController.pointSize.value,
-                              point: latLng,
-                              child: CircleAvatar(
-                                child: Image.asset(
-                                  "assets/compass.png",
-                                  width: 250,
-                                  height: 250,
+                    /// button zoom in/out kanan bawah
+                    const FlutterMapZoomButtons(
+                      minZoom: 4,
+                      maxZoom: 18,
+                      mini: true,
+                      padding: 10,
+                      alignment: Alignment.bottomRight,
+                    ),
+
+                    /// widget skala kiri atas
+                    ScaleLayerWidget(
+                      options: ScaleLayerPluginOption(
+                        lineColor: Colors.blue,
+                        lineWidth: 2,
+                        textStyle:
+                        const TextStyle(color: Colors.blue, fontSize: 12),
+                        padding: const EdgeInsets.all(10),
+                      ),
+                    ),
+                    Obx(
+                          () {
+                        if (mapGetController.getVessel.value) {
+                          return VesselDetail();
+                        }
+                        return SizedBox();
+                      },
+                    ),
+                  ],
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                      // Google RoadMap
+                      // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                      // Google Altered roadmap
+                      // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
+                      // Google Satellite
+                      // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+                      // Google Terrain
+                      // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
+                      // Google Hybrid
+                      'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                      // Open Street Map
+                      // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                      // tileProvider: CancellableNetworkTileProvider(),
+                    ),
+                    PipelineLayer(),
+                    VesselWidget(),
+                    Obx(
+                          () {
+                        final LatLng? latLng = mapGetController.latLng.value;
+
+                        return MarkerLayer(
+                          markers: [
+                            if (latLng != null)
+                              Marker(
+                                width: mapGetController.pointSize.value,
+                                height: mapGetController.pointSize.value,
+                                point: latLng,
+                                child: CircleAvatar(
+                                  child: Image.asset(
+                                    "assets/compass.png",
+                                    width: 250,
+                                    height: 250,
+                                  ),
                                 ),
                               ),
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+        // AnimatedPositioned(
+        //   duration: Duration(milliseconds: 300),
+        //   left: isSidenavOpen ? 0.0 : -context.width,
+        //   curve: Curves.easeOut,
+        //   child: AnimatedOpacity(
+        //     opacity: isSidenavOpen ? 1.0 : 0.0,
+        //     curve: Curves.easeOut,
+        //     duration: Duration(milliseconds: 300),
+        //     child: AnimatedContainer(
+        //       duration: Duration(milliseconds: 300),
+        //       height: context.height,
+        //       width: context.width / 6,
+        //       curve: Curves.easeOut,
+        //       decoration: BoxDecoration(
+        //           color: Colors.black54,
+        //           borderRadius: BorderRadius.horizontal(
+        //               right: Radius.elliptical(
+        //                   isSidenavOpen ? 0.0 : context.width,
+        //                   context.height / 2))),
+        //       child: ListenableBuilder(
+        //         listenable: sidebarModel,
+        //         builder: (context, child) {
+        //           return Column(
+        //               children: sidebarModel.title.map<Widget>((title) {
+        //               return Column(
+        //                 children: [
+        //                   Text("")
+        //                 ],
+        //               )
+        //               }).toList()
+        //           )
+        //         },
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ]),
     );
+  }
+}
+
+class SidebarModel extends ChangeNotifier {
+  List<String> title = ["Vessel", "Pipeline", "Client"];
+  String? hoveredTitle;
+
+  void setHoveredTitle(String? title) {
+    hoveredTitle = title;
+    notifyListeners();
   }
 }

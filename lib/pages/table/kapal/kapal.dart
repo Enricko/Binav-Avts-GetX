@@ -6,6 +6,7 @@ import 'package:pagination_flutter/pagination.dart';
 
 import '../../../controller/table/kapal/kapal.dart';
 import '../../../utils/alerts.dart';
+import 'ip_kapal.dart';
 
 class KapalTable extends StatelessWidget {
   KapalTable({super.key});
@@ -89,101 +90,110 @@ class KapalTable extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: SingleChildScrollView(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Obx(
-                    () => controller.isLoad.value
-                        ? Container(
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(),
-                          )
-                        : DataTable(
-                            border: TableBorder.all(color: Colors.black, width: 1),
-                            headingRowColor: MaterialStateProperty.all(const Color(0xffd3d3d3)),
-                            columns: const [
-                              DataColumn(label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Client Name", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Call Sign", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Year Built", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("File XML", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Upload IP ", style: TextStyle(fontWeight: FontWeight.w800))),
-                              DataColumn(label: Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
-                            ],
-                            // ignore: invalid_use_of_protected_member
-                            rows: controller.data!.value.map((row) {
-                              int numberedTable =
-                                  // ignore: invalid_use_of_protected_member
-                                  controller.data!.value.toList().indexWhere((e) => e.callSign == row.callSign) +
-                                      1 * controller.page.value;
-                              return DataRow(cells: [
-                                DataCell(Text(numberedTable.toString())),
-                                DataCell(Text(row.client!.user!.name!)),
-                                DataCell(Text(row.callSign!)),
-                                DataCell(Text(row.flag!)),
-                                DataCell(Text(row.kelas!)),
-                                DataCell(Text(row.builder!)),
-                                DataCell(Text(row.yearBuilt!)),
-                                DataCell(Text(row.size!)),
-                                DataCell(Text(row.xmlFile!)),
-                                DataCell(Container()),
-                                DataCell(Row(
-                                  children: [
-                                    Tooltip(
-                                      message: "Edit",
-                                      child: IconButton(
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.blue,
-                                        ),
-                                        onPressed: () {
-                                          Get.dialog(Dialog(
-                                            child: EditFormKapal(callSign: row.callSign!),
-                                          ));
-                                        },
+            // margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Obx(
+                () => controller.isLoad.value
+                    ? Container(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
+                      )
+                    : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DataTable(
+                          border: TableBorder.all(color: Colors.black, width: 1),
+                          headingRowColor: MaterialStateProperty.all(const Color(0xffd3d3d3)),
+                          columns: const [
+                            DataColumn(label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Client Name", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Call Sign", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Year Built", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("File XML", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Upload IP ", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(label: Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
+                          ],
+                          // ignore: invalid_use_of_protected_member
+                          rows: controller.data!.value.map((row) {
+                            int numberedTable =
+                                // ignore: invalid_use_of_protected_member
+                                controller.data!.value.toList().indexWhere((e) => e.callSign == row.callSign) +
+                                    1 * controller.page.value;
+                            return DataRow(cells: [
+                              DataCell(Text(numberedTable.toString())),
+                              DataCell(Text(row.client!.user!.name!)),
+                              DataCell(Text(row.callSign!)),
+                              DataCell(Text(row.flag!)),
+                              DataCell(Text(row.kelas!)),
+                              DataCell(Text(row.builder!)),
+                              DataCell(Text(row.yearBuilt!)),
+                              DataCell(Text(row.size!)),
+                              DataCell(Text(row.xmlFile!)),
+                              DataCell(Tooltip(
+                                message: "Ip Kapal",
+                                child: IconButton(
+                                    onPressed: () {
+                                      Get.dialog(Dialog(
+                                        child: IpKapalPage(callSign: row.callSign!),
+                                      ));
+                                    },
+                                    icon: const Icon(Icons.edit_location_alt_outlined)),
+                              )),
+                              // DataCell(Container()),
+                              DataCell(Row(
+                                children: [
+                                  Tooltip(
+                                    message: "Edit",
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.blue,
                                       ),
+                                      onPressed: () {
+                                        Get.dialog(Dialog(
+                                          child: EditFormKapal(callSign: row.callSign!),
+                                        ));
+                                      },
                                     ),
-                                    Tooltip(
-                                      message: "Delete",
-                                      child: IconButton(
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        ),
-                                        onPressed: controller.isLoad.value
-                                            ? null
-                                            : () {
-                                                Alerts.showAlertYesNo(
-                                                  title: "Are you sure you want to delete this data?",
-                                                  onPressYes: () async {
-                                                    await controller
-                                                        .deleteData(callSign: row.callSign!)
-                                                        .then((_) async {
-                                                      await controller.getKapalData();
-                                                      Navigator.pop(context);
-                                                    });
-                                                  },
-                                                  onPressNo: () {
+                                  ),
+                                  Tooltip(
+                                    message: "Delete",
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: controller.isLoad.value
+                                          ? null
+                                          : () {
+                                              Alerts.showAlertYesNo(
+                                                title: "Are you sure you want to delete this data?",
+                                                onPressYes: () async {
+                                                  await controller
+                                                      .deleteData(callSign: row.callSign!)
+                                                      .then((_) async {
+                                                    await controller.getKapalData();
                                                     Navigator.pop(context);
-                                                  },
-                                                  context: context,
-                                                );
-                                              },
-                                      ),
+                                                  });
+                                                },
+                                                onPressNo: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                context: context,
+                                              );
+                                            },
                                     ),
-                                  ],
-                                )),
-                              ]);
-                            }).toList(),
-                          ),
-                  ),
-                ),
+                                  ),
+                                ],
+                              )),
+                            ]);
+                          }).toList(),
+                        ),
+                    ),
               ),
             ),
           ),

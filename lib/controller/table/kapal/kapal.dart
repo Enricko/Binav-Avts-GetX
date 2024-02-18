@@ -1,3 +1,4 @@
+import 'package:binav_avts_getx/model/get_ip_vessel.dart' as GetIpKapal;
 import 'package:binav_avts_getx/model/get_kapal_response.dart' as GetKapal;
 import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class KapalTableController extends GetxController {
   var total = 0.obs;
 
   RxList<GetKapal.Data>? data;
+
+  // RxList<GetIpKapal.Data>? dataIp;
 
   Future<void> getKapalData() async {
     isLoad.value = true;
@@ -44,6 +47,19 @@ class KapalTableController extends GetxController {
     });
     isLoad.value = false;
   }
+
+  // Future<void> getIpKapal(String callSign) async {
+  //   isLoad.value = true;
+  //   print("------");
+  //   var token = GetStorage().read("userToken");
+  //   await KapalService().getIpVessel(token, callSign).then((value) {
+  //     dataIp = value.data!.obs as RxList<GetIpKapal.Data>?;
+  //     // total_page.value = (value.total! / perpage.value).ceil();
+  //   });
+  //   isLoad.value = false;
+  // }
+
+
 
   @override
   void onInit() {

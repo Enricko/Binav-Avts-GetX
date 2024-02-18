@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:binav_avts_getx/pages/login_page.dart';
 import 'package:binav_avts_getx/pages/not_found.dart';
 import 'package:binav_avts_getx/routes/page_route.dart';
@@ -29,11 +31,18 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      unknownRoute: GetPage(      name: RouteName.notFound,
-      page: () => NotFound(),),
+      unknownRoute: GetPage(
+        name: RouteName.notFound,
+        page: () => NotFound(),
+      ),
       initialRoute: '/login',
       getPages: PageRouteList.pages,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.touch,
+        PointerDeviceKind.stylus,
+        PointerDeviceKind.unknown
+      }),
     );
   }
 }
-

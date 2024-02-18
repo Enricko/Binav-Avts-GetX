@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:binav_avts_getx/model/get_ip_vessel.dart';
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
 import 'package:binav_avts_getx/model/get_kapal_response.dart';
 import 'package:binav_avts_getx/services/init.dart';
@@ -87,4 +88,25 @@ class KapalService extends GetConnect {
     });
     return GetKapalResponse.fromJson(response.body);
   }
+
+  Future<GetIpVessel> getIpVessel(String token, String call_sign) async {
+    var response = await get("${InitService.baseUrlApi}api/ip_kapal/{$call_sign}",
+        headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetIpVessel.fromJson(response.body);
+  }
+
+  Future<GetKapalResponse> addIpVessel(String token,String call_sign,Map<String,dynamic> data,) async {
+    final body = FormData({
+      "type_ip": data['type_ip'],
+      "ip": data['ip'],
+      "port": data['port'],
+    });
+    var response = await post("${InitService.baseUrlApi}api/ip_kapal/${call_sign}",body, headers: {
+      "Authorization": "Bearer " + token,
+    });
+    return GetKapalResponse.fromJson(response.body);
+  }
+
 }
