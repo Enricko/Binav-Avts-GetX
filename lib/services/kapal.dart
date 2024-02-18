@@ -5,10 +5,14 @@ import 'package:binav_avts_getx/model/get_kapal_response.dart';
 import 'package:binav_avts_getx/services/init.dart';
 import 'package:get/get.dart';
 
+import '../model/get_kapal_latlong_response.dart';
+
 class StreamSocketKapal {
   StreamController<GetKapalCoor> socketResponseAllKapal = StreamController<GetKapalCoor>();
 
   StreamController<GetKapalCoor> socketResponseSingleKapal = StreamController<GetKapalCoor>();
+
+  StreamController<GetKapalLatlongResponse> socketResponseSingleKapalLatlong = StreamController<GetKapalLatlongResponse>();
 
   Stream<GetKapalCoor> get getResponseAll => socketResponseAllKapal.stream;
   void addResponseAll(GetKapalCoor response) {
@@ -19,16 +23,22 @@ class StreamSocketKapal {
   void addResponseSingle(GetKapalCoor response) {
     socketResponseSingleKapal.sink.add(response);
   }
+  Stream<GetKapalLatlongResponse> get getResponseSingleLatlong => socketResponseSingleKapalLatlong.stream;
+  void addResponseSingleLatlong(GetKapalLatlongResponse response) {
+    socketResponseSingleKapalLatlong.sink.add(response);
+  }
 
   Future<void> refreshSingleKapal() async {
     await socketResponseSingleKapal.close();
 
     socketResponseSingleKapal = StreamController<GetKapalCoor>();
+    socketResponseSingleKapalLatlong = StreamController<GetKapalLatlongResponse>();
   }
 
   void dispose() {
     socketResponseAllKapal.close();
     socketResponseSingleKapal.close();
+    socketResponseSingleKapalLatlong.close();
   }
 }
 

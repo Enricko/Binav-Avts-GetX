@@ -1,6 +1,7 @@
 import 'package:binav_avts_getx/pages/login_page.dart';
 import 'package:binav_avts_getx/pages/not_found.dart';
 import 'package:binav_avts_getx/routes/page_route.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -33,6 +34,14 @@ class MyApp extends StatelessWidget {
       page: () => NotFound(),),
       initialRoute: '/login',
       getPages: PageRouteList.pages,
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.touch,
+              PointerDeviceKind.stylus,
+              PointerDeviceKind.unknown
+            },
+          ),
     );
   }
 }

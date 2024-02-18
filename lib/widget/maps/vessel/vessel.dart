@@ -67,6 +67,7 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
   Future<void> vesselOnClick(String callSign, LatLng latLng) async {
     mapGetController.getVessel.value = true;
     mapGetController.socketSingleKapal(callSign);
+    mapGetController.socketSingleKapalLatlong(callSign);
     _animatedMapMove(latLng, 15);
   }
 

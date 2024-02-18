@@ -18,7 +18,6 @@ import 'table/client/client.dart';
 import 'table/kapal/kapal.dart';
 import 'table/pipeline/pipeline.dart';
 
-
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
@@ -71,7 +70,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             GestureDetector(
-                onTap: (){
+                onTap: () {
                   Get.dialog(
                     Dialog(
                         alignment: Alignment.centerRight,
@@ -89,7 +88,8 @@ class HomePage extends StatelessWidget {
                   //     });
                 },
                 child: CircleAvatar(
-                  child: Text("${GetStorage().read("name")[0]}".toUpperCase(),style: TextStyle(fontSize: 15) ),
+                  child: Text("${GetStorage().read("name")[0]}".toUpperCase(),
+                      style: TextStyle(fontSize: 15)),
                 ))
           ],
         ),
@@ -160,6 +160,7 @@ class HomePage extends StatelessWidget {
                     // tileProvider: CancellableNetworkTileProvider(),
                   ),
                   PipelineLayer(),
+                  
                   VesselWidget(),
                   Obx(
                     () {
@@ -183,6 +184,60 @@ class HomePage extends StatelessWidget {
                         ],
                       );
                     },
+                  ),
+                  Obx(
+                    () => StreamBuilder(
+                      stream: mapGetController.streamSocketKapal.value.getResponseSingleLatlong,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
+                          if (snapshot.data!.data!.length <= 0 && mapGetController.getVessel.value == false) {
+                            return SizedBox();
+                          }
+                          return PolylineLayer(
+                            polylines: [
+                              Polyline(
+                                strokeWidth: 5,
+                                points: [
+                                  for (var x in snapshot.data!.data!)
+                                    LatLng(x.latitude!, x.longitude!),
+                                  // for (var i in value.vesselCoorResult)
+                                  // if (value.searchKapal != null)
+                                  //   if (value.searchKapal!.kapal!.callSign == value.onClickVessel)
+                                  //     LatLng(
+                                  //         predictLatLong(
+                                  //                 value.searchKapal!.coor!.coorGga!.latitude!
+                                  //                     .toDouble(),
+                                  //                 value.searchKapal!.coor!.coorGga!.longitude!
+                                  //                     .toDouble(),
+                                  //                 100,
+                                  //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
+                                  //                     value.searchKapal!.coor!.defaultHeading!
+                                  //                         .toDouble(),
+                                  //                 value.predictMovementVessel)
+                                  //             .latitude,
+                                  //         predictLatLong(
+                                  //                 value.searchKapal!.coor!.coorGga!.latitude!
+                                  //                     .toDouble(),
+                                  //                 value.searchKapal!.coor!.coorGga!.longitude!
+                                  //                     .toDouble(),
+                                  //                 100,
+                                  //                 value.searchKapal!.coor!.coorHdt!.headingDegree ??
+                                  //                     value.searchKapal!.coor!.defaultHeading!
+                                  //                         .toDouble(),
+                                  //                 value.predictMovementVessel)
+                                  //             .longitude
+                                  //         // i.coorGga!.latitude!.toDouble() + (predictMovementVessel * (9.72222 / 111111.1)),
+                                  //         //   i.coorGga!.longitude!.toDouble()
+                                  //         ),
+                                ],
+                                color: Colors.blue,
+                              ),
+                            ],
+                          );
+                        }
+                        return SizedBox();
+                      },
+                    ),
                   ),
                 ],
               ),

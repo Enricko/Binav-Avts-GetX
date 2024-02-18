@@ -70,6 +70,7 @@ class VesselDetail extends StatelessWidget {
                                     );
                                     Timer(const Duration(milliseconds: 300), () {
                                       mapGetController.socketSingleKapalDisconnect();
+                                      mapGetController.socketSingleKapalLatlongDisconnect();
                                       mapGetController.getVessel.value = false;
                                       mapGetController.streamSocketKapal.value.refreshSingleKapal();
                                     });

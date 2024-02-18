@@ -20,8 +20,7 @@ class AuthService extends GetConnect {
         "email": email,
         "password": password,
       });
-      var response = await post(
-          "${InitService.baseUrlApi}login", body);
+      var response = await post("${InitService.baseUrlApi}login", body);
       return LoginResponse.fromJson(response.body);
     } catch (e) {
       throw Exception("Error: $e");
@@ -45,8 +44,8 @@ class AuthService extends GetConnect {
     return LoginResponse.fromJson(response.body);
   }
 
-  Future<LoginResponse> resetPassword(String email, String otpCode,
-      String password, String passwordConfirmation) async {
+  Future<LoginResponse> resetPassword(
+      String email, String otpCode, String password, String passwordConfirmation) async {
     final body = FormData({
       "email": email,
       "otp_code": otpCode,

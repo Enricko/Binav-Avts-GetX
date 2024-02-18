@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
+import 'package:binav_avts_getx/model/get_kapal_latlong_response.dart';
 import 'package:binav_avts_getx/services/init.dart';
 import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
@@ -102,6 +103,36 @@ class MapGetXController extends GetxController {
       streamSocketKapal.value.addResponseSingle(response);
     });
     singleKapalSocket!.value.onDisconnect((_) => print('disconnect Single'));
+  }
+  
+  Rx<IO.Socket>? singleKapalLatlongSocket;
+
+  void socketSingleKapalLatlongDisconnect() {
+    if (singleKapalLatlongSocket != null) {
+      singleKapalLatlongSocket!.value.disconnect();
+      singleKapalLatlongSocket = null;
+    }
+  }
+
+  void socketSingleKapalLatlong(String callSign) {
+    print("asdasd");
+    socketSingleKapalLatlongDisconnect();
+    // streamSocketKapal.value.socketResponseSingleKapal.close().then((value){});
+    String nameEvent = "kapal_latlong";
+    singleKapalLatlongSocket = IO
+        // .io('${InitService.baseUrl}kapal-latlong?call_sign=$callSign',
+        .io('http://127.0.0.1:5000/kapal-latlong?call_sign=$callSign',
+            IO.OptionBuilder().setTransports(['websocket']).build())
+        .obs;
+
+    singleKapalLatlongSocket!.value.onConnect((_) => print('connect Singleasdasd'));
+
+    singleKapalLatlongSocket!.value.on('kapal_latlong', (data) {
+      var response = GetKapalLatlongResponse.fromJson(data);
+
+      streamSocketKapal.value.addResponseSingleLatlong(response);
+    });
+    singleKapalLatlongSocket!.value.onDisconnect((_) => print('disconnect Single'));
   }
 
   void updatePoint(MapEvent? event) {
