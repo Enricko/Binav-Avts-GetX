@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
             Center(
                 child: CircleAvatar(
                   child: Text(
-                    controller.email[0].toUpperCase(),
+                    controller.name[0].toUpperCase(),
                     style: TextStyle(fontSize: 30),
                   ),
                   radius: 50,

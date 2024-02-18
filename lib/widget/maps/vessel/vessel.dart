@@ -85,8 +85,6 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
     // Calculate the new latitude and longitude
     double newLatitude = latitude + deltaLatitude;
     double newLongitude = longitude + deltaLongitude;
-    print(newLatitude);
-    print(newLongitude);
     return LatLng(newLatitude, newLongitude);
   }
 
@@ -114,49 +112,47 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
                     e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
                     1,
                   );
-                  print(latlong);
-                  return Marker(point: LatLng(0,0),child: SizedBox());
-                  // return Marker(
-                  //   width: mapGetController.vesselSizes(e.size!) +
-                  //       (mapGetController.currentZoom.value - 8) * 6,
-                  //   height: mapGetController.vesselSizes(e.size!) +
-                  //       (mapGetController.currentZoom.value - 8) * 6,
-                  //   point: LatLng(
-                  //     latlong.latitude,
-                  //     latlong.longitude,
-                  //   ),
-                  //   child: MouseRegion(
-                  //     cursor: SystemMouseCursors.click,
-                  //     child: GestureDetector(
-                  //       onTap: () {
-                  //         vesselOnClick(
-                  //           e.callSign!,
-                  //           LatLng(
-                  //             latlong.latitude - .005,
-                  //             latlong.longitude,
-                  //             // e.coor!.coorGga!.latitude! - .005,
-                  //             // e.coor!.coorGga!.longitude!,
-                  //           ),
-                  //         );
-                  //       },
-                  //       child: Transform.rotate(
-                  //         angle: mapGetController.degreesToRadians(
-                  //           e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
-                  //         ),
-                  //         child: Tooltip(
-                  //           message: e.callSign!,
-                  //           child: Image.asset(
-                  //             "assets/ship.png",
-                  //             height: mapGetController.vesselSizes(e.size!.toString()) +
-                  //                 (mapGetController.currentZoom.value - 8) * 6,
-                  //             width: mapGetController.vesselSizes(e.size!.toString()) +
-                  //                 (mapGetController.currentZoom.value - 8) * 6,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+                  return Marker(
+                    width: mapGetController.vesselSizes(e.size!) +
+                        (mapGetController.currentZoom.value - 8) * 6,
+                    height: mapGetController.vesselSizes(e.size!) +
+                        (mapGetController.currentZoom.value - 8) * 6,
+                    point: LatLng(
+                      latlong.latitude,
+                      latlong.longitude,
+                    ),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          vesselOnClick(
+                            e.callSign!,
+                            LatLng(
+                              latlong.latitude - .005,
+                              latlong.longitude,
+                              // e.coor!.coorGga!.latitude! - .005,
+                              // e.coor!.coorGga!.longitude!,
+                            ),
+                          );
+                        },
+                        child: Transform.rotate(
+                          angle: mapGetController.degreesToRadians(
+                            e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                          ),
+                          child: Tooltip(
+                            message: e.callSign!,
+                            child: Image.asset(
+                              "assets/ship.png",
+                              height: mapGetController.vesselSizes(e.size!.toString()) +
+                                  (mapGetController.currentZoom.value - 8) * 6,
+                              width: mapGetController.vesselSizes(e.size!.toString()) +
+                                  (mapGetController.currentZoom.value - 8) * 6,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ).toList(),
             ),

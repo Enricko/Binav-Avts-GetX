@@ -21,8 +21,7 @@ class AuthService extends GetConnect {
         "password": password,
       });
       var response = await post(
-          "${InitService.baseUrlApi}login", body,
-          headers: {'ngrok-skip-browser-warning': 'true'});
+          "${InitService.baseUrlApi}login", body);
       return LoginResponse.fromJson(response.body);
     } catch (e) {
       throw Exception("Error: $e");

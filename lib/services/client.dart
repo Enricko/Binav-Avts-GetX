@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 
 class ClientService extends GetConnect {
   Future<GetClientResponse> getData(String token, int page, int perpage) async {
-    var response = await get("https://627b-140-213-58-125.ngrok-free.app/api/client?page=$page&per_page=$perpage", headers: {
+    var response = await get("${InitService.baseUrlApi}client?page=$page&per_page=$perpage", headers: {
       "Authorization": "Bearer " + token,
-      'ngrok-skip-browser-warning': 'true'
     });
     return GetClientResponse.fromJson(response.body);
   }

@@ -48,8 +48,8 @@ class AuthController extends GetxController {
           var box = GetStorage();
           box.write("email", "${val.data!.first.email}");
           box.write("name", "${val.data!.first.name}");
-          Alerts.snackBarGetx(title: "Success", message: value.message!, alertStatus: AlertStatus.SUCCESS);
           box.write("userToken", "${value.token}");
+          Alerts.snackBarGetx(title: "Success", message: value.message!, alertStatus: AlertStatus.SUCCESS);
           returnVal = true;
         });
 
