@@ -1,1 +1,1 @@
-BASE_URL = "http://api.binav-avts.id:5000/"
+BASE_URL = "https://api.binav-avts.id:5000/"
