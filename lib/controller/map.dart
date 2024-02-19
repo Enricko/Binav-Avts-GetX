@@ -121,7 +121,7 @@ class MapGetXController extends GetxController {
     String nameEvent = "kapal_latlong";
     singleKapalLatlongSocket = IO
         // .io('${InitService.baseUrl}kapal-latlong?call_sign=$callSign',
-        .io('http://127.0.0.1:5000/kapal-latlong?call_sign=$callSign',
+        .io('${InitService.baseUrl}kapal-latlong?call_sign=$callSign',
             IO.OptionBuilder().setTransports(['websocket']).build())
         .obs;
 

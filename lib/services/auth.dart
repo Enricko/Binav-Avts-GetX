@@ -17,16 +17,14 @@ class AuthService extends GetConnect {
   }
 
   Future<LoginResponse> login(String email, String password) async {
-    try {
-      final body = FormData({
-        "email": email,
-        "password": password,
-      });
-      var response = await post("${InitService.baseUrlApi}login", body);
-      return LoginResponse.fromJson(response.body);
-    } catch (e) {
-      throw Exception("Error: $e");
-    }
+    final body = FormData({
+      "email": email,
+      "password": password,
+    });
+    var response = await post("${InitService.baseUrlApi}login", body,contentType: "application/json");
+    print(response.body);
+    print(response.statusCode);
+    return LoginResponse.fromJson(response.body);
   }
 
   Future<LoginResponse> sendOtp(String email) async {
@@ -58,28 +56,25 @@ class AuthService extends GetConnect {
     return LoginResponse.fromJson(response.body);
   }
 
-  Future<LoginResponse> changePassword(String token,String oldpassword, String newpassword, String confirmpassword) async {
+  Future<LoginResponse> changePassword(
+      String oldpassword, String newpassword, String confirmpassword) async {
     try {
       final body = FormData({
         "old_password": oldpassword,
         "new_password": newpassword,
         "new_password_confirmation": confirmpassword,
       });
-      var response = await post(
-          "${InitService.baseUrlApi}change-password", body, headers: {
-        "Authorization": "Bearer " + token,
-      });
+      var response = await post("${InitService.baseUrlApi}change", body);
       return LoginResponse.fromJson(response.body);
     } catch (e) {
       throw Exception("Error: $e");
     }
   }
 
-  Future<LoginResponse> logout(String token) async {
-    var response = await delete("${InitService.baseUrlApi}logout" ,headers: {
+  Future<LogoutResponse> logout(String token) async {
+    var response = await delete("${InitService.baseUrlApi}/api/logout", headers: {
       "Authorization": "Bearer " + token,
     });
-    return LoginResponse.fromJson(response.body);
+    return LogoutResponse.fromJson(response.body);
   }
-
 }
