@@ -21,9 +21,8 @@ class AuthService extends GetConnect {
       "email": email,
       "password": password,
     });
-    var response = await post("${InitService.baseUrlApi}login", body,contentType: "application/json");
-    print(response.body);
-    print(response.statusCode);
+    var response =
+        await post("${InitService.baseUrlApi}login", body, contentType: "application/json");
     return LoginResponse.fromJson(response.body);
   }
 
@@ -57,14 +56,16 @@ class AuthService extends GetConnect {
   }
 
   Future<LoginResponse> changePassword(
-      String oldpassword, String newpassword, String confirmpassword) async {
+      String token, String oldpassword, String newpassword, String confirmpassword) async {
     try {
       final body = FormData({
         "old_password": oldpassword,
         "new_password": newpassword,
         "new_password_confirmation": confirmpassword,
       });
-      var response = await post("${InitService.baseUrlApi}change", body);
+      var response = await post("${InitService.baseUrlApi}change", body, headers: {
+        "Authorization": "Bearer " + token,
+      });
       return LoginResponse.fromJson(response.body);
     } catch (e) {
       throw Exception("Error: $e");
@@ -72,7 +73,7 @@ class AuthService extends GetConnect {
   }
 
   Future<LogoutResponse> logout(String token) async {
-    var response = await delete("${InitService.baseUrlApi}/api/logout", headers: {
+    var response = await delete("${InitService.baseUrlApi}logout", headers: {
       "Authorization": "Bearer " + token,
     });
     return LogoutResponse.fromJson(response.body);

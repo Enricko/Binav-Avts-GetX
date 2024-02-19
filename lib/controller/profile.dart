@@ -78,7 +78,7 @@ class ProfileController extends GetxController {
     var token = GetStorage().read("userToken");
     print(token);
     await AuthService().logout(token).then((value) async {
-      if (General.isApiOk(value.status!)){
+      if (General.isApiOk(value.status!.toInt())){
         await GetStorage().remove("userToken");
         Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
         returnVal = true;
