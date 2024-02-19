@@ -200,7 +200,8 @@ class IpKapalPage extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  onPressed: controller.isLoad.value
+                                  onPressed:
+                                  controller.isLoad.value
                                       ? null
                                       : () async {
                                           if (_formKey.currentState!.validate()) {

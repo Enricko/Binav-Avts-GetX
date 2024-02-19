@@ -58,25 +58,28 @@ class AuthService extends GetConnect {
     return LoginResponse.fromJson(response.body);
   }
 
-  Future<LoginResponse> changePassword(String oldpassword, String newpassword, String confirmpassword) async {
+  Future<LoginResponse> changePassword(String token,String oldpassword, String newpassword, String confirmpassword) async {
     try {
       final body = FormData({
         "old_password": oldpassword,
         "new_password": newpassword,
-        "password_confirmation": confirmpassword,
+        "new_password_confirmation": confirmpassword,
       });
       var response = await post(
-          "${InitService.baseUrlApi}change", body);
+          "${InitService.baseUrlApi}change-password", body, headers: {
+        "Authorization": "Bearer " + token,
+      });
       return LoginResponse.fromJson(response.body);
     } catch (e) {
       throw Exception("Error: $e");
     }
   }
-  Future<LogoutResponse> logout(String token) async {
-    var response = await delete("${InitService.baseUrlApi}/api/logout" ,headers: {
+
+  Future<LoginResponse> logout(String token) async {
+    var response = await delete("${InitService.baseUrlApi}logout" ,headers: {
       "Authorization": "Bearer " + token,
     });
-    return LogoutResponse.fromJson(response.body);
+    return LoginResponse.fromJson(response.body);
   }
 
 }

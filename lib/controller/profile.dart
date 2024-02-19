@@ -49,9 +49,12 @@ class ProfileController extends GetxController {
   Future<bool> changepassword() async {
     bool returnVal = false;
     isLoading.value = true;
-    await AuthService().changePassword(OldPasswordController.text, newPasswordController.text, confirmPasswordController.text).then((value) async {
+    var token = GetStorage().read("userToken");
+    print(token);
+    await AuthService().changePassword(token,OldPasswordController.text, newPasswordController.text, confirmPasswordController.text).then((value) async {
+    print(value.status);
       if (General.isApiOk(value.status!)){
-          Alerts.snackBarGetx(title: "Success", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+          Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
           returnVal = true;
 
       } else {
@@ -68,6 +71,32 @@ class ProfileController extends GetxController {
     isLoading.value = false;
     return returnVal;
   }
+
+  Future<bool> logout() async {
+    bool returnVal = false;
+    isLoading.value = true;
+    var token = GetStorage().read("userToken");
+    print(token);
+    await AuthService().logout(token).then((value) async {
+      if (General.isApiOk(value.status!)){
+        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        returnVal = true;
+
+      } else {
+        Alerts.snackBarGetx(title: "Authentication", message: value.message!, alertStatus: AlertStatus.DANGER);
+        returnVal = false;
+      }
+    }).timeout(const Duration(seconds: 10), onTimeout: () {
+      Alerts.snackBarGetx(title: "Authentication", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    }).onError((error, stackTrace) {
+      Alerts.snackBarGetx(title: "${error}", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      returnVal = false;
+    });
+    isLoading.value = false;
+    return returnVal;
+  }
+
   // void changeWidget(String nameWidget) {
   //   currentWidget.value = nameWidget;
   // }

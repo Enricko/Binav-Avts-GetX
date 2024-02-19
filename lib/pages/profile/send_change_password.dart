@@ -4,6 +4,8 @@ import 'package:binav_avts_getx/controller/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 //
@@ -518,50 +520,41 @@ class SendChangePassword extends StatelessWidget {
                                         MaterialStateProperty.all(Colors.blue),
                                     foregroundColor: MaterialStateProperty.all(
                                         Colors.white)),
-                                onPressed: () async{
-                                  // if (_formKey.currentState!.validate()) {
-                                  //   await controller.login().then((value) {
-                                  //     print(value);
-                                  //     if (value) Get.offNamed(RouteName.home);
-                                  //   });
-                                  // }
-                                  // if (_formKey.currentState!.validate()) {
-                                  //     controller.ignorePointer.value = true;
-                                  //     Timer(const Duration(seconds: 3), () {
-                                  //         controller.ignorePointer.value = false;
-                                  //     });
-                                  //   EasyLoading.show(status: "Loading...");
-                                  //   var data = {
-                                  //     "old_password": controller.OldPasswordController.text,
-                                  //     "new_password": controller.newPasswordController.text,
-                                  //     "password_confirmation": controller.confirmPasswordController.text
-                                  //   };
-                                  // UserDataService()
-                                  //     .changePassword(
-                                  //         token: (state is UserSignedIn)
-                                  //             ? state.user.token!
-                                  //             : "",
-                                  //         data: data)
-                                  //     .then((value) {
-                                  //   if (value.message ==
-                                  //       "Password has changed successful!") {
-                                  //     EasyLoading.showSuccess(value.message!,
-                                  //         duration: const Duration(seconds: 3),
-                                  //         dismissOnTap: true);
-                                  //     Navigator.pop(context);
-                                  //   } else {
-                                  //     EasyLoading.showError(value.message!,
-                                  //         duration: const Duration(seconds: 3),
-                                  //         dismissOnTap: true);
-                                  //   }
-                                  // }).whenComplete(() {
-                                  //   Timer(const Duration(seconds: 5), () {
-                                  //     EasyLoading.dismiss();
-                                  //   });
-                                  // });
-                                  // }
-                                },
-                                child: Text("Submit")),
+                                onPressed:
+                                controller.isLoading.value
+                                ? null
+                                : () async {
+                          if (_formKey.currentState!.validate()) {
+                          await controller.changepassword()
+                              .then((value) async {
+                          if (value) {
+                            controller.currentWidget.value =
+                            "profile_page";
+                          }
+                          });
+                          }
+                          },
+                                child: controller.isLoading.value
+                              ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text(
+                                  "Loading...",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                                  :
+                              Text("Submit")),
                           ),
                         )
                       ],
