@@ -1,4 +1,3 @@
-
 class GetKapalCoor {
   String? message;
   int? status;
@@ -7,40 +6,39 @@ class GetKapalCoor {
   int? total;
   List<Data>? data;
 
-  GetKapalCoor({this.message, this.status, this.perpage, this.page, this.total, this.data});
+  GetKapalCoor(
+      {this.message,
+      this.status,
+      this.perpage,
+      this.page,
+      this.total,
+      this.data});
 
   GetKapalCoor.fromJson(Map<String, dynamic> json) {
-    if(json["message"] is String) {
-      message = json["message"];
-    }
-    if(json["status"] is int) {
-      status = json["status"];
-    }
-    if(json["perpage"] is int) {
-      perpage = json["perpage"];
-    }
-    if(json["page"] is int) {
-      page = json["page"];
-    }
-    if(json["total"] is int) {
-      total = json["total"];
-    }
-    if(json["data"] is List) {
-      data = json["data"] == null ? null : (json["data"] as List).map((e) => Data.fromJson(e)).toList();
+    message = json['message'];
+    status = json['status'];
+    perpage = json['perpage'];
+    page = json['page'];
+    total = json['total'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["message"] = message;
-    _data["status"] = status;
-    _data["perpage"] = perpage;
-    _data["page"] = page;
-    _data["total"] = total;
-    if(data != null) {
-      _data["data"] = data?.map((e) => e.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['status'] = this.status;
+    data['perpage'] = this.perpage;
+    data['page'] = this.page;
+    data['total'] = this.total;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    return _data;
+    return data;
   }
 }
 
@@ -56,112 +54,79 @@ class Data {
   String? xmlFile;
   Coor? coor;
 
-  Data({this.idClient, this.callSign, this.flag, this.kelas, this.builder, this.status, this.size, this.yearBuilt, this.xmlFile, this.coor});
+  Data(
+      {this.idClient,
+      this.callSign,
+      this.flag,
+      this.kelas,
+      this.builder,
+      this.status,
+      this.size,
+      this.yearBuilt,
+      this.xmlFile,
+      this.coor});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["id_client"] is String) {
-      idClient = json["id_client"];
-    }
-    if(json["call_sign"] is String) {
-      callSign = json["call_sign"];
-    }
-    if(json["flag"] is String) {
-      flag = json["flag"];
-    }
-    if(json["kelas"] is String) {
-      kelas = json["kelas"];
-    }
-    if(json["builder"] is String) {
-      builder = json["builder"];
-    }
-    if(json["status"] is bool) {
-      status = json["status"];
-    }
-    if(json["size"] is String) {
-      size = json["size"];
-    }
-    if(json["year_built"] is String) {
-      yearBuilt = json["year_built"];
-    }
-    if(json["xml_file"] is String) {
-      xmlFile = json["xml_file"];
-    }
-    if(json["coor"] is Map) {
-      coor = json["coor"] == null ? null : Coor.fromJson(json["coor"]);
-    }
+    idClient = json['id_client'];
+    callSign = json['call_sign'];
+    flag = json['flag'];
+    kelas = json['kelas'];
+    builder = json['builder'];
+    status = json['status'];
+    size = json['size'];
+    yearBuilt = json['year_built'];
+    xmlFile = json['xml_file'];
+    coor = json['coor'] != null ? new Coor.fromJson(json['coor']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id_client"] = idClient;
-    _data["call_sign"] = callSign;
-    _data["flag"] = flag;
-    _data["kelas"] = kelas;
-    _data["builder"] = builder;
-    _data["status"] = status;
-    _data["size"] = size;
-    _data["year_built"] = yearBuilt;
-    _data["xml_file"] = xmlFile;
-    if(coor != null) {
-      _data["coor"] = coor?.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_client'] = this.idClient;
+    data['call_sign'] = this.callSign;
+    data['flag'] = this.flag;
+    data['kelas'] = this.kelas;
+    data['builder'] = this.builder;
+    data['status'] = this.status;
+    data['size'] = this.size;
+    data['year_built'] = this.yearBuilt;
+    data['xml_file'] = this.xmlFile;
+    if (this.coor != null) {
+      data['coor'] = this.coor!.toJson();
     }
-    return _data;
+    return data;
   }
 }
 
 class Coor {
   int? idCoor;
-  int? defaultHeading;
+  double? defaultHeading;
   CoorGga? coorGga;
   CoorHdt? coorHdt;
 
   Coor({this.idCoor, this.defaultHeading, this.coorGga, this.coorHdt});
 
   Coor.fromJson(Map<String, dynamic> json) {
-    if(json["id_coor"] is int) {
-      idCoor = json["id_coor"];
-    }
-    if(json["default_heading"] is int) {
-      defaultHeading = json["default_heading"];
-    }
-    if(json["coor_gga"] is Map) {
-      coorGga = json["coor_gga"] == null ? null : CoorGga.fromJson(json["coor_gga"]);
-    }
-    if(json["coor_hdt"] is Map) {
-      coorHdt = json["coor_hdt"] == null ? null : CoorHdt.fromJson(json["coor_hdt"]);
-    }
+    idCoor = json['id_coor'];
+    defaultHeading = json['default_heading'];
+    coorGga = json['coor_gga'] != null
+        ? new CoorGga.fromJson(json['coor_gga'])
+        : null;
+    coorHdt = json['coor_hdt'] != null
+        ? new CoorHdt.fromJson(json['coor_hdt'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id_coor"] = idCoor;
-    _data["default_heading"] = defaultHeading;
-    if(coorGga != null) {
-      _data["coor_gga"] = coorGga?.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_coor'] = this.idCoor;
+    data['default_heading'] = this.defaultHeading;
+    if (this.coorGga != null) {
+      data['coor_gga'] = this.coorGga!.toJson();
     }
-    if(coorHdt != null) {
-      _data["coor_hdt"] = coorHdt?.toJson();
+    if (this.coorHdt != null) {
+      data['coor_hdt'] = this.coorHdt!.toJson();
     }
-    return _data;
-  }
-}
-
-class CoorHdt {
-  dynamic idCoorHdt;
-  dynamic headingDegree;
-
-  CoorHdt({this.idCoorHdt, this.headingDegree});
-
-  CoorHdt.fromJson(Map<String, dynamic> json) {
-    idCoorHdt = json["id_coor_hdt"];
-    headingDegree = json["heading_degree"];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id_coor_hdt"] = idCoorHdt;
-    _data["heading_degree"] = headingDegree;
-    return _data;
+    return data;
   }
 }
 
@@ -172,18 +137,33 @@ class CoorGga {
   CoorGga({this.latitude, this.longitude});
 
   CoorGga.fromJson(Map<String, dynamic> json) {
-    if(json["latitude"] is double) {
-      latitude = json["latitude"];
-    }
-    if(json["longitude"] is double) {
-      longitude = json["longitude"];
-    }
+    latitude = json['latitude'];
+    longitude = json['longitude'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["latitude"] = latitude;
-    _data["longitude"] = longitude;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+    return data;
+  }
+}
+
+class CoorHdt {
+  int? idCoorHdt;
+  double? headingDegree;
+
+  CoorHdt({this.idCoorHdt, this.headingDegree});
+
+  CoorHdt.fromJson(Map<String, dynamic> json) {
+    idCoorHdt = json['id_coor_hdt'];
+    headingDegree = json['heading_degree'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_coor_hdt'] = this.idCoorHdt;
+    data['heading_degree'] = this.headingDegree;
+    return data;
   }
 }

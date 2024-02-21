@@ -172,10 +172,11 @@ class HomePage extends StatelessWidget {
                       },
                       minZoom: 4,
                       maxZoom: 18,
-                      initialZoom: 10,
-                      initialCenter: const LatLng(-1.089955, 117.360343),
+                      initialZoom: mapGetController.initialZoom.value,
+                      initialCenter: mapGetController.initialCenter.value,
                       onPositionChanged: (position, hasGesture) {
-                        mapGetController.currentZoom.value = position.zoom!;
+
+                        mapGetController.setUserCurrentPosition(position.zoom!,position.center!);
                       },
                     ),
                     nonRotatedChildren: [
@@ -226,7 +227,8 @@ class HomePage extends StatelessWidget {
                       ),
                       PipelineLayer(),
                       VesselWidget(),
-                      VesselLineLatlong(),
+                      // Garis kapal
+                      // VesselLineLatlong(),
                     ],
                   ),
                 ),

@@ -8,6 +8,7 @@ import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -25,21 +26,25 @@ class MapGetXController extends GetxController {
 
   var currentZoom = 10.0.obs;
 
+  var initialZoom = 10.0.obs;
+  var initialCenter = Rx<LatLng>(LatLng(-1.089955, 117.360343));
+
+
   Rx<StreamSocketKapal> streamSocketKapal = StreamSocketKapal().obs;
   
 
   double vesselSizes(String size) {
     switch (size) {
       case "small":
-        return 4.0;
+        return 25.0;
       case "medium":
-        return 8.0;
+        return 50.0;
       case "large":
-        return 12.0;
+        return 100.0;
       case "extra_large":
-        return 16.0;
+        return 150.0;
       default:
-        return 8.0;
+        return 25.0;
     }
   }
 
@@ -115,7 +120,6 @@ class MapGetXController extends GetxController {
   }
 
   void socketSingleKapalLatlong(String callSign) {
-    print("asdasd");
     socketSingleKapalLatlongDisconnect();
     // streamSocketKapal.value.socketResponseSingleKapal.close().then((value){});
     String nameEvent = "kapal_latlong";
@@ -140,9 +144,25 @@ class MapGetXController extends GetxController {
     latLng.value = mapController.camera.pointToLatLng(math.Point(pointX, pointY.value));
   }
 
+  void userCurrentPosition()async{
+    var box = GetStorage();
+    if(box.read("currentZoom") != null && box.read("currentLatlong") != null){
+      initialZoom.value = box.read("currentZoom");
+      currentZoom.value = box.read("currentZoom");
+      initialCenter.value = LatLng(box.read("currentLatlong")['coordinates'][1],box.read("currentLatlong")['coordinates'][0]);
+    }
+  }
+  void setUserCurrentPosition(double zoom,LatLng center)async{
+    var box = GetStorage();
+    currentZoom.value = zoom;
+    box.write("currentZoom", zoom);
+    box.write("currentLatlong", center);
+  }
+
   @override
   void onInit() {
     super.onInit();
+      userCurrentPosition();
     try {
       mapController = MapController();
       socketAllKapal();

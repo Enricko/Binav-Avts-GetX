@@ -68,7 +68,7 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
     mapGetController.getVessel.value = true;
     mapGetController.socketSingleKapal(callSign);
     mapGetController.socketSingleKapalLatlong(callSign);
-    _animatedMapMove(latLng, 15);
+    _animatedMapMove(latLng, 17);
   }
 
   LatLng predictLatLong(
@@ -103,60 +103,58 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
             return SizedBox();
           }
           return Obx(
-            () => MarkerLayer(
-              markers: snapshot.data!.data!.map(
-                (e) {
-                  var latlong = predictLatLong(
-                    e.coor!.coorGga!.latitude!,
-                    e.coor!.coorGga!.longitude!,
-                    100,
-                    e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
-                    1,
-                  );
-                  return Marker(
-                    width: mapGetController.vesselSizes(e.size!) +
-                        (mapGetController.currentZoom.value - 8) * 6,
-                    height: mapGetController.vesselSizes(e.size!) +
-                        (mapGetController.currentZoom.value - 8) * 6,
-                    point: LatLng(
-                      latlong.latitude,
-                      latlong.longitude,
-                    ),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () {
-                          vesselOnClick(
-                            e.callSign!,
-                            LatLng(
-                              latlong.latitude - .005,
-                              latlong.longitude,
-                              // e.coor!.coorGga!.latitude! - .005,
-                              // e.coor!.coorGga!.longitude!,
+            () {
+              return MarkerLayer(
+                markers: snapshot.data!.data!.map(
+                  (e) {
+                    var latlong = predictLatLong(
+                      e.coor!.coorGga!.latitude!,
+                      e.coor!.coorGga!.longitude!,
+                      100,
+                      e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                      1,
+                    );
+                    return Marker(
+                      width: ((25 * (math.pow(2, (mapGetController.currentZoom.value)))) / 4000000) * mapGetController.vesselSizes(e.size!),
+                      height: ((25 * (math.pow(2, (mapGetController.currentZoom.value)))) / 4000000) * mapGetController.vesselSizes(e.size!),
+                      point: LatLng(
+                        latlong.latitude,
+                        latlong.longitude,
+                      ),
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            vesselOnClick(
+                              e.callSign!,
+                              LatLng(
+                                latlong.latitude - .000005,
+                                latlong.longitude,
+                              ),
+                            );
+                          },
+                          child: Transform.rotate(
+                            angle: mapGetController.degreesToRadians(
+                              e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
                             ),
-                          );
-                        },
-                        child: Transform.rotate(
-                          angle: mapGetController.degreesToRadians(
-                            e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
-                          ),
-                          child: Tooltip(
-                            message: e.callSign!,
-                            child: Image.asset(
-                              "assets/ship.png",
-                              height: mapGetController.vesselSizes(e.size!.toString()) +
-                                  (mapGetController.currentZoom.value - 8) * 6,
-                              width: mapGetController.vesselSizes(e.size!.toString()) +
-                                  (mapGetController.currentZoom.value - 8) * 6,
+                            child: Tooltip(
+                              message: e.callSign!,
+                              child: Image.asset(
+                                "assets/ship.png",
+                                height:
+                                    ((25 * (math.pow(2, (mapGetController.currentZoom.value)))) / 4000000) * mapGetController.vesselSizes(e.size!),
+                                width:
+                                    ((25 * (math.pow(2, (mapGetController.currentZoom.value)))) / 4000000) * mapGetController.vesselSizes(e.size!),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ).toList(),
-            ),
+                    );
+                  },
+                ).toList(),
+              );
+            },
           );
         }
         return SizedBox();
