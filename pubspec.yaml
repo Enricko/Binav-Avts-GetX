@@ -79,6 +79,7 @@ dependencies:
   flutter_map_cancellable_tile_provider: ^1.0.0
   snapping_sheet: ^3.1.0
   latlong2: ^0.9.0
+  searchfield: ^0.8.3
 
   # Otp Field
   pin_code_fields: ^8.0.1
