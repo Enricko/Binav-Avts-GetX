@@ -77,7 +77,9 @@ class KapalTable extends StatelessWidget {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
               onPressed: () {
-                Get.dialog(Dialog(
+                Get.dialog(
+                    Dialog(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: AddFormKapal(),
                 ));
               },

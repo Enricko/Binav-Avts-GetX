@@ -151,12 +151,12 @@ class AddFormPipeline extends StatelessWidget {
                             controller: formController.filePickerController,
                             hint: 'File Name',
                             type: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty || value == "") {
-                                return "The File field is required.";
-                              }
-                              return null;
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty || value == "") {
+                            //     return "The File field is required.";
+                            //   }
+                            //   return null;
+                            // },
                           ),
                         ),
                         Div(

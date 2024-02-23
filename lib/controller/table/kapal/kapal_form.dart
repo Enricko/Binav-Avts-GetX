@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../utils/alerts.dart';
 import '../../../utils/general.dart';
@@ -22,7 +23,16 @@ class KapalFormController extends GetxController {
   var isSwitched = true.obs;
   late TextEditingController filePickerController;
 
+
+
   Rx<Uint8List?> filePickerVal = Rx<Uint8List?>(null);
+
+  Rx<Uint8List?> webImage_1 = Rx<Uint8List?>(null);
+  Rx<File?> file_1 = Rx<File?>(null);
+  // Uint8List webImage_1 = Uint8List(8);
+
+  late ImagePicker image_1;
+   // Rx<File>? file_1 ;
 
   var isLoad = false.obs;
 
@@ -33,6 +43,14 @@ class KapalFormController extends GetxController {
       filePickerController.text = result.files.single.name;
       filePickerVal.value = result.files.first.bytes;
     }
+  }
+  void pickImage() async {
+    var img = await image_1.pickImage(source: ImageSource.gallery);
+    var f = await img!.readAsBytes();
+
+      webImage_1 = f.obs;
+      file_1 = File(img.path).obs;
+      print(webImage_1.value);
   }
 
   Future<void> getUpdatedData(String callSign) async {
@@ -138,6 +156,7 @@ class KapalFormController extends GetxController {
     builderController = TextEditingController();
     yearBuiltController = TextEditingController();
     filePickerController = TextEditingController();
+    image_1 = ImagePicker();
   }
 
   @override

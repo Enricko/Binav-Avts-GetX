@@ -87,6 +87,7 @@ dependencies:
   jwt_decoder: ^2.0.1
   socket_io_client: ^2.0.3+1
   flutter_dotenv: ^5.1.0
+  image_picker: ^1.0.5
 
 dev_dependencies:
   flutter_test:

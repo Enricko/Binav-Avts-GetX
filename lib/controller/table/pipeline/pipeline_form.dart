@@ -16,7 +16,6 @@ class PipelineFormController extends GetxController {
   late TextEditingController filePickerController;
 
   Rx<Uint8List?> filePickerVal = Rx<Uint8List?>(null);
-
   var isLoad = false.obs;
 
   void pickFile() async {
@@ -53,7 +52,7 @@ class PipelineFormController extends GetxController {
       "name": nameController.text,
       "id_client": idClientController.dropDownValue!.value.toString(),
       "status": isSwitched.value,
-      "file": MultipartFile(filePickerVal.value, filename: filePickerController.text),
+      "file": filePickerVal.value != null ? MultipartFile(filePickerVal.value, filename: filePickerController.text) : null
     }).then((value) {
       if (General.isApiOk(value.status!)) {
         Get.back();
