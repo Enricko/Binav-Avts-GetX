@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
+import 'package:binav_avts_getx/model/get_kapal_coor.dart' as KapalCoor;
 import 'package:binav_avts_getx/model/get_kapal_latlong_response.dart';
 import 'package:binav_avts_getx/services/init.dart';
 import 'package:binav_avts_getx/services/kapal.dart';
@@ -29,6 +30,7 @@ class MapGetXController extends GetxController {
   var initialZoom = 10.0.obs;
   var initialCenter = Rx<LatLng>(LatLng(-1.089955, 117.360343));
 
+  RxList<KapalCoor.Data> searchVessel = RxList<KapalCoor.Data>([]);
 
   Rx<StreamSocketKapal> streamSocketKapal = StreamSocketKapal().obs;
   
@@ -76,12 +78,14 @@ class MapGetXController extends GetxController {
     socket.on('kapal_coor', (data) {
       var response = GetKapalCoor.fromJson(data);
 
+      searchVessel.value = response.data!;
       streamSocketKapal.value.addResponseAll(response);
     });
     socket.onDisconnect((_) => print('disconnect All'));
   }
 
   Rx<IO.Socket>? singleKapalSocket;
+  Rx<IO.Socket>? singleWindowKapalSocket;
   var getVessel = false.obs;
 
   void socketSingleKapalDisconnect() {
@@ -106,10 +110,11 @@ class MapGetXController extends GetxController {
       var response = GetKapalCoor.fromJson(data);
 
       streamSocketKapal.value.addResponseSingle(response);
+      streamSocketKapal.value.addResponseSingleWindow(response);
     });
     singleKapalSocket!.value.onDisconnect((_) => print('disconnect Single'));
   }
-  
+
   Rx<IO.Socket>? singleKapalLatlongSocket;
 
   void socketSingleKapalLatlongDisconnect() {

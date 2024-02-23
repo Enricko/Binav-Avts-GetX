@@ -16,6 +16,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:binav_avts_getx/model/get_kapal_coor.dart' as KapalCoor;
 import '../widget/maps/pipeline_layer.dart';
 import '../widget/maps/scale_bar/scale_bar.dart';
+import '../widget/maps/vessel/search_vessel.dart';
 import '../widget/maps/zoom_button.dart';
 import '../widget/maps/vessel/vessel_detail.dart';
 import 'table/client/client.dart';
@@ -28,7 +29,6 @@ class HomePage extends StatelessWidget {
   var mapGetController = Get.find<MapGetXController>();
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
-  TextEditingController SearchVessel = TextEditingController();
 
   // ///animation
   @override
@@ -46,8 +46,7 @@ class HomePage extends StatelessWidget {
             PopupMenuButton(
               position: PopupMenuPosition.under,
               icon: const Icon(Icons.menu),
-              itemBuilder: (context) =>
-              [
+              itemBuilder: (context) => [
                 PopupMenuItem(
                   value: 'vesselList',
                   child: Text('Vessel List'),
@@ -66,22 +65,19 @@ class HomePage extends StatelessWidget {
                   case "vesselList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           child: KapalTable()),
                     );
                   case "pipelineList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           child: PipelineTable()),
                     );
                   case "clientList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                           child: ClientTable()),
                     );
                 }
@@ -111,91 +107,17 @@ class HomePage extends StatelessWidget {
             //         icon: AnimatedIcons.menu_close, progress: iconAnimation)),
             Row(
               children: [
-                SizedBox(
-                  width: 500,
-                  height: 50,
-                  child: SearchField(
-                    suggestions: [],
-                    controller: SearchVessel,
-                    // suggestions: value.vesselCoorResult
-                    //     .map(
-                    //       (e) => SearchFieldListItem<VesselCoor.Data>(
-                    //     e.kapal!.callSign!,
-                    //     item: e,
-                    //     // Use child to show Custom Widgets in the suggestions
-                    //     // defaults to Text widget
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(8.0),
-                    //       child: Row(
-                    //         children: [
-                    //           const SizedBox(
-                    //             width: 10,
-                    //           ),
-                    //           Text(e.kapal!.callSign!),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
-                    //     .where((e) => e.searchKey
-                    //     .toLowerCase()
-                    //     .contains(SearchVessel.text.toLowerCase()))
-                    //     .toList(),
-                    searchInputDecoration: InputDecoration(
-                      hintText: "Pilih Call Sign Kapal",
-                      // labelText: "Pilih Call Sign Kapal",
-                      hintStyle: const TextStyle(color: Colors.black),
-                      // labelStyle: TextStyle(color: Colors.black),
-                      prefixIcon: const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(Icons.search),
-                      ),
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 230, 230, 230),
-                      prefixIconColor: Colors.black,
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                            width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    // searchVessel(SearchVessel.text);
-                  },
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Icon(Icons.search),
-                  ),
-                ),
+                SearchVessel(),
                 const SizedBox(
                   width: 20,
                 ),
-
                 GestureDetector(
                     onTap: () {
                       Get.dialog(
                         // transitionDuration: Duration(seconds: 1),
                         Dialog(
                             alignment: Alignment.centerRight,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             child: FirstProfile()),
                       );
                       // showDialog(
@@ -214,7 +136,6 @@ class HomePage extends StatelessWidget {
                     ))
               ],
             ),
-
           ],
         ),
       ),
@@ -248,98 +169,93 @@ class HomePage extends StatelessWidget {
       //   ),
       // ),
       body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Flexible(
-                    child: FlutterMap(
-                      mapController: mapGetController.mapController,
-                      options: MapOptions(
-                        onMapEvent: (event) {
-                          mapGetController.updatePoint(null);
-                        },
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Flexible(
+                  child: FlutterMap(
+                    mapController: mapGetController.mapController,
+                    options: MapOptions(
+                      onMapEvent: (event) {
+                        mapGetController.updatePoint(null);
+                      },
+                      minZoom: 4,
+                      maxZoom: 18,
+                      initialZoom: mapGetController.initialZoom.value,
+                      initialCenter: mapGetController.initialCenter.value,
+                      onPositionChanged: (position, hasGesture) {
+                        mapGetController.setUserCurrentPosition(position.zoom!, position.center!);
+                      },
+                    ),
+                    nonRotatedChildren: [
+                      /// button zoom in/out kanan bawah
+                      const FlutterMapZoomButtons(
                         minZoom: 4,
                         maxZoom: 18,
-                        initialZoom: mapGetController.initialZoom.value,
-                        initialCenter: mapGetController.initialCenter.value,
-                        onPositionChanged: (position, hasGesture) {
-                          mapGetController.setUserCurrentPosition(
-                              position.zoom!, position.center!);
-                        },
+                        mini: true,
+                        padding: 10,
+                        alignment: Alignment.bottomRight,
                       ),
-                      nonRotatedChildren: [
 
-                        /// button zoom in/out kanan bawah
-                        const FlutterMapZoomButtons(
-                          minZoom: 4,
-                          maxZoom: 18,
-                          mini: true,
-                          padding: 10,
-                          alignment: Alignment.bottomRight,
-                        ),
+                      /// window kanan atas
+                      Obx(() {
+                        if (mapGetController.getVessel.value) {
+                          return WindowVesselDetail();
+                        }
+                        return SizedBox();
+                      }),
 
-                        /// window kanan atas
-                        Obx(() {
+                      Obx(
+                        () {
                           if (mapGetController.getVessel.value) {
-                            return WindowVesselDetail();
+                            return VesselDetail();
                           }
                           return SizedBox();
-                        }),
+                        },
+                      ),
 
-                        Obx(
-                              () {
-                            if (mapGetController.getVessel.value) {
-                              return VesselDetail();
-                            }
-                            return SizedBox();
-                          },
+                      /// widget skala kiri atas
+                      ScaleLayerWidget(
+                        options: ScaleLayerPluginOption(
+                          lineColor: Colors.blue,
+                          lineWidth: 2,
+                          textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+                          padding: const EdgeInsets.all(10),
                         ),
-
-                        /// widget skala kiri atas
-                        ScaleLayerWidget(
-                          options: ScaleLayerPluginOption(
-                            lineColor: Colors.blue,
-                            lineWidth: 2,
-                            textStyle:
-                            const TextStyle(color: Colors.blue, fontSize: 12),
-                            padding: const EdgeInsets.all(10),
-                          ),
-                        ),
-
-                      ],
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                          // Google RoadMap
-                          // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                          // Google Altered roadmap
-                          // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
-                          // Google Satellite
-                          // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
-                          // Google Terrain
-                          // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
-                          // Google Hybrid
-                          'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
-                          // Open Street Map
-                          // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          userAgentPackageName:
-                          'dev.fleaflet.flutter_map.example',
-                          // tileProvider: CancellableNetworkTileProvider(),
-                        ),
-                        PipelineLayer(),
-                        VesselWidget(),
-                        // Garis kapal
-                        // VesselLineLatlong(),
-                      ],
-                    ),
+                      ),
+                    ],
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            // Google RoadMap
+                            // 'https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                            // Google Altered roadmap
+                            // 'https://mt0.google.com/vt/lyrs=r&hl=en&x={x}&y={y}&z={z}',
+                            // Google Satellite
+                            // 'https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}',
+                            // Google Terrain
+                            // 'https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}',
+                            // Google Hybrid
+                            'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
+                        // Open Street Map
+                        // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                        // tileProvider: CancellableNetworkTileProvider(),
+                      ),
+                      PipelineLayer(),
+                      VesselWidget(),
+                      // Garis kapal
+                      // VesselLineLatlong(),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        )
+          ),
+        ],
+      ),
     );
   }
 }

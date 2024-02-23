@@ -6,13 +6,7 @@ class GetKapalCoor {
   int? total;
   List<Data>? data;
 
-  GetKapalCoor(
-      {this.message,
-      this.status,
-      this.perpage,
-      this.page,
-      this.total,
-      this.data});
+  GetKapalCoor({this.message, this.status, this.perpage, this.page, this.total, this.data});
 
   GetKapalCoor.fromJson(Map<String, dynamic> json) {
     message = json['message'];
@@ -102,18 +96,16 @@ class Coor {
   double? defaultHeading;
   CoorGga? coorGga;
   CoorHdt? coorHdt;
+  CoorVtg? coorVtg;
 
-  Coor({this.idCoor, this.defaultHeading, this.coorGga, this.coorHdt});
+  Coor({this.idCoor, this.defaultHeading, this.coorGga, this.coorHdt, this.coorVtg});
 
   Coor.fromJson(Map<String, dynamic> json) {
     idCoor = json['id_coor'];
     defaultHeading = json['default_heading'];
-    coorGga = json['coor_gga'] != null
-        ? new CoorGga.fromJson(json['coor_gga'])
-        : null;
-    coorHdt = json['coor_hdt'] != null
-        ? new CoorHdt.fromJson(json['coor_hdt'])
-        : null;
+    coorGga = json['coor_gga'] != null ? new CoorGga.fromJson(json['coor_gga']) : null;
+    coorHdt = json['coor_hdt'] != null ? new CoorHdt.fromJson(json['coor_hdt']) : null;
+    coorVtg = json['coor_vtg'] != null ? new CoorVtg.fromJson(json['coor_vtg']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -126,6 +118,9 @@ class Coor {
     if (this.coorHdt != null) {
       data['coor_hdt'] = this.coorHdt!.toJson();
     }
+    if (this.coorVtg != null) {
+      data['coor_vtg'] = this.coorVtg!.toJson();
+    }
     return data;
   }
 }
@@ -133,18 +128,21 @@ class Coor {
 class CoorGga {
   double? latitude;
   double? longitude;
+  String? gpsQualityIndicator;
 
-  CoorGga({this.latitude, this.longitude});
+  CoorGga({this.latitude, this.longitude, this.gpsQualityIndicator});
 
   CoorGga.fromJson(Map<String, dynamic> json) {
     latitude = json['latitude'];
     longitude = json['longitude'];
+    gpsQualityIndicator = json['gps_quality_indicator'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
+    data['gps_quality_indicator'] = this.gpsQualityIndicator;
     return data;
   }
 }
@@ -164,6 +162,25 @@ class CoorHdt {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id_coor_hdt'] = this.idCoorHdt;
     data['heading_degree'] = this.headingDegree;
+    return data;
+  }
+}
+
+class CoorVtg {
+  int? idCoorVtg;
+  double? speedInKnots;
+
+  CoorVtg({this.idCoorVtg, this.speedInKnots});
+
+  CoorVtg.fromJson(Map<String, dynamic> json) {
+    idCoorVtg = json['id_coor_vtg'];
+    speedInKnots = json['speed_in_knots'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_coor_vtg'] = this.idCoorVtg;
+    data['speed_in_knots'] = this.speedInKnots;
     return data;
   }
 }

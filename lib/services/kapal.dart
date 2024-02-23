@@ -12,6 +12,7 @@ class StreamSocketKapal {
   StreamController<GetKapalCoor> socketResponseAllKapal = StreamController<GetKapalCoor>();
 
   StreamController<GetKapalCoor> socketResponseSingleKapal = StreamController<GetKapalCoor>();
+  StreamController<GetKapalCoor> socketResponseSingleWindowKapal = StreamController<GetKapalCoor>();
 
   StreamController<GetKapalLatlongResponse> socketResponseSingleKapalLatlong =
       StreamController<GetKapalLatlongResponse>();
@@ -25,6 +26,10 @@ class StreamSocketKapal {
   void addResponseSingle(GetKapalCoor response) {
     socketResponseSingleKapal.sink.add(response);
   }
+  Stream<GetKapalCoor> get getResponseSingleWindow => socketResponseSingleWindowKapal.stream;
+  void addResponseSingleWindow(GetKapalCoor response) {
+    socketResponseSingleWindowKapal.sink.add(response);
+  }
 
   Stream<GetKapalLatlongResponse> get getResponseSingleLatlong =>
       socketResponseSingleKapalLatlong.stream;
@@ -36,12 +41,14 @@ class StreamSocketKapal {
     await socketResponseSingleKapal.close();
 
     socketResponseSingleKapal = StreamController<GetKapalCoor>();
+    socketResponseSingleWindowKapal = StreamController<GetKapalCoor>();
     socketResponseSingleKapalLatlong = StreamController<GetKapalLatlongResponse>();
   }
 
   void dispose() {
     socketResponseAllKapal.close();
     socketResponseSingleKapal.close();
+    socketResponseSingleWindowKapal.close();
     socketResponseSingleKapalLatlong.close();
   }
 }
