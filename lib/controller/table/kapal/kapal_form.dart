@@ -23,8 +23,6 @@ class KapalFormController extends GetxController {
   var isSwitched = true.obs;
   late TextEditingController filePickerController;
 
-
-
   Rx<Uint8List?> filePickerVal = Rx<Uint8List?>(null);
 
   Rx<Uint8List?> webImage_1 = Rx<Uint8List?>(null);
@@ -32,25 +30,26 @@ class KapalFormController extends GetxController {
   // Uint8List webImage_1 = Uint8List(8);
 
   late ImagePicker image_1;
-   // Rx<File>? file_1 ;
+  // Rx<File>? file_1 ;
 
   var isLoad = false.obs;
 
   void pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xml']);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['xml']);
 
     if (result != null) {
       filePickerController.text = result.files.single.name;
       filePickerVal.value = result.files.first.bytes;
     }
   }
+
   void pickImage() async {
     var img = await image_1.pickImage(source: ImageSource.gallery);
     var f = await img!.readAsBytes();
 
-      webImage_1 = f.obs;
-      file_1 = File(img.path).obs;
-      print(webImage_1.value);
+    webImage_1.value = f;
+    file_1.value = File(img.path);
   }
 
   Future<void> getUpdatedData(String callSign) async {
@@ -71,8 +70,9 @@ class KapalFormController extends GetxController {
   Future<bool> addData() async {
     bool returnVal = false;
     isLoad.value = true;
-    if (filePickerVal.value == null) {
-      Alerts.snackBarGetx(title: "Vessel", message: "Xml File Required.", alertStatus: AlertStatus.DANGER);
+    if (webImage_1.value == null) {
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Image Required.", alertStatus: AlertStatus.DANGER);
       isLoad.value = false;
       return false;
     }
@@ -87,22 +87,29 @@ class KapalFormController extends GetxController {
       "year_built": yearBuiltController.text,
       "size": vesselSize.value,
       "status": isSwitched.value,
-      "xml_file": MultipartFile(filePickerVal.value, filename: filePickerController.text),
+      "xml_file": filePickerVal.value == null
+          ? null
+          : MultipartFile(filePickerVal.value, filename: filePickerController.text),
+      "image": MultipartFile(webImage_1.value, filename:"iamge")
     }).then((value) {
       if (General.isApiOk(value.status!)) {
         Get.back();
         Get.delete<KapalFormController>();
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        Alerts.snackBarGetx(
+            title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
         returnVal = true;
       } else {
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
+        Alerts.snackBarGetx(
+            title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
         returnVal = false;
       }
     }).timeout(const Duration(seconds: 10), onTimeout: () {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     });
     isLoad.value = false;
@@ -113,9 +120,15 @@ class KapalFormController extends GetxController {
   Future<bool> updateData(String callSign) async {
     bool returnVal = false;
     isLoad.value = true;
+    if (webImage_1.value == null) {
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Image Required.", alertStatus: AlertStatus.DANGER);
+      isLoad.value = false;
+      return false;
+    }
 
     var token = GetStorage().read("userToken");
-    await KapalService().updateData(token, callSign,{
+    await KapalService().updateData(token, callSign, {
       "new_call_sign": callSignController.text,
       "flag": flagController.text,
       "kelas": kelasController.text,
@@ -123,22 +136,29 @@ class KapalFormController extends GetxController {
       "year_built": yearBuiltController.text,
       "size": vesselSize.value,
       "status": isSwitched.value,
-      "xml_file": filePickerVal.value != null ? MultipartFile(filePickerVal.value, filename: filePickerController.text) : null,
+      "xml_file": filePickerVal.value != null
+          ? MultipartFile(filePickerVal.value, filename: filePickerController.text)
+          : null,
+      "image": MultipartFile(webImage_1.value, filename: "image"),
     }).then((value) {
       if (General.isApiOk(value.status!)) {
         Get.back();
         Get.delete<KapalFormController>();
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
+        Alerts.snackBarGetx(
+            title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
         returnVal = true;
       } else {
-        Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
+        Alerts.snackBarGetx(
+            title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);
         returnVal = false;
       }
     }).timeout(const Duration(seconds: 10), onTimeout: () {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     }).onError((error, stackTrace) {
-      Alerts.snackBarGetx(title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
+      Alerts.snackBarGetx(
+          title: "Vessel", message: "Try Again Later...", alertStatus: AlertStatus.DANGER);
       returnVal = false;
     });
     isLoad.value = false;

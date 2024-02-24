@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pagination_flutter/pagination.dart';
 
 import '../../../controller/table/kapal/kapal.dart';
+import '../../../services/init.dart';
 import '../../../utils/alerts.dart';
 import 'ip_kapal.dart';
 
@@ -74,12 +75,12 @@ class KapalTable extends StatelessWidget {
             margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: ElevatedButton(
               style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                  shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                   backgroundColor: MaterialStateProperty.all(Colors.blueAccent)),
               onPressed: () {
-                Get.dialog(
-                    Dialog(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                Get.dialog(Dialog(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   child: AddFormKapal(),
                 ));
               },
@@ -102,31 +103,57 @@ class KapalTable extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       )
                     : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DataTable(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DataTable(
                           border: TableBorder.all(color: Colors.black, width: 1),
                           headingRowColor: MaterialStateProperty.all(const Color(0xffd3d3d3)),
                           columns: const [
-                            DataColumn(label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Client Name", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Call Sign", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Year Built", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("File XML", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Upload IP ", style: TextStyle(fontWeight: FontWeight.w800))),
-                            DataColumn(label: Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label:
+                                    Text("Image", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Client Name",
+                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Call Sign",
+                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label:
+                                    Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label:
+                                    Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Year Built",
+                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("File XML",
+                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label: Text("Upload IP ",
+                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
+                                label:
+                                    Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
                           ],
                           // ignore: invalid_use_of_protected_member
                           rows: controller.data!.value.map((row) {
                             int numberedTable =
                                 // ignore: invalid_use_of_protected_member
-                                controller.data!.value.toList().indexWhere((e) => e.callSign == row.callSign) +
+                                controller.data!.value
+                                        .toList()
+                                        .indexWhere((e) => e.callSign == row.callSign) +
                                     1 * controller.page.value;
                             return DataRow(cells: [
                               DataCell(Text(numberedTable.toString())),
+                              DataCell(Image.network(
+                                  InitService.baseUrl! + "assets/kapal_image/" + row.image!,width: 100,)),
                               DataCell(Text(row.client!.user!.name!)),
                               DataCell(Text(row.callSign!)),
                               DataCell(Text(row.flag!)),
@@ -195,7 +222,7 @@ class KapalTable extends StatelessWidget {
                             ]);
                           }).toList(),
                         ),
-                    ),
+                      ),
               ),
             ),
           ),

@@ -1,4 +1,3 @@
-
 class GetKapalResponse {
   String? message;
   int? status;
@@ -7,40 +6,39 @@ class GetKapalResponse {
   int? total;
   List<Data>? data;
 
-  GetKapalResponse({this.message, this.status, this.perpage, this.page, this.total, this.data});
+  GetKapalResponse(
+      {this.message,
+      this.status,
+      this.perpage,
+      this.page,
+      this.total,
+      this.data});
 
   GetKapalResponse.fromJson(Map<String, dynamic> json) {
-    if(json["message"] is String) {
-      message = json["message"];
-    }
-    if(json["status"] is int) {
-      status = json["status"];
-    }
-    if(json["perpage"] is int) {
-      perpage = json["perpage"];
-    }
-    if(json["page"] is int) {
-      page = json["page"];
-    }
-    if(json["total"] is int) {
-      total = json["total"];
-    }
-    if(json["data"] is List) {
-      data = json["data"] == null ? null : (json["data"] as List).map((e) => Data.fromJson(e)).toList();
+    message = json['message'];
+    status = json['status'];
+    perpage = json['perpage'];
+    page = json['page'];
+    total = json['total'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["message"] = message;
-    _data["status"] = status;
-    _data["perpage"] = perpage;
-    _data["page"] = page;
-    _data["total"] = total;
-    if(data != null) {
-      _data["data"] = data?.map((e) => e.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['message'] = this.message;
+    data['status'] = this.status;
+    data['perpage'] = this.perpage;
+    data['page'] = this.page;
+    data['total'] = this.total;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    return _data;
+    return data;
   }
 }
 
@@ -52,55 +50,59 @@ class Data {
   String? size;
   bool? status;
   String? xmlFile;
+  String? image;
   String? yearBuilt;
+  String? createdAt;
+  String? updatedAt;
   Client? client;
 
-  Data({this.callSign, this.flag, this.kelas, this.builder, this.size, this.status, this.xmlFile, this.yearBuilt, this.client});
+  Data(
+      {this.callSign,
+      this.flag,
+      this.kelas,
+      this.builder,
+      this.size,
+      this.status,
+      this.xmlFile,
+      this.image,
+      this.yearBuilt,
+      this.createdAt,
+      this.updatedAt,
+      this.client});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if(json["call_sign"] is String) {
-      callSign = json["call_sign"];
-    }
-    if(json["flag"] is String) {
-      flag = json["flag"];
-    }
-    if(json["kelas"] is String) {
-      kelas = json["kelas"];
-    }
-    if(json["builder"] is String) {
-      builder = json["builder"];
-    }
-    if(json["size"] is String) {
-      size = json["size"];
-    }
-    if(json["status"] is bool) {
-      status = json["status"];
-    }
-    if(json["xml_file"] is String) {
-      xmlFile = json["xml_file"];
-    }
-    if(json["year_built"] is String) {
-      yearBuilt = json["year_built"];
-    }
-    if(json["client"] is Map) {
-      client = json["client"] == null ? null : Client.fromJson(json["client"]);
-    }
+    callSign = json['call_sign'];
+    flag = json['flag'];
+    kelas = json['kelas'];
+    builder = json['builder'];
+    size = json['size'];
+    status = json['status'];
+    xmlFile = json['xml_file'];
+    image = json['image'];
+    yearBuilt = json['year_built'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    client =
+        json['client'] != null ? new Client.fromJson(json['client']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["call_sign"] = callSign;
-    _data["flag"] = flag;
-    _data["kelas"] = kelas;
-    _data["builder"] = builder;
-    _data["size"] = size;
-    _data["status"] = status;
-    _data["xml_file"] = xmlFile;
-    _data["year_built"] = yearBuilt;
-    if(client != null) {
-      _data["client"] = client?.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['call_sign'] = this.callSign;
+    data['flag'] = this.flag;
+    data['kelas'] = this.kelas;
+    data['builder'] = this.builder;
+    data['size'] = this.size;
+    data['status'] = this.status;
+    data['xml_file'] = this.xmlFile;
+    data['image'] = this.image;
+    data['year_built'] = this.yearBuilt;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.client != null) {
+      data['client'] = this.client!.toJson();
     }
-    return _data;
+    return data;
   }
 }
 
@@ -111,42 +113,33 @@ class Client {
   String? createdAt;
   String? updatedAt;
 
-  Client({this.idClient, this.status, this.user, this.createdAt, this.updatedAt});
+  Client(
+      {this.idClient, this.status, this.user, this.createdAt, this.updatedAt});
 
   Client.fromJson(Map<String, dynamic> json) {
-    if(json["id_client"] is String) {
-      idClient = json["id_client"];
-    }
-    if(json["status"] is bool) {
-      status = json["status"];
-    }
-    if(json["user"] is Map) {
-      user = json["user"] == null ? null : User.fromJson(json["user"]);
-    }
-    if(json["created_at"] is String) {
-      createdAt = json["created_at"];
-    }
-    if(json["updated_at"] is String) {
-      updatedAt = json["updated_at"];
-    }
+    idClient = json['id_client'];
+    status = json['status'];
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id_client"] = idClient;
-    _data["status"] = status;
-    if(user != null) {
-      _data["user"] = user?.toJson();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_client'] = this.idClient;
+    data['status'] = this.status;
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
     }
-    _data["created_at"] = createdAt;
-    _data["updated_at"] = updatedAt;
-    return _data;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    return data;
   }
 }
 
 class User {
   String? idUser;
-  dynamic idClient;
+  Null? idClient;
   String? name;
   String? email;
   String? level;
@@ -154,28 +147,20 @@ class User {
   User({this.idUser, this.idClient, this.name, this.email, this.level});
 
   User.fromJson(Map<String, dynamic> json) {
-    if(json["id_user"] is String) {
-      idUser = json["id_user"];
-    }
-    idClient = json["id_client"];
-    if(json["name"] is String) {
-      name = json["name"];
-    }
-    if(json["email"] is String) {
-      email = json["email"];
-    }
-    if(json["level"] is String) {
-      level = json["level"];
-    }
+    idUser = json['id_user'];
+    idClient = json['id_client'];
+    name = json['name'];
+    email = json['email'];
+    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["id_user"] = idUser;
-    _data["id_client"] = idClient;
-    _data["name"] = name;
-    _data["email"] = email;
-    _data["level"] = level;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_user'] = this.idUser;
+    data['id_client'] = this.idClient;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['level'] = this.level;
+    return data;
   }
 }

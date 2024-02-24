@@ -101,18 +101,26 @@ class VesselDetail extends StatelessWidget {
                                         children: [
                                           Text(
                                             "${data.callSign}",
-                                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                            style: const TextStyle(
+                                                fontSize: 20, fontWeight: FontWeight.bold),
                                           ),
                                           Text(
                                             "${data.flag}",
-                                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                                            style: const TextStyle(
+                                                fontSize: 14, fontWeight: FontWeight.w400),
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        "assets/model_kapal.jpg",
-                                        width: 100,
-                                      ),
+                                      (data.image! == "" || data.image! == null) ?
+                                        Image.asset(
+                                          "assets/model_kapal.jpg",
+                                          width: 100,
+                                        )
+                                        :
+                                        Image.network(
+                                          InitService.baseUrl! + "assets/kapal_image/" + data.image!,
+                                          width: 100,
+                                        )
                                     ],
                                   ),
                                 ),
@@ -133,8 +141,8 @@ class VesselDetail extends StatelessWidget {
                                           Expanded(
                                             child: Container(
                                               padding: const EdgeInsets.all(10),
-                                              decoration:
-                                                  BoxDecoration(border: Border.all(color: Colors.grey, width: 1)),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey, width: 1)),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -162,8 +170,8 @@ class VesselDetail extends StatelessWidget {
                                           Expanded(
                                             child: Container(
                                               padding: const EdgeInsets.all(10),
-                                              decoration:
-                                                  BoxDecoration(border: Border.all(color: Colors.grey, width: 1)),
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey, width: 1)),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
@@ -197,7 +205,8 @@ class VesselDetail extends StatelessWidget {
                                   "Vessel",
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
-                                VesselDrawer(link: InitService.baseUrl! + "assets/kapal/" + data.xmlFile!),
+                                VesselDrawer(
+                                    link: InitService.baseUrl! + "assets/kapal/" + data.xmlFile!),
                               ],
                             ),
                           ),

@@ -6,7 +6,13 @@ class GetKapalCoor {
   int? total;
   List<Data>? data;
 
-  GetKapalCoor({this.message, this.status, this.perpage, this.page, this.total, this.data});
+  GetKapalCoor(
+      {this.message,
+      this.status,
+      this.perpage,
+      this.page,
+      this.total,
+      this.data});
 
   GetKapalCoor.fromJson(Map<String, dynamic> json) {
     message = json['message'];
@@ -46,6 +52,7 @@ class Data {
   String? size;
   String? yearBuilt;
   String? xmlFile;
+  String? image;
   Coor? coor;
 
   Data(
@@ -58,6 +65,7 @@ class Data {
       this.size,
       this.yearBuilt,
       this.xmlFile,
+      this.image,
       this.coor});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -70,6 +78,7 @@ class Data {
     size = json['size'];
     yearBuilt = json['year_built'];
     xmlFile = json['xml_file'];
+    image = json['image'];
     coor = json['coor'] != null ? new Coor.fromJson(json['coor']) : null;
   }
 
@@ -84,6 +93,7 @@ class Data {
     data['size'] = this.size;
     data['year_built'] = this.yearBuilt;
     data['xml_file'] = this.xmlFile;
+    data['image'] = this.image;
     if (this.coor != null) {
       data['coor'] = this.coor!.toJson();
     }
@@ -98,14 +108,25 @@ class Coor {
   CoorHdt? coorHdt;
   CoorVtg? coorVtg;
 
-  Coor({this.idCoor, this.defaultHeading, this.coorGga, this.coorHdt, this.coorVtg});
+  Coor(
+      {this.idCoor,
+      this.defaultHeading,
+      this.coorGga,
+      this.coorHdt,
+      this.coorVtg});
 
   Coor.fromJson(Map<String, dynamic> json) {
     idCoor = json['id_coor'];
     defaultHeading = json['default_heading'];
-    coorGga = json['coor_gga'] != null ? new CoorGga.fromJson(json['coor_gga']) : null;
-    coorHdt = json['coor_hdt'] != null ? new CoorHdt.fromJson(json['coor_hdt']) : null;
-    coorVtg = json['coor_vtg'] != null ? new CoorVtg.fromJson(json['coor_vtg']) : null;
+    coorGga = json['coor_gga'] != null
+        ? new CoorGga.fromJson(json['coor_gga'])
+        : null;
+    coorHdt = json['coor_hdt'] != null
+        ? new CoorHdt.fromJson(json['coor_hdt'])
+        : null;
+    coorVtg = json['coor_vtg'] != null
+        ? new CoorVtg.fromJson(json['coor_vtg'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

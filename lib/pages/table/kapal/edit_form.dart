@@ -1,4 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -201,12 +202,6 @@ class EditFormKapal extends StatelessWidget {
                             controller: controller.filePickerController,
                             hint: 'File Name',
                             type: TextInputType.text,
-                            validator: (value) {
-                              if (value == null || value.isEmpty || value == "") {
-                                return "The File field is required.";
-                              }
-                              return null;
-                            },
                           ),
                         ),
                         Div(
@@ -238,6 +233,73 @@ class EditFormKapal extends StatelessWidget {
                           ),
                         ),
                       ],
+                    ),
+                    Divider(),
+                    Text(
+                      "Upload Image",
+                      style: Constants.labelstyle,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: Obx(
+                          () {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: controller.file_1.value == null
+                                  ? Icon(Icons.image)
+                                  : kIsWeb
+                                      ? Image.memory(
+                                          controller.webImage_1.value!,
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Image.file(
+                                          controller.file_1.value!,
+                                          fit: BoxFit.fill,
+                                        ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: context.width,
+                      // height: 300,
+                      child: ElevatedButton.icon(
+                        icon: const Icon(
+                          Icons.upload_file,
+                          color: Colors.white,
+                          // size: 24.0,
+                        ),
+                        label: const Text('Pick Image',
+                            style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                        onPressed: () {
+                          controller.pickImage();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.lightBlue,
+                          // minimumSize: const Size(122, 48),
+                          // maximumSize: const Size(122, 48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Divider(),
+                    Text(
+                      "Instalation",
+                      style: Constants.labelstyle,
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     const SizedBox(
                       height: 5,
