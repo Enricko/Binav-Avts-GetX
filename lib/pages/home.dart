@@ -9,6 +9,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:responsive_ui/responsive_ui.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
@@ -40,8 +41,8 @@ class HomePage extends StatelessWidget {
         iconTheme: const IconThemeData(
           color: Colors.white, // Change this color to the desired color
         ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        title:
+        Responsive(
           children: [
             PopupMenuButton(
               position: PopupMenuPosition.under,
@@ -65,77 +66,49 @@ class HomePage extends StatelessWidget {
                   case "vesselList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           child: KapalTable()),
                     );
                   case "pipelineList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           child: PipelineTable()),
                     );
                   case "clientList":
                     Get.dialog(
                       Dialog(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                           child: ClientTable()),
                     );
                 }
               },
             ),
-
-            // IconButton(
-            //   icon: new Icon(Icons.settings),
-            //   onPressed: () {
-            //     Scaffold.of(context).openDrawer();
-            //     // Scaffold.of(context).openDrawer();
-            //   },
-            // ),
-
-            // InkWell(
-            //     onTap: () {
-            //       setState(() {
-            //         isSidenavOpen = !isSidenavOpen;
-            //         if (isSidenavOpen) {
-            //           animationController.forward();
-            //         } else {
-            //           animationController.reverse();
-            //         }
-            //       });
-            //     },
-            //     child: AnimatedIcon(
-            //         icon: AnimatedIcons.menu_close, progress: iconAnimation)),
-            Row(
-              children: [
-                SearchVessel(),
-                const SizedBox(
-                  width: 20,
-                ),
-                GestureDetector(
-                    onTap: () {
-                      Get.dialog(
-                        // transitionDuration: Duration(seconds: 1),
-                        Dialog(
-                            alignment: Alignment.centerRight,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            child: FirstProfile()),
-                      );
-                      // showDialog(
-                      //     context: context,
-                      //     barrierDismissible: false,
-                      //     builder: (BuildContext context) {
-                      //       return Dialog(
-                      //           alignment: Alignment.centerRight,
-                      //           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
-                      //           child:FirstProfile());
-                      //     });
-                    },
-                    child: CircleAvatar(
-                      child: Text("${GetStorage().read("name")[0]}".toUpperCase(),
-                          style: TextStyle(fontSize: 15)),
-                    ))
-              ],
+            SizedBox(width: 10,),
+            SearchVessel(),
+            const SizedBox(
+              width: 20,
             ),
+            GestureDetector(
+                onTap: () {
+                  Get.dialog(
+                    // transitionDuration: Duration(seconds: 1),
+                    Dialog(
+                        alignment: Alignment.centerRight,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: FirstProfile()),
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 25,
+                  child: Text(
+                      "${GetStorage().read("name")[0]}".toUpperCase(),
+                      style: TextStyle(fontSize: 15)),
+                ))
           ],
         ),
       ),
@@ -186,7 +159,8 @@ class HomePage extends StatelessWidget {
                       initialZoom: mapGetController.initialZoom.value,
                       initialCenter: mapGetController.initialCenter.value,
                       onPositionChanged: (position, hasGesture) {
-                        mapGetController.setUserCurrentPosition(position.zoom!, position.center!);
+                        mapGetController.setUserCurrentPosition(
+                            position.zoom!, position.center!);
                       },
                     ),
                     nonRotatedChildren: [
@@ -202,7 +176,33 @@ class HomePage extends StatelessWidget {
                       /// window kanan atas
                       Obx(() {
                         if (mapGetController.getVessel.value) {
-                          return WindowVesselDetail();
+                          return Align(
+                              alignment: Alignment.topRight,
+                              child: (mapGetController.isClick.value)
+                                  ? WindowVesselDetail()
+                                  : Container(
+                                      margin: EdgeInsets.all(10),
+                                      child: IconButton(
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.white)),
+                                          onPressed: () {
+                                            mapGetController.isClick.value =
+                                                true;
+                                            // Get.dialog(
+                                            //   Dialog(
+                                            //     alignment: Alignment.topRight,
+                                            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                                            //     child:WindowVesselDetail()) ,
+                                            //   );
+                                          },
+                                          icon: Icon(
+                                            Icons.location_pin,
+                                            color: Colors.black54,
+                                          )),
+                                    ));
+                          // WindowVesselDetail();
                         }
                         return SizedBox();
                       }),
@@ -221,7 +221,8 @@ class HomePage extends StatelessWidget {
                         options: ScaleLayerPluginOption(
                           lineColor: Colors.blue,
                           lineWidth: 2,
-                          textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+                          textStyle:
+                              const TextStyle(color: Colors.blue, fontSize: 12),
                           padding: const EdgeInsets.all(10),
                         ),
                       ),
@@ -241,7 +242,8 @@ class HomePage extends StatelessWidget {
                             'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
                         // Open Street Map
                         // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                        userAgentPackageName:
+                            'dev.fleaflet.flutter_map.example',
                         // tileProvider: CancellableNetworkTileProvider(),
                       ),
                       PipelineLayer(),

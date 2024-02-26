@@ -30,9 +30,12 @@ class MapGetXController extends GetxController {
   var initialZoom = 10.0.obs;
   var initialCenter = Rx<LatLng>(LatLng(-1.089955, 117.360343));
 
+  var isClick = false.obs;
+
   RxList<KapalCoor.Data> searchVessel = RxList<KapalCoor.Data>([]);
 
   Rx<StreamSocketKapal> streamSocketKapal = StreamSocketKapal().obs;
+
   
 
   double vesselSizes(String size) {

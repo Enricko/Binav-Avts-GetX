@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:responsive_ui/responsive_ui.dart';
 import 'package:searchfield/searchfield.dart';
 import 'package:binav_avts_getx/model/get_kapal_coor.dart' as KapalCoor;
 
@@ -75,55 +76,64 @@ class _SearchVesselState extends State<SearchVessel> with TickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Row(
+      () => Responsive(
         children: [
-          SizedBox(
-            width: 500,
-            height: 50,
-            child: SearchField(
-              controller: searchVessel,
-              suggestions: mapGetController.searchVessel
-                  .map(
-                    (e) {
-                      return SearchFieldListItem<KapalCoor.Data>(
-                        e.callSign!,
-                        item: e,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(e.callSign!),
-                            ],
+          Div(
+            divison: const Division(
+              colXS: 6,
+              colS: 6,
+              colM: 5,
+              colL: 5,
+              colXL: 4,
+            ),
+            child: SizedBox(
+              height: 50,
+              // width: 500,
+              child: SearchField(
+                controller: searchVessel,
+                suggestions: mapGetController.searchVessel
+                    .map(
+                      (e) {
+                        return SearchFieldListItem<KapalCoor.Data>(
+                          e.callSign!,
+                          item: e,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(e.callSign!),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  )
-                  .where((e) => e.searchKey.toLowerCase().contains(searchVessel.text.toLowerCase()))
-                  .toList(),
-              searchInputDecoration: InputDecoration(
-                hintText: "Pilih Call Sign Kapal",
-                // labelText: "Pilih Call Sign Kapal",
-                hintStyle: const TextStyle(color: Colors.black),
-                // labelStyle: TextStyle(color: Colors.black),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Icon(Icons.search),
-                ),
-                filled: true,
-                fillColor: const Color.fromARGB(255, 230, 230, 230),
-                prefixIconColor: Colors.black,
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-                  borderRadius: BorderRadius.circular(50),
-                ),
+                        );
+                      },
+                    )
+                    .where((e) => e.searchKey.toLowerCase().contains(searchVessel.text.toLowerCase()))
+                    .toList(),
+                searchInputDecoration: InputDecoration(
+                  hintText: "Pilih Call Sign Kapal",
+                  // labelText: "Pilih Call Sign Kapal",
+                  hintStyle: const TextStyle(color: Colors.black),
+                  // labelStyle: TextStyle(color: Colors.black),
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Icon(Icons.search),
+                  ),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 230, 230, 230),
+                  prefixIconColor: Colors.black,
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(width: 3, color: Color.fromARGB(255, 230, 230, 230)),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
 
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-                  borderRadius: BorderRadius.circular(50),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(width: 3, color: Color.fromARGB(255, 230, 230, 230)),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
                 ),
               ),
             ),

@@ -352,7 +352,7 @@ class AddFormKapal extends StatelessWidget {
                             return ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: formController.file_1.value == null
-                                  ? Icon(Icons.image)
+                                  ? Image.asset("assets/add_file_icon.png")
                                   : kIsWeb
                                       ? Image.memory(
                                           formController.webImage_1.value!,
@@ -366,6 +366,9 @@ class AddFormKapal extends StatelessWidget {
                           },
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       width: context.width,
@@ -382,7 +385,7 @@ class AddFormKapal extends StatelessWidget {
                           formController.pickImage();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.lightBlue,
+                          backgroundColor: Colors.blueAccent,
                           // minimumSize: const Size(122, 48),
                           // maximumSize: const Size(122, 48),
                           shape: RoundedRectangleBorder(
@@ -396,7 +399,7 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     Divider(),
                     Text(
-                      "Instalation",
+                      "Status",
                       style: Constants.labelstyle,
                     ),
                     SizedBox(
