@@ -155,7 +155,7 @@ class VesselDetail extends StatelessWidget {
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${data.coor!.coorGga!.latitude!.toStringAsFixed(5)}",
+                                                    "${data.coor!.coorGga!.latitude!.toStringAsFixed(8)}",
                                                     // "${predictLatLong(vesselData.coor!.coorGga!.latitude!.toDouble(), vesselData.coor!.coorGga!.longitude!.toDouble(), 100, vesselData.coor!.coorHdt!.headingDegree ?? vesselData.coor!.defaultHeading!, predictMovementVessel).latitude.toStringAsFixed(5)}",
                                                     style: const TextStyle(
                                                       fontSize: 12,
@@ -184,7 +184,7 @@ class VesselDetail extends StatelessWidget {
                                                     ),
                                                   ),
                                                   Text(
-                                                    "${data.coor!.coorGga!.longitude!.toStringAsFixed(5)}",
+                                                    "${data.coor!.coorGga!.longitude!.toStringAsFixed(8)}",
                                                     // "${predictLatLong(vesselData.coor!.coorGga!.latitude!.toDouble(), vesselData.coor!.coorGga!.longitude!.toDouble(), 100, vesselData.coor!.coorHdt!.headingDegree ?? vesselData.coor!.defaultHeading!, predictMovementVessel).longitude.toStringAsFixed(5)}",
                                                     style: const TextStyle(
                                                       fontSize: 12,
