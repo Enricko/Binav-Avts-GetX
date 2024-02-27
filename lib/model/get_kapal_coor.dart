@@ -3,23 +3,15 @@ class GetKapalCoor {
   int? status;
   int? perpage;
   int? page;
-  int? total;
   List<Data>? data;
 
-  GetKapalCoor(
-      {this.message,
-      this.status,
-      this.perpage,
-      this.page,
-      this.total,
-      this.data});
+  GetKapalCoor({this.message, this.status, this.perpage, this.page, this.data});
 
   GetKapalCoor.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     status = json['status'];
     perpage = json['perpage'];
     page = json['page'];
-    total = json['total'];
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -34,7 +26,6 @@ class GetKapalCoor {
     data['status'] = this.status;
     data['perpage'] = this.perpage;
     data['page'] = this.page;
-    data['total'] = this.total;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -43,6 +34,7 @@ class GetKapalCoor {
 }
 
 class Data {
+  bool? telnetStatus;
   String? idClient;
   String? callSign;
   String? flag;
@@ -56,7 +48,8 @@ class Data {
   Coor? coor;
 
   Data(
-      {this.idClient,
+      {this.telnetStatus,
+      this.idClient,
       this.callSign,
       this.flag,
       this.kelas,
@@ -69,6 +62,7 @@ class Data {
       this.coor});
 
   Data.fromJson(Map<String, dynamic> json) {
+    telnetStatus = json['telnet_status'];
     idClient = json['id_client'];
     callSign = json['call_sign'];
     flag = json['flag'];
@@ -84,6 +78,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['telnet_status'] = this.telnetStatus;
     data['id_client'] = this.idClient;
     data['call_sign'] = this.callSign;
     data['flag'] = this.flag;
@@ -169,38 +164,32 @@ class CoorGga {
 }
 
 class CoorHdt {
-  int? idCoorHdt;
   double? headingDegree;
 
-  CoorHdt({this.idCoorHdt, this.headingDegree});
+  CoorHdt({this.headingDegree});
 
   CoorHdt.fromJson(Map<String, dynamic> json) {
-    idCoorHdt = json['id_coor_hdt'];
     headingDegree = json['heading_degree'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_coor_hdt'] = this.idCoorHdt;
     data['heading_degree'] = this.headingDegree;
     return data;
   }
 }
 
 class CoorVtg {
-  int? idCoorVtg;
   double? speedInKnots;
 
-  CoorVtg({this.idCoorVtg, this.speedInKnots});
+  CoorVtg({this.speedInKnots});
 
   CoorVtg.fromJson(Map<String, dynamic> json) {
-    idCoorVtg = json['id_coor_vtg'];
     speedInKnots = json['speed_in_knots'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id_coor_vtg'] = this.idCoorVtg;
     data['speed_in_knots'] = this.speedInKnots;
     return data;
   }
