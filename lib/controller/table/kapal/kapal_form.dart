@@ -93,7 +93,7 @@ class KapalFormController extends GetxController {
           : MultipartFile(filePickerVal.value, filename: filePickerController.text),
       "image": MultipartFile(webImage_1.value, filename:"iamge")
     }).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Get.back();
         Get.delete<KapalFormController>();
         Alerts.snackBarGetx(
@@ -142,7 +142,7 @@ class KapalFormController extends GetxController {
           : null,
       "image": MultipartFile(webImage_1.value, filename: "image"),
     }).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Get.back();
         Get.delete<KapalFormController>();
         Alerts.snackBarGetx(

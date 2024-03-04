@@ -133,6 +133,8 @@ class KapalTable extends StatelessWidget {
                             DataColumn(
                                 label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
                             DataColumn(
+                                label: Text("Heading Direction", style: TextStyle(fontWeight: FontWeight.w800))),
+                            DataColumn(
                                 label: Text("File XML",
                                     style: TextStyle(fontWeight: FontWeight.w800))),
                             DataColumn(
@@ -161,6 +163,7 @@ class KapalTable extends StatelessWidget {
                               DataCell(Text(row.builder!)),
                               DataCell(Text(row.yearBuilt!)),
                               DataCell(Text(row.size!)),
+                              DataCell(Text(row.headingDirection.toString())),
                               DataCell(Text(row.xmlFile!)),
                               DataCell(Tooltip(
                                 message: "Ip Kapal",

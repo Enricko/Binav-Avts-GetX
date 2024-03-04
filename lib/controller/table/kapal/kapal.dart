@@ -35,7 +35,7 @@ class KapalTableController extends GetxController {
 
     var token = GetStorage().read("userToken");
     await KapalService().deleteData(token, callSign).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
       } else {
         Alerts.snackBarGetx(title: "Vessel", message: value.message!, alertStatus: AlertStatus.DANGER);

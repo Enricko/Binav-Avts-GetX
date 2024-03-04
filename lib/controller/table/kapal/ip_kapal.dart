@@ -37,7 +37,7 @@ class IpTableController extends GetxController {
       "port": portController.text,
     },
     ).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Get.back();
         Get.delete<IpTableController>();
         Alerts.snackBarGetx(title: "IP Vessel", message: value.message!, alertStatus: AlertStatus.SUCCESS);
