@@ -8,6 +8,8 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.hint,
+    this.label,
+    this.suffix,
     required this.type,
     this.initValue,
     this.validator,
@@ -17,6 +19,8 @@ class CustomTextField extends StatelessWidget {
 
   final TextEditingController controller;
   final String hint;
+  final String? label;
+  final String? suffix;
   final String? Function(String? value)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final String? initValue;
@@ -40,10 +44,13 @@ class CustomTextField extends StatelessWidget {
             validator: validator,
             inputFormatters: inputFormatters,
             decoration: InputDecoration(
-                contentPadding: const EdgeInsets.fromLTRB(8, 3, 1, 3),
+                contentPadding: const EdgeInsets.fromLTRB(8, 3, 8, 3),
                 hintText: hint,
-                labelText: hint,
+                labelText: label,
+                suffixText: suffix,
+                // suffixStyle: Constants.labelstyle,
                 labelStyle: Constants.labelstyle,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(width: 1, color: Colors.blueAccent),
                 ),

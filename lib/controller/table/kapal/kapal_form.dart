@@ -19,6 +19,7 @@ class KapalFormController extends GetxController {
   late TextEditingController kelasController;
   late TextEditingController builderController;
   late TextEditingController yearBuiltController;
+  late TextEditingController headingdirectionController;
   var vesselSize = "".obs;
   var isSwitched = true.obs;
   late TextEditingController filePickerController;
@@ -175,6 +176,7 @@ class KapalFormController extends GetxController {
     kelasController = TextEditingController();
     builderController = TextEditingController();
     yearBuiltController = TextEditingController();
+    headingdirectionController = TextEditingController();
     filePickerController = TextEditingController();
     image_1 = ImagePicker();
   }
