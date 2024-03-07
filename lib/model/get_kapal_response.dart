@@ -100,7 +100,7 @@ class Data {
       String? xmlFile, 
       String? image, 
       String? yearBuilt, 
-      num? headingDirection, 
+      int? headingDirection, 
       String? createdAt, 
       String? updatedAt, 
       Client? client,}){
@@ -143,7 +143,7 @@ class Data {
   String? _xmlFile;
   String? _image;
   String? _yearBuilt;
-  num? _headingDirection;
+  int? _headingDirection;
   String? _createdAt;
   String? _updatedAt;
   Client? _client;
@@ -156,7 +156,7 @@ Data copyWith({  String? callSign,
   String? xmlFile,
   String? image,
   String? yearBuilt,
-  num? headingDirection,
+  int? headingDirection,
   String? createdAt,
   String? updatedAt,
   Client? client,
@@ -183,7 +183,7 @@ Data copyWith({  String? callSign,
   String? get xmlFile => _xmlFile;
   String? get image => _image;
   String? get yearBuilt => _yearBuilt;
-  num? get headingDirection => _headingDirection;
+  int? get headingDirection => _headingDirection;
   String? get createdAt => _createdAt;
   String? get updatedAt => _updatedAt;
   Client? get client => _client;

@@ -131,6 +131,22 @@ class EditFormKapal extends StatelessWidget {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                     ),
+                    CustomTextField(
+                      controller: controller.headingdirectionController,
+                      label: 'Heading Direction',
+                      hint: 'Enter a value less than 360°',
+                      suffix: "Degress",
+                      type: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || value == "") {
+                          return "The Heading Direction is required.";
+                        }
+                        if (int.parse(value) < 0 || int.parse(value) > 360) {
+                          return "The Heading Direction more than 360.";
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(
                       width: double.infinity,
                       child: DropdownSearch<String>(

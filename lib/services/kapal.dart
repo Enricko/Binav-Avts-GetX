@@ -90,6 +90,7 @@ class KapalService extends GetConnect {
       "status": data['status'],
       "xml_file": data['xml_file'],
       "image": data['image'],
+      "heading_direction": data['heading_direction'],
     });
     var response = await post("${InitService.baseUrlApi}kapal", body, headers: {
       "Authorization": "Bearer " + token,
@@ -109,6 +110,7 @@ class KapalService extends GetConnect {
       "status": data['status'],
       "xml_file": data['xml_file'],
       "image": data['image'],
+      "heading_direction": data['heading_direction'],
     });
     var response = await put("${InitService.baseUrlApi}kapal/$callSign", body, headers: {
       "Authorization": "Bearer " + token,

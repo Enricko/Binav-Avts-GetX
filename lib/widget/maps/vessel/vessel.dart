@@ -111,7 +111,7 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
                       e.coor!.coorGga!.latitude!,
                       e.coor!.coorGga!.longitude!,
                       100,
-                      e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                      e.headingDirection!.toDouble() + (e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!),
                       1,
                     );
                     return Marker(
@@ -135,7 +135,7 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
                           },
                           child: Transform.rotate(
                             angle: mapGetController.degreesToRadians(
-                              e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!,
+                              e.headingDirection!.toDouble() + (e.coor!.coorHdt!.headingDegree ?? e.coor!.defaultHeading!),
                             ),
                             child: Tooltip(
                               message: e.callSign!,

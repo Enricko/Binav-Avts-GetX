@@ -63,6 +63,7 @@ class KapalFormController extends GetxController {
       builderController.text = value.data!.first.builder!;
       yearBuiltController.text = value.data!.first.yearBuilt!;
       filePickerController.text = value.data!.first.xmlFile!;
+      headingdirectionController.text = value.data!.first.headingDirection.toString();
       isSwitched.value = value.data!.first.status!;
       vesselSize.value = value.data!.first.size!;
     });
@@ -91,7 +92,8 @@ class KapalFormController extends GetxController {
       "xml_file": filePickerVal.value == null
           ? null
           : MultipartFile(filePickerVal.value, filename: filePickerController.text),
-      "image": MultipartFile(webImage_1.value, filename:"iamge")
+      "image": MultipartFile(webImage_1.value, filename:"image"),
+      "heading_direction":headingdirectionController.text,
     }).then((value) {
       if (General.isApiOk(value.status!.toInt())) {
         Get.back();
@@ -121,12 +123,6 @@ class KapalFormController extends GetxController {
   Future<bool> updateData(String callSign) async {
     bool returnVal = false;
     isLoad.value = true;
-    if (webImage_1.value == null) {
-      Alerts.snackBarGetx(
-          title: "Vessel", message: "Image Required.", alertStatus: AlertStatus.DANGER);
-      isLoad.value = false;
-      return false;
-    }
 
     var token = GetStorage().read("userToken");
     await KapalService().updateData(token, callSign, {
@@ -141,6 +137,7 @@ class KapalFormController extends GetxController {
           ? MultipartFile(filePickerVal.value, filename: filePickerController.text)
           : null,
       "image": MultipartFile(webImage_1.value, filename: "image"),
+      "heading_direction":headingdirectionController.text,
     }).then((value) {
       if (General.isApiOk(value.status!.toInt())) {
         Get.back();
