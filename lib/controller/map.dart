@@ -41,6 +41,33 @@ class MapGetXController extends GetxController {
   var jumlahGarisLintang = 18.0.obs;
   var scaleLintang = 10.0.obs;
 
+  var countDistance = false.obs;
+  var isCalculateDistance = false.obs;
+
+  RxList<Marker> markers = RxList <Marker>([]);
+  RxList<LatLng> markersLatLng = RxList <LatLng>([]);
+
+  void handleMapTap(LatLng point) {
+    if (markers.length <= 1) {
+      markers.add(
+        Marker(
+          width: 80.0,
+          height: 80.0,
+          point: point,
+          child: Container(
+            child: Icon(Icons.place, color: Colors.red), // Ubah ikon sesuai kebutuhan Anda
+          ),
+        ),
+      );
+          markersLatLng.add(point);
+    }
+
+  }
+  double calculateDistance(LatLng pointA, LatLng pointB) {
+    Distance distance = Distance();
+    return distance(pointA, pointB);
+  }
+
   
 
   double vesselSizes(String size) {

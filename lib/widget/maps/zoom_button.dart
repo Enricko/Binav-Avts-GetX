@@ -39,6 +39,7 @@ class FlutterMapZoomButtons extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+
           Tooltip(
             message: "Zoom In",
             child: Padding(
