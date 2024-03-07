@@ -143,7 +143,8 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: formController.callSignController,
-                      hint: 'Call Sign',
+                      label: 'Call Sign',
+                      hint: 'Enter the Call Sign',
                       type: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
@@ -154,7 +155,8 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: formController.flagController,
-                      hint: 'Flag',
+                      label: 'Flag',
+                      hint: 'Enter the Flag',
                       type: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
@@ -165,7 +167,8 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: formController.kelasController,
-                      hint: 'Class',
+                      label: 'Class',
+                      hint: 'Enter the Class',
                       type: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
@@ -176,7 +179,8 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: formController.builderController,
-                      hint: 'Builder',
+                      label: 'Builder',
+                      hint: 'Enter the Builder',
                       type: TextInputType.text,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
@@ -187,7 +191,8 @@ class AddFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: formController.yearBuiltController,
-                      hint: 'Year Built',
+                      label: 'Year Built',
+                      hint: 'Enter the Year Built',
                       type: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty || value == "") {
@@ -199,11 +204,27 @@ class AddFormKapal extends StatelessWidget {
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                     ),
+                    CustomTextField(
+                      controller: formController.headingdirectionController,
+                      label: 'Heading Direction',
+                      hint: 'Enter a value less than 360°',
+                      suffix: "Degress",
+                      type: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || value == "") {
+                          return "The Heading Direction is required.";
+                        }
+                        if (int.parse(value) < 0 || int.parse(value) > 360) {
+                          return "The Heading Direction more than 360.";
+                        }
+                        return null;
+                      },
+                    ),
                     SizedBox(
                       width: double.infinity,
                       child: DropdownSearch<String>(
                         dropdownBuilder: (context, selectedItem) => Text(
-                          selectedItem ?? "",
+                          selectedItem ?? "Choose the Vessel Size",
                           style: const TextStyle(fontSize: 15, color: Colors.black54),
                         ),
                         validator: (value) {
@@ -243,15 +264,16 @@ class AddFormKapal extends StatelessWidget {
                           ),
                         ),
                         items: [
-                          "small",
-                          "medium",
-                          "large",
+                          "Small",
+                          "Medium",
+                          "Large",
                         ],
                         onChanged: (value) {
                           formController.vesselSize.value = value!;
                         },
                       ),
                     ),
+
                     const SizedBox(
                       height: 5,
                     ),
@@ -278,8 +300,8 @@ class AddFormKapal extends StatelessWidget {
                             decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.fromLTRB(8, 3, 1, 3),
                                 hintText: 'File Name',
-                                labelText: 'File Name',
-                                labelStyle: Constants.labelstyle,
+                                // labelText: 'File Name',
+                                // labelStyle: Constants.labelstyle,
                                 focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(width: 1, color: Colors.blueAccent),
                                 ),
@@ -324,7 +346,7 @@ class AddFormKapal extends StatelessWidget {
                               formController.pickFile();
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.lightBlue,
+                              primary: Colors.blueAccent,
                               minimumSize: const Size(122, 48),
                               maximumSize: const Size(122, 48),
                               shape: RoundedRectangleBorder(
@@ -423,8 +445,8 @@ class AddFormKapal extends StatelessWidget {
                                   onChanged: (bool value) {
                                     formController.isSwitched.value = value;
                                   },
-                                  activeTrackColor: Colors.lightGreen,
-                                  activeColor: Colors.green,
+                                  activeTrackColor: Colors.blueAccent,
+                                  activeColor: Colors.blue,
                                 ),
                               ),
                             ),

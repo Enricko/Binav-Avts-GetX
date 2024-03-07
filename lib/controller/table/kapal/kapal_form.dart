@@ -19,6 +19,7 @@ class KapalFormController extends GetxController {
   late TextEditingController kelasController;
   late TextEditingController builderController;
   late TextEditingController yearBuiltController;
+  late TextEditingController headingdirectionController;
   var vesselSize = "".obs;
   var isSwitched = true.obs;
   late TextEditingController filePickerController;
@@ -92,7 +93,7 @@ class KapalFormController extends GetxController {
           : MultipartFile(filePickerVal.value, filename: filePickerController.text),
       "image": MultipartFile(webImage_1.value, filename:"iamge")
     }).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Get.back();
         Get.delete<KapalFormController>();
         Alerts.snackBarGetx(
@@ -141,7 +142,7 @@ class KapalFormController extends GetxController {
           : null,
       "image": MultipartFile(webImage_1.value, filename: "image"),
     }).then((value) {
-      if (General.isApiOk(value.status!)) {
+      if (General.isApiOk(value.status!.toInt())) {
         Get.back();
         Get.delete<KapalFormController>();
         Alerts.snackBarGetx(
@@ -175,6 +176,7 @@ class KapalFormController extends GetxController {
     kelasController = TextEditingController();
     builderController = TextEditingController();
     yearBuiltController = TextEditingController();
+    headingdirectionController = TextEditingController();
     filePickerController = TextEditingController();
     image_1 = ImagePicker();
   }
