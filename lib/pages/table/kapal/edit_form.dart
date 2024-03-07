@@ -75,6 +75,7 @@ class EditFormKapal extends StatelessWidget {
                   children: [
                     CustomTextField(
                       controller: controller.callSignController,
+                      label: "Call Sign",
                       hint: 'Call Sign',
                       type: TextInputType.text,
                       validator: (value) {
@@ -86,6 +87,7 @@ class EditFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: controller.flagController,
+                      label: 'Flag',
                       hint: 'Flag',
                       type: TextInputType.text,
                       validator: (value) {
@@ -97,6 +99,7 @@ class EditFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: controller.kelasController,
+                      label: "Class",
                       hint: 'Class',
                       type: TextInputType.text,
                       validator: (value) {
@@ -108,6 +111,7 @@ class EditFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: controller.builderController,
+                      label: "Builder",
                       hint: 'Builder',
                       type: TextInputType.text,
                       validator: (value) {
@@ -119,6 +123,7 @@ class EditFormKapal extends StatelessWidget {
                     ),
                     CustomTextField(
                       controller: controller.yearBuiltController,
+                      label: "Year Built",
                       hint: 'Year Built',
                       type: TextInputType.number,
                       validator: (value) {
@@ -151,9 +156,11 @@ class EditFormKapal extends StatelessWidget {
                       width: double.infinity,
                       child: DropdownSearch<String>(
                         dropdownBuilder: (context, selectedItem) => Text(
-                          selectedItem ?? "",
+                          selectedItem ?? controller.vesselSize.value,
                           style: const TextStyle(fontSize: 15, color: Colors.black54),
                         ),
+                        // selectedItem: controller.vesselSize.value,
+
                         validator: (value) {
                           if (value == null || value.isEmpty || value == "") {
                             return "The Ukuran Kapal field is required.";
@@ -216,6 +223,7 @@ class EditFormKapal extends StatelessWidget {
                           child: CustomTextField(
                             readOnly: true,
                             controller: controller.filePickerController,
+                            label: "File Name",
                             hint: 'File Name',
                             type: TextInputType.text,
                           ),

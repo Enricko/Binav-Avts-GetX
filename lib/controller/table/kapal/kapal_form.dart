@@ -187,6 +187,7 @@ class KapalFormController extends GetxController {
     kelasController.dispose();
     builderController.dispose();
     yearBuiltController.dispose();
+    headingdirectionController.dispose();
     filePickerController.dispose();
   }
 }

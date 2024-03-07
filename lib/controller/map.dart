@@ -36,6 +36,11 @@ class MapGetXController extends GetxController {
 
   Rx<StreamSocketKapal> streamSocketKapal = StreamSocketKapal().obs;
 
+  var jumlahGarisBujur = 9.0.obs;
+  var scaleBujur = 10.0.obs;
+  var jumlahGarisLintang = 18.0.obs;
+  var scaleLintang = 10.0.obs;
+
   
 
   double vesselSizes(String size) {
