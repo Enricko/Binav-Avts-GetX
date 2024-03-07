@@ -45,6 +45,7 @@ class Data {
   String? yearBuilt;
   String? xmlFile;
   String? image;
+  int? headingDirection;
   Coor? coor;
 
   Data(
@@ -59,6 +60,7 @@ class Data {
       this.yearBuilt,
       this.xmlFile,
       this.image,
+      this.headingDirection,
       this.coor});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -73,6 +75,7 @@ class Data {
     yearBuilt = json['year_built'];
     xmlFile = json['xml_file'];
     image = json['image'];
+    headingDirection = json['heading_direction'];
     coor = json['coor'] != null ? new Coor.fromJson(json['coor']) : null;
   }
 
@@ -89,6 +92,7 @@ class Data {
     data['year_built'] = this.yearBuilt;
     data['xml_file'] = this.xmlFile;
     data['image'] = this.image;
+    data['heading_direction'] = this.headingDirection;
     if (this.coor != null) {
       data['coor'] = this.coor!.toJson();
     }
