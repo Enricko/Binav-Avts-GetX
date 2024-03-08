@@ -169,7 +169,7 @@ class WindowVesselDetail extends StatelessWidget {
                                               TableCell(
                                                 child: Text(
                                                     textAlign: TextAlign.right,
-                                                    ' ${data.coor!.coorVtg!.speedInKnots} kts '),
+                                                    data.coor!.coorVtg!.speedInKnots == null ? " VTG Not Detected" : " ${data.coor!.coorVtg!.speedInKnots} KTS"),
                                               ),
                                             ],
                                           ),

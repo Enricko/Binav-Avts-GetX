@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:binav_avts_getx/controller/map.dart';
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
 import 'package:binav_avts_getx/pages/table/first_profile.dart';
@@ -78,9 +80,8 @@ class HomePage extends StatelessWidget {
                         child: Center(
                           child: PopupMenuButton(
                             position: PopupMenuPosition.under,
-                            child: Text('Menu',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 17)),
+                            child:
+                                Text('Menu', style: TextStyle(color: Colors.white, fontSize: 17)),
                             // icon: const Icon(Icons.menu),
                             itemBuilder: (context) => [
                               PopupMenuItem(
@@ -102,24 +103,21 @@ class HomePage extends StatelessWidget {
                                   Get.dialog(
                                     Dialog(
                                         shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                            borderRadius: BorderRadius.circular(10)),
                                         child: KapalTable()),
                                   );
                                 case "pipelineList":
                                   Get.dialog(
                                     Dialog(
                                         shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                            borderRadius: BorderRadius.circular(10)),
                                         child: PipelineTable()),
                                   );
                                 case "clientList":
                                   Get.dialog(
                                     Dialog(
                                         shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                            borderRadius: BorderRadius.circular(10)),
                                         child: ClientTable()),
                                   );
                               }
@@ -128,46 +126,44 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Div(
-                      divison: const Division(
-                        colXS: 1,
-                        colS: 1,
-                        colM: 1,
-                        colL: 1,
-                        colXL: 1,
-                      ),
-                      child: SizedBox(
-                        height: 50,
-                        child: Center(
-                          child: PopupMenuButton(
-                            position: PopupMenuPosition.under,
-                            child: Text('Tools',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 17)),
-                            // icon: const Icon(Icons.menu),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 'countDistance',
-                                child: Text('Count Distance'),
-                              ),
-                            ],
-                            onSelected: (item) {
-                              switch (item) {
-                                case "countDistance":
-                                  mapGetController.countDistance.value =
-                                      !mapGetController.countDistance.value;
-                                  mapGetController.isCalculateDistance.value =
-                                      true;
-                                  print(mapGetController.countDistance.value);
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
+                    // SizedBox(
+                    //   width: 10,
+                    // ),
+                    // Div(
+                    //   divison: const Division(
+                    //     colXS: 1,
+                    //     colS: 1,
+                    //     colM: 1,
+                    //     colL: 1,
+                    //     colXL: 1,
+                    //   ),
+                    //   child: SizedBox(
+                    //     height: 50,
+                    //     child: Center(
+                    //       child: PopupMenuButton(
+                    //         position: PopupMenuPosition.under,
+                    //         child:
+                    //             Text('Tools', style: TextStyle(color: Colors.white, fontSize: 17)),
+                    //         // icon: const Icon(Icons.menu),
+                    //         itemBuilder: (context) => [
+                    //           PopupMenuItem(
+                    //             value: 'countDistance',
+                    //             child: Text('Count Distance'),
+                    //           ),
+                    //         ],
+                    //         onSelected: (item) {
+                    //           switch (item) {
+                    //             case "countDistance":
+                    //               mapGetController.countDistance.value =
+                    //                   !mapGetController.countDistance.value;
+                    //               mapGetController.isCalculateDistance.value = true;
+                    //               print(mapGetController.countDistance.value);
+                    //           }
+                    //         },
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     SizedBox(
                       width: 10,
                     ),
@@ -181,15 +177,14 @@ class HomePage extends StatelessWidget {
                             // transitionDuration: Duration(seconds: 1),
                             Dialog(
                                 alignment: Alignment.centerRight,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
+                                shape:
+                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                 child: FirstProfile()),
                           );
                         },
                         child: CircleAvatar(
                           radius: 25,
-                          child: Text(
-                              "${GetStorage().read("name")[0]}".toUpperCase(),
+                          child: Text("${GetStorage().read("name")[0]}".toUpperCase(),
                               style: TextStyle(fontSize: 15)),
                         )),
                     const SizedBox(
@@ -243,11 +238,14 @@ class HomePage extends StatelessWidget {
                           },
                           onTap: (mapGetController.countDistance.value)
                               ? (TapPosition, LatLong) {
-                                  print(LatLong.longitude);
-                                  print(LatLong.latitude);
                                   mapGetController.handleMapTap(LatLong);
                                 }
                               : null,
+                          onPointerHover: (PointerHoverEvent, LatLng) {
+                            if (mapGetController.countDistance.value) {
+                              mapGetController.latLngCursor.value = LatLng;
+                            }
+                          },
                           minZoom: 4,
                           maxZoom: 18,
                           initialZoom: mapGetController.initialZoom.value,
@@ -255,56 +253,6 @@ class HomePage extends StatelessWidget {
                           onPositionChanged: (position, hasGesture) {
                             mapGetController.setUserCurrentPosition(
                                 position.zoom!, position.center!);
-                            print(mapGetController.jumlahGarisBujur.value);
-                            print(mapGetController.scaleBujur.value);
-                            print(position.zoom);
-                            if (position.zoom! <= 11.3) {
-                              mapGetController.jumlahGarisBujur.value = 720;
-                              mapGetController.scaleBujur.value = 0.125;
-                              mapGetController.jumlahGarisLintang.value = 1440;
-                              mapGetController.scaleLintang.value = 0.125;
-                            }
-                            if (position.zoom! <= 10.5) {
-                              mapGetController.jumlahGarisBujur.value = 360;
-                              mapGetController.scaleBujur.value = 0.25;
-                              mapGetController.jumlahGarisLintang.value = 720;
-                              mapGetController.scaleLintang.value = 0.25;
-                            }
-                            if (position.zoom! <= 9) {
-                              mapGetController.jumlahGarisBujur.value = 180;
-                              mapGetController.scaleBujur.value = 0.50;
-                              mapGetController.jumlahGarisLintang.value = 360;
-                              mapGetController.scaleLintang.value = 0.50;
-                            }
-                            if (position.zoom! <= 8.3) {
-                              mapGetController.jumlahGarisBujur.value = 36;
-                              mapGetController.scaleBujur.value = 2.5;
-                              mapGetController.jumlahGarisLintang.value = 72;
-                              mapGetController.scaleLintang.value = 2.5;
-                            }
-                            if (position.zoom! <= 7.5) {
-                              mapGetController.jumlahGarisBujur.value = 18;
-                              mapGetController.scaleBujur.value = 5;
-                              mapGetController.jumlahGarisLintang.value = 36;
-                              mapGetController.scaleLintang.value = 5;
-                            }
-                            if (position.zoom! < 5) {
-                              mapGetController.jumlahGarisBujur.value = 9;
-                              mapGetController.scaleBujur.value = 10;
-                              mapGetController.jumlahGarisLintang.value = 18;
-                              mapGetController.scaleLintang.value = 10;
-                            }
-                            // if (position.zoom! < 9) {
-                            //   mapGetController.jumlahGarisBujur.value = 18;
-                            //   mapGetController.scaleBujur.value = 5;
-                            //   mapGetController.jumlahGarisLintang.value = 36;
-                            //   mapGetController.scaleLintang.value = 5;
-                            // }else{
-                            //   mapGetController.jumlahGarisBujur.value = 36;
-                            //   mapGetController.scaleBujur.value = 2.5;
-                            //   mapGetController.jumlahGarisLintang.value = 72;
-                            //   mapGetController.scaleLintang.value = 2.5;
-                            // }
                           },
                         ),
                         nonRotatedChildren: [
@@ -323,8 +271,7 @@ class HomePage extends StatelessWidget {
                           Obx(() {
                             if (mapGetController.getVessel.value) {
                               return Align(
-                                  alignment: Alignment.topRight,
-                                  child: WindowVesselDetail());
+                                  alignment: Alignment.topRight, child: WindowVesselDetail());
                               // WindowVesselDetail();
                             }
                             return SizedBox();
@@ -338,14 +285,48 @@ class HomePage extends StatelessWidget {
                               return SizedBox();
                             },
                           ),
-                          ScaleLayerWidget(
-                            options: ScaleLayerPluginOption(
-                              lineColor: Colors.blue,
-                              lineWidth: 2,
-                              textStyle: const TextStyle(
-                                  color: Colors.blue, fontSize: 12),
-                              padding: const EdgeInsets.all(20),
-                            ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: 100,
+                                height: 50,
+                                child: ScaleLayerWidget(
+                                  options: ScaleLayerPluginOption(
+                                    lineColor: Colors.blue,
+                                    lineWidth: 2,
+                                    textStyle: const TextStyle(color: Colors.blue, fontSize: 12),
+                                    padding: const EdgeInsets.all(20),
+                                  ),
+                                ),
+                              ),
+                              Obx(
+                                () => Container(
+                                  width: 40,
+                                  height: 40,
+                                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      mapGetController.countDistance.value =
+                                          !mapGetController.countDistance.value;
+                                      mapGetController.isCalculateDistance.value = true;
+                                      mapGetController.latLngCursor.value = null;
+                                    },
+                                    icon: Icon(
+                                      Icons.straighten,
+                                      color: mapGetController.countDistance.value
+                                          ? Colors.blue
+                                          : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           // Align(
                           //   alignment: Alignment.centerLeft,
@@ -381,8 +362,7 @@ class HomePage extends StatelessWidget {
                                 'https://mt0.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&User-Agent=BinavAvts/1.0',
                             // Open Street Map
                             // 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName:
-                                'dev.fleaflet.flutter_map.example',
+                            userAgentPackageName: 'dev.fleaflet.flutter_map.example',
                             // tileProvider: CancellableNetworkTileProvider(),
                           ),
                           PipelineLayer(),
@@ -390,134 +370,73 @@ class HomePage extends StatelessWidget {
                           // Garis kapal
                           // VesselLineLatlong(),
                           Obx(() {
-                            return PolylineLayer(
-                              polylines: [
-                                ///Bujur
-                                Polyline(
-                                  points: [
-                                    LatLng(0, -180), // Garis Khatulistiwa
-                                    LatLng(0, 180),
-                                  ],
-                                  color: Colors.white54,
-                                  // Warna Garis Khatulistiwa
-                                  strokeWidth: 1, // Lebar Garis Khatulistiwa
-                                ),
-                                for (int i = 1;
-                                    i <=
-                                        mapGetController.jumlahGarisBujur.value;
-                                    i++)
-                                  Polyline(
-                                    points: [
-                                      LatLng(
-                                          mapGetController.scaleBujur.value *
-                                              i.toDouble(),
-                                          -180),
-                                      // Garis Bujur Positive
-                                      LatLng(
-                                          mapGetController.scaleBujur.value *
-                                              i.toDouble(),
-                                          180),
-                                    ],
-                                    color: Colors.white54,
-                                    strokeWidth: 1,
-                                  ),
-                                for (int i = 1;
-                                    i <=
-                                        mapGetController.jumlahGarisBujur.value;
-                                    i++)
-                                  Polyline(
-                                    points: [
-                                      LatLng(
-                                          -mapGetController.scaleBujur.value *
-                                              i.toDouble(),
-                                          -180),
-                                      // Garis Bujur Negative
-                                      LatLng(
-                                          -mapGetController.scaleBujur.value *
-                                              i.toDouble(),
-                                          180),
-                                    ],
-                                    color: Colors.white54,
-                                    strokeWidth: 1,
-                                  ),
-
-                                /// Lintang
-                                Polyline(
-                                  points: [
-                                    LatLng(-90, 0), // Garis Lintang
-                                    LatLng(90, 0),
-                                  ],
-                                  color: Colors.white54, // Warna garis lintang
-                                  strokeWidth: 1, // Lebar garis lintang
-                                ),
-                                for (int i = 1;
-                                    i <=
-                                        mapGetController
-                                            .jumlahGarisLintang.value;
-                                    i++)
-                                  Polyline(
-                                    points: [
-                                      LatLng(
-                                          -90,
-                                          mapGetController.scaleLintang.value *
-                                              i.toDouble()),
-                                      // Garis Lintang Positive
-                                      LatLng(
-                                          90,
-                                          mapGetController.scaleLintang.value *
-                                              i.toDouble()),
-                                    ],
-                                    color: Colors.white54,
-                                    // Warna garis lintang
-                                    strokeWidth: 1, // Lebar garis lintang
-                                  ),
-                                for (int i = 1;
-                                    i <=
-                                        mapGetController
-                                            .jumlahGarisLintang.value;
-                                    i++)
-                                  Polyline(
-                                    points: [
-                                      LatLng(
-                                          -90,
-                                          -mapGetController.scaleLintang.value *
-                                              i.toDouble()),
-                                      // Garis Lintang Negative
-                                      LatLng(
-                                          90,
-                                          -mapGetController.scaleLintang.value *
-                                              i.toDouble()),
-                                    ],
-                                    color: Colors.white54,
-                                    // Warna garis lintang
-                                    strokeWidth: 1, // Lebar garis lintang
-                                  ),
-                              ],
-                            );
-                          }),
-                          Obx(() {
-                            return MarkerLayer(
-                                markers: mapGetController.markers.value);
+                            return MarkerLayer(markers: mapGetController.markers.value);
                           }),
 
                           PolylineLayer(polylines: [
-                            (mapGetController.markersLatLng.length == 2)
-                                ? Polyline(
-                                    points: [
-                                      mapGetController.markersLatLng[0], // Garis Khatulistiwa
-                                      mapGetController.markersLatLng[1], // Garis Khatulistiwa
-                                    ],
-                                    color: Colors.blueAccent,
-                                    // Warna Garis Khatulistiwa
-                                    strokeWidth: 2, // Lebar Garis Khatulistiwa
-                                  )
-                                : Polyline(
-                                    points: [
-                                      LatLng(0, 0), // Garis Khatulistiwa
-                                      LatLng(0, 0),
-                                    ],
-                                  )
-                          ])
+                            Polyline(
+                              points: mapGetController.markersLatLng.value.map((e) => e).toList(),
+                              color: Colors.blueAccent,
+                              strokeWidth: 2,
+                            ),
+                          ]),
+                          Obx(
+                            () {
+                              return mapGetController.latLngCursor.value == null
+                                  ? SizedBox()
+                                  : MarkerLayer(
+                                      markers: [
+                                        Marker(
+                                          width: 150.0,
+                                          height: 80.0,
+                                          point: mapGetController.latLngCursor.value!,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Container(
+                                                child: Icon(Icons.place,
+                                                    color: Colors
+                                                        .red), // Ubah ikon sesuai kebutuhan Anda
+                                              ),
+                                              Align(
+                                                alignment: Alignment.bottomCenter,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(4),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: Colors.black.withOpacity(0.7),
+                                                  ),
+                                                  child: Text(
+                                                    mapGetController.markersLatLng.length > 0
+                                                        ? "${mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!)} M"
+                                                        : "${mapGetController.markersLatLng.length} M",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                            },
+                          ),
+
+                          // MarkerLayer(
+                          //   markers: [
+                          //     if (mapGetController.latLng.value != null)
+                          //       Marker(
+                          //         width: mapGetController.pointSize.value,
+                          //         height: mapGetController.pointSize.value,
+                          //         point: mapGetController.latLng.value!,
+                          //         child: Image.asset(
+                          //           "assets/compass.png",
+                          //           width: 250,
+                          //           height: 250,
+                          //         ),
+                          //       ),
+                          //   ],
+                          // ),
                         ],
                       );
                     }),

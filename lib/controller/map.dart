@@ -11,13 +11,15 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../services/pipeline.dart';
 
 class MapGetXController extends GetxController {
   // MapGetXController({required this.context});
-  // late BuildContext context;
+  Rx<SnappingSheetController> snappingSheetController =
+      Rx<SnappingSheetController>(SnappingSheetController());
 
   late final MapController mapController;
   Rx<LatLng?> latLng = Rx<LatLng?>(null);
@@ -44,31 +46,51 @@ class MapGetXController extends GetxController {
   var countDistance = false.obs;
   var isCalculateDistance = false.obs;
 
-  RxList<Marker> markers = RxList <Marker>([]);
-  RxList<LatLng> markersLatLng = RxList <LatLng>([]);
+  RxList<Marker> markers = RxList<Marker>([]);
+  RxList<LatLng> markersLatLng = RxList<LatLng>([]);
+  Rx<LatLng?> latLngCursor = Rx<LatLng?>(null);
 
   void handleMapTap(LatLng point) {
-    if (markers.length <= 1) {
-      markers.add(
-        Marker(
-          width: 80.0,
-          height: 80.0,
-          point: point,
-          child: Container(
-            child: Icon(Icons.place, color: Colors.red), // Ubah ikon sesuai kebutuhan Anda
-          ),
+    // if (markers.length <= 1) {
+    markers.add(
+      Marker(
+        width: 150.0,
+        height: 80.0,
+        point: point,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              child: Icon(Icons.place, color: Colors.red), // Ubah ikon sesuai kebutuhan Anda
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.black.withOpacity(0.7),
+                ),
+                child: Text(
+                  markersLatLng.length > 0
+                      ? "${calculateDistance(markersLatLng[markersLatLng.length - 1], point)} M"
+                      : "${markersLatLng.length} M",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
-      );
-          markersLatLng.add(point);
-    }
-
+      ),
+    );
+    markersLatLng.add(point);
+    // }
   }
+
   double calculateDistance(LatLng pointA, LatLng pointB) {
     Distance distance = Distance();
     return distance(pointA, pointB);
   }
-
-  
 
   double vesselSizes(String size) {
     switch (size) {
@@ -85,7 +107,8 @@ class MapGetXController extends GetxController {
     }
   }
 
-  LatLng predictLatLong(double latitude, double longitude, double speed, double course, int movementTime) {
+  LatLng predictLatLong(
+      double latitude, double longitude, double speed, double course, int movementTime) {
     // Convert course from degrees to radians
     double courseRad = degreesToRadians(course);
     // Convert speed from meters per minute to meters per second
@@ -94,7 +117,8 @@ class MapGetXController extends GetxController {
     double distanceM = speedMps * movementTime;
     // Calculate the change in latitude and longitude
     double deltaLatitude = distanceM * math.cos(courseRad) / 111111.1;
-    double deltaLongitude = distanceM * math.sin(courseRad) / (111111.1 * math.cos(degreesToRadians(latitude)));
+    double deltaLongitude =
+        distanceM * math.sin(courseRad) / (111111.1 * math.cos(degreesToRadians(latitude)));
     // Calculate the new latitude and longitude
     double newLatitude = latitude + deltaLatitude;
     double newLongitude = longitude + deltaLongitude;
@@ -106,7 +130,8 @@ class MapGetXController extends GetxController {
   }
 
   void socketAllKapal() {
-    IO.Socket socket = IO.io('${InitService.baseUrl}kapal', IO.OptionBuilder().setTransports(['websocket']).build());
+    IO.Socket socket = IO.io(
+        '${InitService.baseUrl}kapal', IO.OptionBuilder().setTransports(['websocket']).build());
 
     socket.onConnect((_) => print('connect All'));
 
@@ -184,15 +209,17 @@ class MapGetXController extends GetxController {
     latLng.value = mapController.camera.pointToLatLng(math.Point(pointX, pointY.value));
   }
 
-  void userCurrentPosition()async{
+  void userCurrentPosition() async {
     var box = GetStorage();
-    if(box.read("currentZoom") != null && box.read("currentLatlong") != null){
+    if (box.read("currentZoom") != null && box.read("currentLatlong") != null) {
       initialZoom.value = box.read("currentZoom");
       currentZoom.value = box.read("currentZoom");
-      initialCenter.value = LatLng(box.read("currentLatlong")['coordinates'][1],box.read("currentLatlong")['coordinates'][0]);
+      initialCenter.value = LatLng(box.read("currentLatlong")['coordinates'][1],
+          box.read("currentLatlong")['coordinates'][0]);
     }
   }
-  void setUserCurrentPosition(double zoom,LatLng center)async{
+
+  void setUserCurrentPosition(double zoom, LatLng center) async {
     var box = GetStorage();
     currentZoom.value = zoom;
     box.write("currentZoom", zoom);
@@ -202,7 +229,7 @@ class MapGetXController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-      userCurrentPosition();
+    userCurrentPosition();
     try {
       mapController = MapController();
       socketAllKapal();
