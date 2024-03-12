@@ -15,7 +15,10 @@ class RulerLine extends StatelessWidget {
       () => PolylineLayer(
         polylines: [
           Polyline(
-            points: mapGetController.markersLatLng.value.map((e) => e).toList(),
+            points: [
+              for (var x in mapGetController.markersLatLng.value) x,
+              if (mapGetController.markersLatLng.length > 0) mapGetController.latLngCursor.value!
+            ],
             color: Colors.blueAccent,
             strokeWidth: 2,
           ),

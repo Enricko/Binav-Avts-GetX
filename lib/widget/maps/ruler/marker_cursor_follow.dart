@@ -34,11 +34,17 @@ class MarkerCursorFollow extends StatelessWidget {
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.black.withOpacity(0.7),
+                              color: Colors.black.withOpacity(0.4),
                             ),
                             child: Text(
                               mapGetController.markersLatLng.length > 0
-                                  ? "${mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!)} M"
+                                  ? (mapGetController.calculateDistance(
+                                              mapGetController.markersLatLng[
+                                                  mapGetController.markersLatLng.length - 1],
+                                              mapGetController.latLngCursor.value!) >
+                                          0
+                                      ? "${mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!)} M"
+                                      : "")
                                   : "${mapGetController.markersLatLng.length} M",
                               style: TextStyle(color: Colors.white),
                             ),
