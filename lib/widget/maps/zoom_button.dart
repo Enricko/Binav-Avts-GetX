@@ -34,60 +34,57 @@ class FlutterMapZoomButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final map = MapCamera.of(context);
-    return Align(
-      alignment: alignment,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-
-          Tooltip(
-            message: "Zoom In",
-            child: Padding(
-              padding: EdgeInsets.only(left: padding, top: padding, right: padding),
-              child: FloatingActionButton(
-                heroTag: 'zoomInButton',
-                mini: mini,
-                backgroundColor: zoomInColor ?? Theme.of(context).primaryColor,
-                onPressed: () {
-                  final paddedMapCamera = CameraFit.bounds(
-                    bounds: map.visibleBounds,
-                    padding: _fitBoundsPadding,
-                  ).fit(map);
-                  var zoom = paddedMapCamera.zoom + 1;
-                  if (zoom > maxZoom) {
-                    zoom = maxZoom;
-                  }
-                  MapController.of(context).move(paddedMapCamera.center, zoom);
-                },
-                child: Icon(zoomInIcon, color: zoomInColorIcon ?? IconTheme.of(context).color),
-              ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        // IconButton(onPressed: (){}, icon: Icon(Icons.location_pin)),
+        Tooltip(
+          message: "Zoom In",
+          child: Padding(
+            padding: EdgeInsets.only(left: padding, top: padding,right: padding),
+            child: FloatingActionButton(
+              heroTag: 'zoomInButton',
+              mini: mini,
+              backgroundColor: zoomInColor ?? Colors.white,
+              onPressed: () {
+                final paddedMapCamera = CameraFit.bounds(
+                  bounds: map.visibleBounds,
+                  padding: _fitBoundsPadding,
+                ).fit(map);
+                var zoom = paddedMapCamera.zoom + 1;
+                if (zoom > maxZoom) {
+                  zoom = maxZoom;
+                }
+                MapController.of(context).move(paddedMapCamera.center, zoom);
+              },
+              child: Icon(zoomInIcon, color: zoomInColorIcon ?? IconTheme.of(context).color),
             ),
           ),
-          Tooltip(
-            message: "Zoom Out",
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: FloatingActionButton(
-                heroTag: 'zoomOutButton',
-                mini: mini,
-                backgroundColor: zoomOutColor ?? Theme.of(context).primaryColor,
-                onPressed: () {
-                  final paddedMapCamera = CameraFit.bounds(
-                    bounds: map.visibleBounds,
-                    padding: _fitBoundsPadding,
-                  ).fit(map);
-                  var zoom = paddedMapCamera.zoom - 1;
-                  if (zoom < minZoom) {
-                    zoom = minZoom;
-                  }
-                  MapController.of(context).move(paddedMapCamera.center, zoom);
-                },
-                child: Icon(zoomOutIcon, color: zoomOutColorIcon ?? IconTheme.of(context).color),
-              ),
+        ),
+        Tooltip(
+          message: "Zoom Out",
+          child: Padding(
+            padding: EdgeInsets.all(padding),
+            child: FloatingActionButton(
+              heroTag: 'zoomOutButton',
+              mini: mini,
+              backgroundColor: zoomOutColor ?? Colors.white,
+              onPressed: () {
+                final paddedMapCamera = CameraFit.bounds(
+                  bounds: map.visibleBounds,
+                  padding: _fitBoundsPadding,
+                ).fit(map);
+                var zoom = paddedMapCamera.zoom - 1;
+                if (zoom < minZoom) {
+                  zoom = minZoom;
+                }
+                MapController.of(context).move(paddedMapCamera.center, zoom);
+              },
+              child: Icon(zoomOutIcon, color: zoomOutColorIcon ?? IconTheme.of(context).color),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

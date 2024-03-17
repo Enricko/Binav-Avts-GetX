@@ -445,8 +445,8 @@ class AddFormKapal extends StatelessWidget {
                                   onChanged: (bool value) {
                                     formController.isSwitched.value = value;
                                   },
-                                  activeTrackColor: Colors.blueAccent,
-                                  activeColor: Colors.blue,
+                                  activeTrackColor: Colors.lightGreen,
+                                  activeColor: Colors.green,
                                 ),
                               ),
                             ),

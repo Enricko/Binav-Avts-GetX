@@ -137,3 +137,13 @@ flutter:
     - assets/intro4.jpg
     - assets/vector1.jpg
     - assets/vector2.svg
+
+  fonts:
+    - family: Helvetica
+      fonts:
+        - asset: assets/fonts/Helvetica/HelveticaNeueLight.ttf
+          weight: 100
+        - asset: assets/fonts/Helvetica/HelveticaNeueMedium.ttf
+          weight: 400
+        - asset: assets/fonts/Helvetica/HelveticaNeueBold.ttf
+          weight: 600

@@ -109,53 +109,73 @@ class KapalTable extends StatelessWidget {
                           headingRowColor: MaterialStateProperty.all(const Color(0xffd3d3d3)),
                           columns: const [
                             DataColumn(
-                                label: Text("No.", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("No.",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label:
-                                    Text("Image", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Image",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
                                 label: Text("Client Name",
-                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
                                 label: Text("Call Sign",
-                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label: Text("Flag", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Flag",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label:
-                                    Text("Class", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Class",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label:
-                                    Text("Builder", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Builder",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
                                 label: Text("Year Built",
-                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label: Text("Size", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Size",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
-                                label: Text("Heading Direction", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Heading Direction",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
                                 label: Text("File XML",
-                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             DataColumn(
                                 label: Text("Upload IP ",
-                                    style: TextStyle(fontWeight: FontWeight.w800))),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800))),
                             DataColumn(
-                                label:
-                                    Text("Action", style: TextStyle(fontWeight: FontWeight.w800))),
+                                label: Text("Action",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                           ],
                           // ignore: invalid_use_of_protected_member
                           rows: controller.data!.value.map((row) {
                             int numberedTable =
                                 // ignore: invalid_use_of_protected_member
-                                controller.data!.value
-                                        .toList()
-                                        .indexWhere((e) => e.callSign == row.callSign) +
+                                controller.data!.value.toList().indexWhere(
+                                        (e) => e.callSign == row.callSign) +
                                     1 * controller.page.value;
                             return DataRow(cells: [
                               DataCell(Text(numberedTable.toString())),
                               DataCell(Image.network(
-                                  InitService.baseUrl! + "assets/kapal_image/" + row.image!,width: 100,)),
+                                InitService.baseUrl! +
+                                    "assets/kapal_image/" +
+                                    row.image!,
+                                width: 100,
+                              )),
                               DataCell(Text(row.client!.user!.name!)),
                               DataCell(Text(row.callSign!)),
                               DataCell(Text(row.flag!)),
@@ -170,14 +190,33 @@ class KapalTable extends StatelessWidget {
                                 child: IconButton(
                                     onPressed: () {
                                       Get.dialog(Dialog(
-                                        child: IpKapalPage(callSign: row.callSign!),
+                                        child: IpKapalPage(
+                                            callSign: row.callSign!),
                                       ));
                                     },
-                                    icon: const Icon(Icons.edit_location_alt_outlined)),
+                                    icon: const Icon(
+                                        Icons.edit_location_alt_outlined)),
                               )),
                               // DataCell(Container()),
                               DataCell(Row(
                                 children: [
+                                  // ElevatedButton(
+                                  //     style: ButtonStyle(
+                                  //         shape: MaterialStateProperty.all(
+                                  //           RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(5),
+                                  //           ),
+                                  //         ),
+                                  //         side: MaterialStateProperty.all(BorderSide(color: Colors.black,width: 1)),
+                                  //         backgroundColor:
+                                  //             MaterialStateProperty.all(
+                                  //                 Colors.yellow)),
+                                  //     onPressed: () {},
+                                  //     child: Text(
+                                  //       "Edit",
+                                  //       style: TextStyle(color: Colors.black),
+                                  //     )),
                                   Tooltip(
                                     message: "Edit",
                                     child: IconButton(
@@ -187,7 +226,8 @@ class KapalTable extends StatelessWidget {
                                       ),
                                       onPressed: () {
                                         Get.dialog(Dialog(
-                                          child: EditFormKapal(callSign: row.callSign!),
+                                          child: EditFormKapal(
+                                              callSign: row.callSign!),
                                         ));
                                       },
                                     ),
@@ -203,12 +243,16 @@ class KapalTable extends StatelessWidget {
                                           ? null
                                           : () {
                                               Alerts.showAlertYesNo(
-                                                title: "Are you sure you want to delete this data?",
+                                                title:
+                                                    "Are you sure you want to delete this data?",
                                                 onPressYes: () async {
                                                   await controller
-                                                      .deleteData(callSign: row.callSign!)
+                                                      .deleteData(
+                                                          callSign:
+                                                              row.callSign!)
                                                       .then((_) async {
-                                                    await controller.getKapalData();
+                                                    await controller
+                                                        .getKapalData();
                                                     Navigator.pop(context);
                                                   });
                                                 },
