@@ -124,7 +124,7 @@ class _VesselWidgetState extends State<VesselWidget> with TickerProviderStateMix
                       child: MouseRegion(
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
-                          onTap: () {
+                          onDoubleTap: () {
                             vesselOnClick(
                               e.callSign!,
                               LatLng(
