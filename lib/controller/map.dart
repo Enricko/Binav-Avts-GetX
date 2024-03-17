@@ -49,9 +49,12 @@ class MapGetXController extends GetxController {
   RxList<Marker> markers = RxList<Marker>([]);
   RxList<LatLng> markersLatLng = RxList<LatLng>([]);
   Rx<LatLng?> latLngCursor = Rx<LatLng?>(null);
+  // var maxLengthMarker = 0.obs;
 
   void handleMapTap(LatLng point) {
-    // if (markers.length <= 1) {
+    // print("marker length ${markers.length}");
+    // print("max marker length ${maxLengthMarker.value}");
+    // if (markers.length <= maxLengthMarker.value) {
     markers.add(
       Marker(
         width: 150.0,
@@ -83,6 +86,7 @@ class MapGetXController extends GetxController {
         ),
       ),
     );
+    // maxLengthMarker.value++;
     markersLatLng.add(point);
     // }
   }
