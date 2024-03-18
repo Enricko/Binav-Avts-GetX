@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     // print("Token : ${JwtDecoder.isExpired("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjUxOTMzMiwianRpIjoiYjg2YTVhOTUtN2EyMS00YjdhLWI3ODctNTNlMTExOTkxM2ViIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IktIcm82T1E2azlXNWpuQ21EZ0p5ZHo4dVlUYVhkcnpWbWZiIiwibmJmIjoxNzA2NTE5MzMyLCJjc3JmIjoiYzViZjM3M2ItMjM5Zi00MGZlLWJmNjgtZmQ1YTZiNjMyYzk4IiwiZXhwIjoxNzA2NjkyMTMyfQ.Fh0JWQmSPy9l0eoMrQbVIYq3i6Y7oMKpsNQtzvM95m8")}");
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Binav Avts',
+      title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

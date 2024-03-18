@@ -8,7 +8,6 @@ import 'package:binav_avts_getx/services/init.dart';
 import 'package:binav_avts_getx/services/kapal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:latlong2/latlong.dart';
@@ -51,10 +50,6 @@ class MapGetXController extends GetxController {
   RxList<LatLng> markersLatLng = RxList<LatLng>([]);
   Rx<LatLng?> latLngCursor = Rx<LatLng?>(null);
   // var maxLengthMarker = 0.obs;
-  var isBottomBarVisible = false.obs;
-  late LocationPermission permission;
-  Rx<LatLng?> currentPosition = Rx<LatLng?>(null);
-  var currentPositionActive = false.obs;
 
   void handleMapTap(LatLng point) {
     // print("marker length ${markers.length}");
@@ -69,13 +64,7 @@ class MapGetXController extends GetxController {
           alignment: Alignment.center,
           children: [
             Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(color: Colors.black54,width: 1)
-              ),
+              child: Icon(Icons.place, color: Colors.red), // Ubah ikon sesuai kebutuhan Anda
             ),
             Align(
               alignment: Alignment.bottomCenter,
