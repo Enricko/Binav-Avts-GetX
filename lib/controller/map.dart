@@ -76,7 +76,6 @@ class MapGetXController extends GetxController {
                 color: Colors.white,
                 border: Border.all(color: Colors.black54,width: 1)
               ),
-              // child: Icon(Icons.circ, color: Colors.blue,), // Ubah ikon sesuai kebutuhan Anda
             ),
             Align(
               alignment: Alignment.bottomCenter,
