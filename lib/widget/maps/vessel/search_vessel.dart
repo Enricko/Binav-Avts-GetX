@@ -31,14 +31,12 @@ class _SearchVesselState extends State<SearchVessel> with TickerProviderStateMix
 
   void _animatedMapMove(LatLng destLocation, double destZoom) {
     final camera = mapGetController.mapController.camera;
-    final latTween = Tween<double>(
-        begin: camera.center.latitude, end: destLocation.latitude);
-    final lngTween = Tween<double>(
-        begin: camera.center.longitude, end: destLocation.longitude);
+    final latTween = Tween<double>(begin: camera.center.latitude, end: destLocation.latitude);
+    final lngTween = Tween<double>(begin: camera.center.longitude, end: destLocation.longitude);
     final zoomTween = Tween<double>(begin: camera.zoom, end: destZoom);
 
-    final controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+    final controller =
+        AnimationController(duration: const Duration(milliseconds: 500), vsync: this);
 
     final Animation<double> animation =
         CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
@@ -81,176 +79,174 @@ class _SearchVesselState extends State<SearchVessel> with TickerProviderStateMix
       width: 500,
       height: 50,
       // width: 500,
-      child: SearchField(
-        controller: searchVessel,
-        suggestions: mapGetController.searchVessel
-            .map(
-              (e) {
-            return SearchFieldListItem<KapalCoor.Data>(
-              e.callSign!,
-              item: e,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
+      child: Obx(
+        () => SearchField(
+          controller: searchVessel,
+          suggestions: mapGetController.searchVessel
+              .map(
+                (e) {
+                  return SearchFieldListItem<KapalCoor.Data>(
+                    e.callSign!,
+                    item: e,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(e.callSign!),
+                        ],
+                      ),
                     ),
-                    Text(e.callSign!),
-                  ],
-                ),
-              ),
-            );
-          },
-        )
-            .where((e) => e.searchKey
-            .toLowerCase()
-            .contains(searchVessel.text.toLowerCase()))
-            .toList(),
-        searchInputDecoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 20),
-          hintText: "Pilih Call Sign Kapal",
-          // labelText: "Pilih Call Sign Kapal",
-          hintStyle: const TextStyle(color: Colors.black),
-          // labelStyle: TextStyle(color: Colors.black),
-          // prefixIcon: const Padding(
-          //   padding: EdgeInsets.all(10),
-          //   child: Icon(Icons.search),
-          // ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: IconButton(onPressed: (){
-    if (searchVessel.text != "" || searchVessel.text != null) {
-                var lat = mapGetController.searchVessel
-                        .where((x) => searchVessel.text == x.callSign!)
-                        .first
-                        .coor!
-                        .coorGga!
-                        .latitude;
-                    var long = mapGetController.searchVessel
-                        .where((x) => searchVessel.text == x.callSign!)
-                        .first
-                        .coor!
-                        .coorGga!
-                        .longitude;
-                    vesselOnClick(searchVessel.text, LatLng(lat!, long!));
-                  }
-                }, icon: Icon(Icons.search)),
-          ),
-          filled: true,
-          fillColor: Colors.white,
-          // fillColor: const Color.fromARGB(255, 230, 230, 230),
-          prefixIconColor: Colors.black,
-          border: OutlineInputBorder(
-            borderSide: const BorderSide(
-                width: 3, color: Colors.white),
-            borderRadius: BorderRadius.circular(30),
-          ),
+                  );
+                },
+              )
+              .where((e) => e.searchKey.toLowerCase().contains(searchVessel.text.toLowerCase()))
+              .toList(),
+          searchInputDecoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            hintText: "Pilih Call Sign Kapal",
+            // labelText: "Pilih Call Sign Kapal",
+            hintStyle: const TextStyle(color: Colors.black),
+            // labelStyle: TextStyle(color: Colors.black),
+            // prefixIcon: const Padding(
+            //   padding: EdgeInsets.all(10),
+            //   child: Icon(Icons.search),
+            // ),
+            suffixIcon: Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                  onPressed: () {
+                    if (searchVessel.text != "" || searchVessel.text != null) {
+                      var lat = mapGetController.searchVessel
+                          .where((x) => searchVessel.text == x.callSign!)
+                          .first
+                          .coor!
+                          .coorGga!
+                          .latitude;
+                      var long = mapGetController.searchVessel
+                          .where((x) => searchVessel.text == x.callSign!)
+                          .first
+                          .coor!
+                          .coorGga!
+                          .longitude;
+                      vesselOnClick(searchVessel.text, LatLng(lat!, long!));
+                    }
+                  },
+                  icon: Icon(Icons.search)),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            // fillColor: const Color.fromARGB(255, 230, 230, 230),
+            prefixIconColor: Colors.black,
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(width: 3, color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
 
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                width: 3, color: Colors.white),
-            borderRadius: BorderRadius.circular(30),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(
-                width: 3, color: Colors.white),
-            borderRadius: BorderRadius.circular(30),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(width: 3, color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(width: 3, color: Colors.white),
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
         ),
-        
       ),
     );
 
-      // Row(
-      //     children: [
-      //       SizedBox(
-      //         height: 50,
-      //         // width: 500,
-      //         child: SearchField(
-      //           controller: searchVessel,
-      //           suggestions: mapGetController.searchVessel
-      //               .map(
-      //                 (e) {
-      //                   return SearchFieldListItem<KapalCoor.Data>(
-      //                     e.callSign!,
-      //                     item: e,
-      //                     child: Padding(
-      //                       padding: const EdgeInsets.all(8.0),
-      //                       child: Row(
-      //                         children: [
-      //                           const SizedBox(
-      //                             width: 10,
-      //                           ),
-      //                           Text(e.callSign!),
-      //                         ],
-      //                       ),
-      //                     ),
-      //                   );
-      //                 },
-      //               )
-      //               .where((e) => e.searchKey
-      //                   .toLowerCase()
-      //                   .contains(searchVessel.text.toLowerCase()))
-      //               .toList(),
-      //           searchInputDecoration: InputDecoration(
-      //             hintText: "Pilih Call Sign Kapal",
-      //             // labelText: "Pilih Call Sign Kapal",
-      //             hintStyle: const TextStyle(color: Colors.black),
-      //             // labelStyle: TextStyle(color: Colors.black),
-      //             prefixIcon: const Padding(
-      //               padding: EdgeInsets.all(10),
-      //               child: Icon(Icons.search),
-      //             ),
-      //             filled: true,
-      //             fillColor: const Color.fromARGB(255, 230, 230, 230),
-      //             prefixIconColor: Colors.black,
-      //             border: OutlineInputBorder(
-      //               borderSide: const BorderSide(
-      //                   width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-      //               borderRadius: BorderRadius.circular(50),
-      //             ),
-      //
-      //             enabledBorder: OutlineInputBorder(
-      //               borderSide: const BorderSide(
-      //                   width: 3, color: Color.fromARGB(255, 230, 230, 230)),
-      //               borderRadius: BorderRadius.circular(50),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //       const SizedBox(
-      //         width: 10,
-      //       ),
-      //       InkWell(
-      //         onTap: () {
-      //           if (searchVessel.text != "" || searchVessel.text != null) {
-      //             var lat = mapGetController.searchVessel
-      //                 .where((x) => searchVessel.text == x.callSign!)
-      //                 .first
-      //                 .coor!
-      //                 .coorGga!
-      //                 .latitude;
-      //             var long = mapGetController.searchVessel
-      //                 .where((x) => searchVessel.text == x.callSign!)
-      //                 .first
-      //                 .coor!
-      //                 .coorGga!
-      //                 .longitude;
-      //             vesselOnClick(searchVessel.text, LatLng(lat!, long!));
-      //           }
-      //         },
-      //         child: Container(
-      //           width: 50,
-      //           height: 50,
-      //           decoration: BoxDecoration(
-      //             color: Colors.grey,
-      //             borderRadius: BorderRadius.circular(20),
-      //           ),
-      //           child: const Icon(Icons.search),
-      //         ),
-      //       ),
-      //     ],
-      //   );
+    // Row(
+    //     children: [
+    //       SizedBox(
+    //         height: 50,
+    //         // width: 500,
+    //         child: SearchField(
+    //           controller: searchVessel,
+    //           suggestions: mapGetController.searchVessel
+    //               .map(
+    //                 (e) {
+    //                   return SearchFieldListItem<KapalCoor.Data>(
+    //                     e.callSign!,
+    //                     item: e,
+    //                     child: Padding(
+    //                       padding: const EdgeInsets.all(8.0),
+    //                       child: Row(
+    //                         children: [
+    //                           const SizedBox(
+    //                             width: 10,
+    //                           ),
+    //                           Text(e.callSign!),
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   );
+    //                 },
+    //               )
+    //               .where((e) => e.searchKey
+    //                   .toLowerCase()
+    //                   .contains(searchVessel.text.toLowerCase()))
+    //               .toList(),
+    //           searchInputDecoration: InputDecoration(
+    //             hintText: "Pilih Call Sign Kapal",
+    //             // labelText: "Pilih Call Sign Kapal",
+    //             hintStyle: const TextStyle(color: Colors.black),
+    //             // labelStyle: TextStyle(color: Colors.black),
+    //             prefixIcon: const Padding(
+    //               padding: EdgeInsets.all(10),
+    //               child: Icon(Icons.search),
+    //             ),
+    //             filled: true,
+    //             fillColor: const Color.fromARGB(255, 230, 230, 230),
+    //             prefixIconColor: Colors.black,
+    //             border: OutlineInputBorder(
+    //               borderSide: const BorderSide(
+    //                   width: 3, color: Color.fromARGB(255, 230, 230, 230)),
+    //               borderRadius: BorderRadius.circular(50),
+    //             ),
+    //
+    //             enabledBorder: OutlineInputBorder(
+    //               borderSide: const BorderSide(
+    //                   width: 3, color: Color.fromARGB(255, 230, 230, 230)),
+    //               borderRadius: BorderRadius.circular(50),
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //       const SizedBox(
+    //         width: 10,
+    //       ),
+    //       InkWell(
+    //         onTap: () {
+    //           if (searchVessel.text != "" || searchVessel.text != null) {
+    //             var lat = mapGetController.searchVessel
+    //                 .where((x) => searchVessel.text == x.callSign!)
+    //                 .first
+    //                 .coor!
+    //                 .coorGga!
+    //                 .latitude;
+    //             var long = mapGetController.searchVessel
+    //                 .where((x) => searchVessel.text == x.callSign!)
+    //                 .first
+    //                 .coor!
+    //                 .coorGga!
+    //                 .longitude;
+    //             vesselOnClick(searchVessel.text, LatLng(lat!, long!));
+    //           }
+    //         },
+    //         child: Container(
+    //           width: 50,
+    //           height: 50,
+    //           decoration: BoxDecoration(
+    //             color: Colors.grey,
+    //             borderRadius: BorderRadius.circular(20),
+    //           ),
+    //           child: const Icon(Icons.search),
+    //         ),
+    //       ),
+    //     ],
+    //   );
   }
 }
