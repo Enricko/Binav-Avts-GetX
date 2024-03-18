@@ -63,7 +63,7 @@ class MapGetXController extends GetxController {
     markers.add(
       Marker(
         width: 150.0,
-        height: 80.0,
+        height: 100.0,
         point: point,
         child: Stack(
           alignment: Alignment.center,
