@@ -58,7 +58,7 @@ class MapGetXController extends GetxController {
   late LocationPermission permission;
   Rx<LatLng?> currentPosition = Rx<LatLng?>(null);
   var currentPositionActive = false.obs;
-  Rx<RulerMode> rulerMode = Rx<RulerMode>(RulerMode.CENTER);
+  Rx<RulerMode> rulerMode = Rx<RulerMode>(RulerMode.FOLLOW);
   var isRulerDetail = true.obs;
 
   void handleMapTap(LatLng point) {

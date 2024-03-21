@@ -14,7 +14,7 @@ class MarkerCursorFollow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return mapGetController.latLngCursor.value == null
+        return mapGetController.latLngCursor.value == null || !mapGetController.countDistance.value
             ? SizedBox()
             : MarkerLayer(
                 markers: [
@@ -26,8 +26,13 @@ class MarkerCursorFollow extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Container(
-                          child: Icon(Icons.place,
-                              color: Colors.red), // Ubah ikon sesuai kebutuhan Anda
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black54, width: 1)),
+                          // child: Icon(Icons.circ, color: Colors.blue,), // Ubah ikon sesuai kebutuhan Anda
                         ),
                         Align(
                           alignment: Alignment.bottomCenter,
@@ -35,7 +40,7 @@ class MarkerCursorFollow extends StatelessWidget {
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: Colors.black.withOpacity(0.4),
+                              color: Colors.black.withOpacity(0.7),
                             ),
                             child: Text(
                               mapGetController.markersLatLng.length > 0
