@@ -2,6 +2,8 @@ import 'package:binav_avts_getx/controller/map.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/general.dart';
+
 class RulerCenter extends StatelessWidget {
    RulerCenter({super.key});
 
@@ -39,7 +41,7 @@ class RulerCenter extends StatelessWidget {
                                               mapGetController.markersLatLng.length - 1],
                                           mapGetController.latLngCursor.value!) >
                                       0
-                                  ? "${mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!)} M"
+                                  ? "${General.numberFormat.format(mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!))} M"
                                   : "")
                               : "${mapGetController.markersLatLng.length} M",
                           style: TextStyle(color: Colors.white),

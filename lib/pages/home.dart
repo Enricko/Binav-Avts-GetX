@@ -6,6 +6,7 @@ import 'package:binav_avts_getx/model/get_kapal_coor.dart';
 import 'package:binav_avts_getx/pages/table/first_profile.dart';
 import 'package:binav_avts_getx/utils/alerts.dart';
 import 'package:binav_avts_getx/widget/maps/ruler/marker_cursor_follow.dart';
+import 'package:binav_avts_getx/widget/maps/ruler/ruler_detail.dart';
 import 'package:binav_avts_getx/widget/maps/ruler/ruler_line.dart';
 import 'package:binav_avts_getx/widget/maps/vessel/vessel.dart';
 import 'package:binav_avts_getx/widget/maps/vessel/vessel_line_latlong.dart';
@@ -80,17 +81,6 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   nonRotatedChildren: [
-                    // Align(
-                    //   alignment: Alignment.bottomRight,
-                    //   child: const FlutterMapZoomButtons(
-                    //     minZoom: 4,
-                    //     maxZoom: 18,
-                    //     mini: true,
-                    //     padding: 10,
-                    //     zoomInColorIcon: Colors.black,
-                    //     zoomOutColorIcon: Colors.black,
-                    //   ),
-                    // ),
                     Column(
                       children: [
                         Container(
@@ -113,14 +103,72 @@ class HomePage extends StatelessWidget {
 
                     /// window kanan atas
                     Obx(() {
-                      if (mapGetController.getVessel.value) {
-                        return Align(alignment: Alignment.topRight, child: WindowVesselDetail());
-                        // WindowVesselDetail();
-                      }
-                      return SizedBox();
+                      return Wrap(
+                        children: [
+                          if (mapGetController.getVessel.value)
+                            Align(alignment: Alignment.topRight, child: WindowVesselDetail()),
+                          if (mapGetController.countDistance.value)
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  RulerDetail(),
+                                  Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Tooltip(
+                                          message: "Undo Ruler",
+                                          child: IconButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(Colors.white)),
+                                            onPressed: mapGetController.markers.isEmpty
+                                                ? null
+                                                : () {
+                                                    mapGetController.markers.removeLast();
+                                                    mapGetController.markersLatLng.removeLast();
+                                                    // mapGetController.latLngCursor.removeLast();
+                                                  },
+                                            icon: Icon(
+                                              Icons.undo,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8,),
+                                        Tooltip(
+                                          message: "Add Ruler",
+                                          child: IconButton(
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.all(Colors.blue),
+                                            ),
+                                            onPressed: (mapGetController.countDistance.value)
+                                                ? () {
+                                                    mapGetController.latLngCursor.value =
+                                                        mapGetController.mapController.center;
+                                                    mapGetController.handleMapTap(
+                                                        mapGetController.mapController.center);
+                                                  }
+                                                : null,
+                                            icon: Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      );
                     }),
 
-                    // Ruler Follows Center Screen
                     RulerCenter(),
 
                     Obx(
@@ -203,26 +251,27 @@ class HomePage extends StatelessWidget {
                             () => SizedBox(
                               width: 50,
                               height: 50,
-                              child: IconButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Colors.white)),
-                                onPressed: () {
-                                  mapGetController.isBottomBarVisible.value =
-                                      !mapGetController.isBottomBarVisible.value;
-                                  mapGetController.countDistance.value =
-                                      !mapGetController.countDistance.value;
-                                  if (mapGetController.countDistance.value == false) {
-                                    mapGetController.markers.clear();
-                                    mapGetController.markersLatLng.clear();
-                                  } else {
-                                    mapGetController.latLngCursor.value = null;
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.straighten,
-                                  color: mapGetController.countDistance.value
-                                      ? Colors.blue
-                                      : Colors.grey,
+                              child: Tooltip(
+                                message: "Ruler",
+                                child: IconButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.white)),
+                                  onPressed: () {
+                                    mapGetController.countDistance.value =
+                                        !mapGetController.countDistance.value;
+                                    if (mapGetController.countDistance.value == false) {
+                                      mapGetController.markers.clear();
+                                      mapGetController.markersLatLng.clear();
+                                    } else {
+                                      mapGetController.latLngCursor.value = null;
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.straighten,
+                                    color: mapGetController.countDistance.value
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                  ),
                                 ),
                               ),
                             ),
@@ -235,7 +284,7 @@ class HomePage extends StatelessWidget {
                     ),
 
                     Align(
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.bottomRight,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -298,67 +347,71 @@ class HomePage extends StatelessWidget {
                             zoomInColorIcon: Colors.black,
                             zoomOutColorIcon: Colors.black,
                           ),
-                          Obx(
-                            () => AnimatedContainer(
-                              duration: Duration(milliseconds: 500),
-                              // Sesuaikan durasi animasi sesuai kebutuhan
-                              height: mapGetController.isBottomBarVisible.value
-                                  ? kBottomNavigationBarHeight
-                                  : 0,
-                              child: Container(
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Klik Icon (+) untuk mengukur jarak",
-                                        style: TextStyle(color: Colors.black54),
-                                      ),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(Colors.white)),
-                                              onPressed: mapGetController.markers.isEmpty
-                                                  ? null
-                                                  : () {
-                                                      mapGetController.markers.removeLast();
-                                                      mapGetController.markersLatLng.removeLast();
-                                                      // mapGetController.latLngCursor.removeLast();
-                                                    },
-                                              icon: Icon(Icons.undo)),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          IconButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(Colors.blue),
-                                              ),
-                                              onPressed: (mapGetController.countDistance.value)
-                                                  ? () {
-                                                      mapGetController.latLngCursor.value =
-                                                          mapGetController.mapController.center;
-                                                      mapGetController.handleMapTap(
-                                                          mapGetController.mapController.center);
-                                                    }
-                                                  : null,
-                                              icon: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              )),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                // height: 80,
-                              ),
-                            ),
-                          ),
+                          // Obx(
+                          //   () => AnimatedContainer(
+                          //     duration: Duration(milliseconds: 500),
+                          //     // Sesuaikan durasi animasi sesuai kebutuhan
+                          //     height: mapGetController.countDistance.value
+                          //         ? kBottomNavigationBarHeight
+                          //         : 0,
+                          //     child: Container(
+                          //       color: Colors.white,
+                          //       child: Padding(
+                          //         padding: EdgeInsets.symmetric(horizontal: 20),
+                          //         child: Row(
+                          //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //           children: [
+                          //             Text(
+                          //               "Klik Icon (+) untuk mengukur jarak",
+                          //               style: TextStyle(color: Colors.black54),
+                          //             ),
+                          //             Row(
+                          //               children: [
+                          //                 IconButton(
+                          //                   style: ButtonStyle(
+                          //                       backgroundColor:
+                          //                           MaterialStateProperty.all(Colors.white)),
+                          //                   onPressed: mapGetController.markers.isEmpty
+                          //                       ? null
+                          //                       : () {
+                          //                           mapGetController.markers.removeLast();
+                          //                           mapGetController.markersLatLng.removeLast();
+                          //                           // mapGetController.latLngCursor.removeLast();
+                          //                         },
+                          //                   icon: Icon(
+                          //                     Icons.undo,
+                          //                   ),
+                          //                 ),
+                          //                 SizedBox(
+                          //                   width: 10,
+                          //                 ),
+                          //                 IconButton(
+                          //                   style: ButtonStyle(
+                          //                     backgroundColor:
+                          //                         MaterialStateProperty.all(Colors.blue),
+                          //                   ),
+                          //                   onPressed: (mapGetController.countDistance.value)
+                          //                       ? () {
+                          //                           mapGetController.latLngCursor.value =
+                          //                               mapGetController.mapController.center;
+                          //                           mapGetController.handleMapTap(
+                          //                               mapGetController.mapController.center);
+                          //                         }
+                          //                       : null,
+                          //                   icon: Icon(
+                          //                     Icons.add,
+                          //                     color: Colors.white,
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //       // height: 80,
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     )

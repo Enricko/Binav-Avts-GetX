@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:binav_avts_getx/model/get_kapal_coor.dart';
@@ -15,7 +14,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../services/pipeline.dart';
+import '../utils/general.dart';
+
+enum RulerMode{
+  FOLLOW,
+  CENTER
+}
 
 class MapGetXController extends GetxController {
   // MapGetXController({required this.context});
@@ -50,16 +54,14 @@ class MapGetXController extends GetxController {
   RxList<Marker> markers = RxList<Marker>([]);
   RxList<LatLng> markersLatLng = RxList<LatLng>([]);
   Rx<LatLng?> latLngCursor = Rx<LatLng?>(null);
-  // var maxLengthMarker = 0.obs;
-  var isBottomBarVisible = false.obs;
+
   late LocationPermission permission;
   Rx<LatLng?> currentPosition = Rx<LatLng?>(null);
   var currentPositionActive = false.obs;
+  Rx<RulerMode> rulerMode = Rx<RulerMode>(RulerMode.CENTER);
+  var isRulerDetail = true.obs;
 
   void handleMapTap(LatLng point) {
-    // print("marker length ${markers.length}");
-    // print("max marker length ${maxLengthMarker.value}");
-    // if (markers.length <= maxLengthMarker.value) {
     markers.add(
       Marker(
         width: 150.0,
@@ -88,7 +90,7 @@ class MapGetXController extends GetxController {
                 ),
                 child: Text(
                   markersLatLng.length > 0
-                      ? "${calculateDistance(markersLatLng[markersLatLng.length - 1], point)} M"
+                      ? "${General.numberFormat.format(calculateDistance(markersLatLng[markersLatLng.length - 1], point))} M"
                       : "${markersLatLng.length} M",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -242,10 +244,23 @@ class MapGetXController extends GetxController {
     box.write("currentLatlong", center);
   }
 
+  // void changeRulerModebyDevice(){
+  //   if (Platform.isAndroid) {
+  //     rulerMode.value = RulerMode.CENTER;
+  //   } else if (Platform.isIOS) {
+  //     rulerMode.value = RulerMode.CENTER;
+  //   } else if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
+  //     rulerMode.value = RulerMode.FOLLOW;
+  //   } else {
+  //     rulerMode.value = RulerMode.CENTER;
+  //   }
+  // }
+
   @override
   void onInit() {
     super.onInit();
     userCurrentPosition();
+    // changeRulerModebyDevice();
     try {
       mapController = MapController();
       socketAllKapal();

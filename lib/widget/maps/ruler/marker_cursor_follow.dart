@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/map.dart';
+import '../../../utils/general.dart';
 
 class MarkerCursorFollow extends StatelessWidget {
   MarkerCursorFollow({super.key});
@@ -43,7 +44,7 @@ class MarkerCursorFollow extends StatelessWidget {
                                                   mapGetController.markersLatLng.length - 1],
                                               mapGetController.latLngCursor.value!) >
                                           0
-                                      ? "${mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!)} M"
+                                      ? "${General.numberFormat.format(mapGetController.calculateDistance(mapGetController.markersLatLng[mapGetController.markersLatLng.length - 1], mapGetController.latLngCursor.value!))} M"
                                       : "")
                                   : "${mapGetController.markersLatLng.length} M",
                               style: TextStyle(color: Colors.white),
