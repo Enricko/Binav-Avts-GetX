@@ -58,6 +58,7 @@ class VesselDetail extends StatelessWidget {
                     return Obx(
                       () {
                         if (mapGetController.getVessel.value) {
+                          String gpsQualityIndicator = data.coor!.coorGga!.gpsQualityIndicator!.split(',')[0].trim();
                           return SingleChildScrollView(
                             child: Container(
                               color: Colors.white,
@@ -279,7 +280,7 @@ class VesselDetail extends StatelessWidget {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     const Text(
-                                                      'Knot True Speed',
+                                                      'SOG',
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: Color.fromARGB(255, 61, 61, 61),
@@ -287,7 +288,9 @@ class VesselDetail extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      data.coor!.coorVtg!.speedInKnots == null ? "VTG Not Detected" : "${data.coor!.coorVtg!.speedInKnots} KTS",
+                                                      data.coor!.coorVtg!.speedInKnots == null
+                                                          ? "VTG Not Detected"
+                                                          : "${data.coor!.coorVtg!.speedInKnots} KTS",
                                                       // "${predictLatLong(vesselData.coor!.coorGga!.latitude!.toDouble(), vesselData.coor!.coorGga!.longitude!.toDouble(), 100, vesselData.coor!.coorHdt!.headingDegree ?? vesselData.coor!.defaultHeading!, predictMovementVessel).longitude.toStringAsFixed(5)}",
                                                       style: const TextStyle(
                                                         fontSize: 12,
@@ -343,7 +346,7 @@ class VesselDetail extends StatelessWidget {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     const Text(
-                                                      'SOIN',
+                                                      'SOLN',
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         color: Color.fromARGB(255, 61, 61, 61),
@@ -351,7 +354,7 @@ class VesselDetail extends StatelessWidget {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "${data.coor!.coorGga!.gpsQualityIndicator}",
+                                                      "${gpsQualityIndicator}",
                                                       // "${predictLatLong(vesselData.coor!.coorGga!.latitude!.toDouble(), vesselData.coor!.coorGga!.longitude!.toDouble(), 100, vesselData.coor!.coorHdt!.headingDegree ?? vesselData.coor!.defaultHeading!, predictMovementVessel).longitude.toStringAsFixed(5)}",
                                                       style: const TextStyle(
                                                         fontSize: 12,

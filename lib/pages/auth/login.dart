@@ -56,6 +56,16 @@ class LoginWidget extends StatelessWidget {
                           }
                           return null;
                         },
+                        onFieldSubmitted: controller.isLoading.value
+                            ? null
+                            : (value) async {
+                                if (_formKey.currentState!.validate()) {
+                                  await controller.login().then((value) {
+                                    print(value);
+                                    if (value) Get.offNamed(RouteName.home);
+                                  });
+                                }
+                              },
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(20, 3, 1, 3),
                           hintText: "Email",
@@ -64,10 +74,12 @@ class LoginWidget extends StatelessWidget {
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(width: 1, color: Colors.blueAccent),
                           ),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.black38)),
-                          errorBorder: OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                          focusedErrorBorder:
-                              OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.black38)),
+                          errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.redAccent)),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.redAccent)),
                           filled: true,
                           fillColor: Color(0x0f2f2f2f),
                         ),
@@ -87,6 +99,16 @@ class LoginWidget extends StatelessWidget {
                           }
                           return null;
                         },
+                        onFieldSubmitted: controller.isLoading.value
+                            ? null
+                            : (value) async {
+                                if (_formKey.currentState!.validate()) {
+                                  await controller.login().then((value) {
+                                    print(value);
+                                    if (value) Get.offNamed(RouteName.home);
+                                  });
+                                }
+                              },
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(20, 3, 1, 3),
                           hintText: "Password",
@@ -103,12 +125,12 @@ class LoginWidget extends StatelessWidget {
                           focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(width: 1, color: Colors.blueAccent),
                           ),
-                          enabledBorder:
-                              const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.black38)),
-                          errorBorder:
-                              const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
-                          focusedErrorBorder:
-                              const OutlineInputBorder(borderSide: BorderSide(width: 1, color: Colors.redAccent)),
+                          enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.black38)),
+                          errorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.redAccent)),
+                          focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(width: 1, color: Colors.redAccent)),
                           filled: true,
                           fillColor: const Color(0x0f2f2f2f),
                         ),

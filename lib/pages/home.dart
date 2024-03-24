@@ -58,7 +58,9 @@ class HomePage extends StatelessWidget {
                       },
                       onTap: (mapGetController.countDistance.value)
                           ? (TapPosition, LatLong) {
-                              mapGetController.handleMapTap(LatLong);
+                              if (mapGetController.rulerMode.value == RulerMode.FOLLOW) {
+                                mapGetController.handleMapTap(LatLong);
+                              }
                             }
                           : null,
                       onPointerHover: (PointerHoverEvent, LatLng) {
@@ -107,98 +109,6 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
 
-                      /// window kanan atas
-                      Obx(() {
-                        return Wrap(
-                          children: [
-                            if (mapGetController.getVessel.value)
-                              Align(alignment: Alignment.topRight, child: WindowVesselDetail()),
-                            if (mapGetController.countDistance.value)
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    RulerDetail(),
-                                    Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Row(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Tooltip(
-                                            message: "Change MODE",
-                                            child: IconButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(Colors.white)),
-                                              onPressed: () {
-                                                      mapGetController.rulerMode.value = mapGetController.rulerMode.value == RulerMode.CENTER
-                                                          ? RulerMode.FOLLOW
-                                                          : RulerMode.CENTER;
-                                                    },
-                                              icon: Icon(
-                                                mapGetController.rulerMode.value == RulerMode.CENTER
-                                                    ? Icons.center_focus_strong
-                                                    : Icons.mouse,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Tooltip(
-                                            message: "Undo Ruler",
-                                            child: IconButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all(Colors.white)),
-                                              onPressed: mapGetController.markers.isEmpty
-                                                  ? null
-                                                  : () {
-                                                      mapGetController.markers.removeLast();
-                                                      mapGetController.markersLatLng.removeLast();
-                                                      // mapGetController.latLngCursor.removeLast();
-                                                    },
-                                              icon: Icon(
-                                                Icons.undo,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 8,
-                                          ),
-                                          Tooltip(
-                                            message: "Add Ruler",
-                                            child: IconButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(Colors.blue),
-                                              ),
-                                              onPressed: (mapGetController.countDistance.value)
-                                                  ? () {
-                                                      mapGetController.latLngCursor.value =
-                                                          mapGetController.latLngCursor.value!;
-                                                      mapGetController.handleMapTap(
-                                                          mapGetController.latLngCursor.value!);
-                                                    }
-                                                  : null,
-                                              icon: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                          ],
-                        );
-                      }),
-
                       Obx(() {
                         if (mapGetController.rulerMode.value == RulerMode.CENTER) {
                           return RulerCenter();
@@ -215,108 +125,209 @@ class HomePage extends StatelessWidget {
                         },
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              decoration:
-                                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                              width: 50,
-                              height: 50,
-                              child: PopupMenuButton(
-                                position: PopupMenuPosition.under,
-                                icon: const Icon(
-                                  Icons.menu,
+                      Wrap(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 10,
                                 ),
-                                color: Colors.white,
-                                itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: 'vesselList',
-                                    child: Text('Vessel List'),
-                                  ),
-                                  const PopupMenuItem(
-                                    value: 'pipelineList',
-                                    child: Text('Pipeline List'),
-                                  ),
-                                  const PopupMenuItem(
-                                    value: 'clientList',
-                                    child: Text('Client List'),
-                                  ),
-                                ],
-                                onSelected: (item) {
-                                  switch (item) {
-                                    case "vesselList":
-                                      Get.dialog(
-                                        Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10)),
-                                            child: KapalTable()),
-                                      );
-                                    case "pipelineList":
-                                      Get.dialog(
-                                        Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10)),
-                                            child: PipelineTable()),
-                                      );
-                                    case "clientList":
-                                      Get.dialog(
-                                        Dialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10)),
-                                            child: ClientTable()),
-                                      );
-                                  }
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            SearchVessel(),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Obx(
-                              () => SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: Tooltip(
-                                  message: "Ruler",
-                                  child: IconButton(
-                                    style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all(Colors.white)),
-                                    onPressed: () {
-                                      mapGetController.countDistance.value =
-                                          !mapGetController.countDistance.value;
-                                      if (mapGetController.countDistance.value == false) {
-                                        mapGetController.markers.clear();
-                                        mapGetController.markersLatLng.clear();
-                                      } else {
-                                        mapGetController.latLngCursor.value = null;
+                                Container(
+                                  decoration:
+                                      BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                                  width: 50,
+                                  height: 50,
+                                  child: PopupMenuButton(
+                                    position: PopupMenuPosition.under,
+                                    icon: const Icon(
+                                      Icons.menu,
+                                    ),
+                                    color: Colors.white,
+                                    itemBuilder: (context) => [
+                                      PopupMenuItem(
+                                        value: 'vesselList',
+                                        child: Text('Vessel List'),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'pipelineList',
+                                        child: Text('Pipeline List'),
+                                      ),
+                                      const PopupMenuItem(
+                                        value: 'clientList',
+                                        child: Text('Client List'),
+                                      ),
+                                    ],
+                                    onSelected: (item) {
+                                      switch (item) {
+                                        case "vesselList":
+                                          Get.dialog(
+                                            Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10)),
+                                                child: KapalTable()),
+                                          );
+                                        case "pipelineList":
+                                          Get.dialog(
+                                            Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10)),
+                                                child: PipelineTable()),
+                                          );
+                                        case "clientList":
+                                          Get.dialog(
+                                            Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10)),
+                                                child: ClientTable()),
+                                          );
                                       }
                                     },
-                                    icon: Icon(
-                                      Icons.straighten,
-                                      color: mapGetController.countDistance.value
-                                          ? Colors.blue
-                                          : Colors.grey,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Flexible(child: SearchVessel()),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Obx(
+                                  () => SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Tooltip(
+                                      message: "Ruler",
+                                      child: IconButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(Colors.white)),
+                                        onPressed: () {
+                                          mapGetController.countDistance.value =
+                                              !mapGetController.countDistance.value;
+                                          if (mapGetController.countDistance.value == false) {
+                                            mapGetController.markers.clear();
+                                            mapGetController.markersLatLng.clear();
+                                          } else {
+                                            mapGetController.latLngCursor.value = null;
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.straighten,
+                                          color: mapGetController.countDistance.value
+                                              ? Colors.blue
+                                              : Colors.grey,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
+                          ),
+
+                          /// window kanan atas
+                          Obx(() {
+                            return Wrap(
+                              children: [
+                                if (mapGetController.getVessel.value)
+                                  Align(alignment: Alignment.topRight, child: WindowVesselDetail()),
+                                if (mapGetController.countDistance.value)
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        RulerDetail(),
+                                        Padding(
+                                          padding: EdgeInsets.all(8),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Tooltip(
+                                                message: "Change MODE",
+                                                child: IconButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty.all(Colors.white)),
+                                                  onPressed: () {
+                                                    mapGetController.rulerMode.value =
+                                                        mapGetController.rulerMode.value ==
+                                                                RulerMode.CENTER
+                                                            ? RulerMode.FOLLOW
+                                                            : RulerMode.CENTER;
+                                                  },
+                                                  icon: Icon(
+                                                    mapGetController.rulerMode.value ==
+                                                            RulerMode.CENTER
+                                                        ? Icons.center_focus_strong
+                                                        : Icons.mouse,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Tooltip(
+                                                message: "Undo Ruler",
+                                                child: IconButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStateProperty.all(Colors.white)),
+                                                  onPressed: mapGetController.markers.isEmpty
+                                                      ? null
+                                                      : () {
+                                                          mapGetController.markers.removeLast();
+                                                          mapGetController.markersLatLng
+                                                              .removeLast();
+                                                          // mapGetController.latLngCursor.removeLast();
+                                                        },
+                                                  icon: Icon(
+                                                    Icons.undo,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8,
+                                              ),
+                                              Tooltip(
+                                                message: "Add Ruler",
+                                                child: IconButton(
+                                                  style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty.all(Colors.blue),
+                                                  ),
+                                                  onPressed: (mapGetController.countDistance.value)
+                                                      ? () {
+                                                          mapGetController.latLngCursor.value =
+                                                              mapGetController.latLngCursor.value!;
+                                                          mapGetController.handleMapTap(
+                                                              mapGetController.latLngCursor.value!);
+                                                        }
+                                                      : null,
+                                                  icon: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          }),
+                        ],
                       ),
 
                       Align(

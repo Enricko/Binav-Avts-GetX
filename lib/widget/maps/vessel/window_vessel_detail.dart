@@ -20,6 +20,9 @@ class WindowVesselDetail extends StatelessWidget {
           KapalCoor.Data data = snapshot.data!.data!.first;
           // if (mapGetController.getVessel.value) {
           return Obx(() {
+            String gpsQualityIndicator =
+                data.coor!.coorGga!.gpsQualityIndicator!.split(',')[0].trim();
+
             return (!mapGetController.isClick.value)
                 ? Container(
                     margin: EdgeInsets.all(10),
@@ -169,19 +172,21 @@ class WindowVesselDetail extends StatelessWidget {
                                               TableCell(
                                                 child: Text(
                                                     textAlign: TextAlign.right,
-                                                    data.coor!.coorVtg!.speedInKnots == null ? " VTG Not Detected" : " ${data.coor!.coorVtg!.speedInKnots} KTS"),
+                                                    data.coor!.coorVtg!.speedInKnots == null
+                                                        ? " VTG Not Detected"
+                                                        : " ${data.coor!.coorVtg!.speedInKnots} KTS"),
                                               ),
                                             ],
                                           ),
                                           TableRow(
                                             children: <Widget>[
                                               TableCell(
-                                                child: Text(' Soin'),
+                                                child: Text(' SOLN'),
                                               ),
                                               TableCell(
                                                 child: Text(
                                                     textAlign: TextAlign.right,
-                                                    ' ${data.coor!.coorGga!.gpsQualityIndicator} '),
+                                                    ' ${gpsQualityIndicator} '),
                                               ),
                                             ],
                                           ),

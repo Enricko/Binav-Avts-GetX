@@ -75,9 +75,8 @@ class _SearchVesselState extends State<SearchVessel> with TickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 500,
-      height: 50,
+    return Container(
+      constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
       // width: 500,
       child: Obx(
         () => SearchField(
@@ -154,6 +153,23 @@ class _SearchVesselState extends State<SearchVessel> with TickerProviderStateMix
               borderRadius: BorderRadius.circular(30),
             ),
           ),
+          onSubmit: (value) {
+            if (searchVessel.text != "" || searchVessel.text != null) {
+              var lat = mapGetController.searchVessel
+                  .where((x) => searchVessel.text == x.callSign!)
+                  .first
+                  .coor!
+                  .coorGga!
+                  .latitude;
+              var long = mapGetController.searchVessel
+                  .where((x) => searchVessel.text == x.callSign!)
+                  .first
+                  .coor!
+                  .coorGga!
+                  .longitude;
+              vesselOnClick(searchVessel.text, LatLng(lat!, long!));
+            }
+          },
         ),
       ),
     );
